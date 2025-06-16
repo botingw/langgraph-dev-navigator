@@ -44,10 +44,11 @@ pip install duckduckgo-search
 
 ## Documentation:
 
-*   `langchain-agent-workflow-plan.md`: High-level plan for agentic workflow development.
-*   `ide_integration_guide.md`: Concrete steps for integrating the rules into your IDE.
-*   `task_implementation_strategies.md`: Mapping of roadmap items to implementation strategies.
-*   `tmp_windsurf_rule.md`: The core rules file that guides the AI assistant.
+### For developers
+*   `docs/prd.md`: High-level plan for improving SWE agents's capabilities in agentic workflow development. 
+*   `docs/ide_integration_guide.md`: Concrete steps for integrating the rules into your IDE.
+*   `docs/task_implementation_strategies.md`: Mapping of roadmap items to implementation strategies.
+*   `docs/langgraph-ai-rules.md`: The core rules file that guides the AI assistant. It is in .clinerules folder and .windsurf/rules folder.
 
 ## Contributing:
 
