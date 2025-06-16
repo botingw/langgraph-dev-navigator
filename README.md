@@ -13,7 +13,16 @@ This repository streamlines and enhances the LangGraph development process by pr
 ## Getting Started:
 
 1.  Clone this repository.
+This single command clones both this repository and the required `langgraph` documentation repository inside it.
+```bash
+git clone --recursive https://github.com/your-username/langgraph-dev-navigator.git
+cd langgraph-dev-navigator
+```
 2.  Clone the `langchain-ai/langgraph` repository as a submodule or sibling directory.
+```bash
+ git submodule init
+ git submodule update
+```
 
 3. create a conda env
 ```bash
