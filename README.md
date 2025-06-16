@@ -6,9 +6,9 @@ This repository streamlines and enhances the LangGraph development process by pr
 
 *   **AI-Driven Development Guidance:** Provides a structured system of rules that guides AI assistants in understanding developer intentions and selecting the appropriate documentation for each development task, leading to more accurate and relevant code generation.
 *   **Local Repository as Source of Truth:** Enforces the use of the local `langchain-ai/langgraph` repository as the primary knowledge base, ensuring all code is aligned with the latest version-controlled documentation and eliminating reliance on outdated or external information.
-*   **IDE Integration for Development Efficiency:** Offers pre-built configurations and best practices for seamlessly integrating these rules into popular IDEs, making AI assistance a natural part of your development workflow.
-*   **Transparent and Traceable Development:** Encourages AI assistants to explicitly declare the rules they are following and the reasoning behind their choices, promoting greater transparency and trust in the generated code, and simplifying debugging.
-*   **Mitigation of Development Pitfalls:** Includes a detailed roadmap for implementing key features and proactively mitigating common pitfalls in LangGraph development, such as API drift, biased outputs, and security vulnerabilities.
+*   **IDE Integration for Development Efficiency:** 🚧 *Not Implemented Yet* - Offers pre-built configurations and best practices for seamlessly integrating these rules into popular IDEs, making AI assistance a natural part of your development workflow.
+*   **Transparent and Traceable Development:** 🚧 *Not Implemented Yet* - Encourages AI assistants to explicitly declare the rules they are following and the reasoning behind their choices, promoting greater transparency and trust in the generated code, and simplifying debugging.
+*   **Mitigation of Development Pitfalls:** 🚧 *Not Implemented Yet* - Includes a detailed roadmap for implementing key features and proactively mitigating common pitfalls in LangGraph development, such as API drift, biased outputs, and security vulnerabilities.
 
 ## Getting Started:
 
