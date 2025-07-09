@@ -1,2 +1,12 @@
 .env
 .DS_Store
+
+# AI coding IDE files (.windsurfrules can deprecate near future)
+.clinerules/
+.cursor/
+.roo/
+.windsurfrules
+.windsurf/
+.github/
+.idx/
+GEMINI.md
