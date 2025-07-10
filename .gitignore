@@ -1,6 +1,9 @@
 .env
 .DS_Store
 
+# gemini cli config
+.gemini/
+
 # AI coding IDE files (.windsurfrules can deprecate near future)
 .clinerules/
 .cursor/
