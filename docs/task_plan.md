@@ -4,7 +4,7 @@ This document tracks the tasks required to integrate and enhance the `mcp-crawl4
 
 | Task ID | Description | Importance | Dependency | Status |
 |---|---|---|---|---|
-| 1 | **Fork and Submodule** | High | - | Not Started |
+| 1 | **Fork and Submodule** | High | - | Done |
 | | Fork the `coleam00/mcp-crawl4ai-rag` repository to `botingw/mcp-crawl4ai-rag` and add it as a submodule to the main project. | | |
 | 2 | **Refactor Core Logic** | High | Task 1 | Not Started |
 | | Abstract the core ingestion logic from MCP tools into a new `src/ingestion_engine.py` within the submodule. | | |

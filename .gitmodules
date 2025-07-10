@@ -1,3 +1,6 @@
 [submodule "langgraph"]
 	path = langgraph
 	url = https://github.com/langchain-ai/langgraph.git
+[submodule "mcp-crawl4ai-rag"]
+	path = mcp-crawl4ai-rag
+	url = https://github.com/botingw/mcp-crawl4ai-rag.git
