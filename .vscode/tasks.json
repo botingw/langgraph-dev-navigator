@@ -1,0 +1,11 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "uv-run-script",
+            "type": "shell",
+            "command": "source ${workspaceFolder}/mcp-crawl4ai-rag/.venv/bin/activate && uv run python ${file}",
+            "problemMatcher": []
+        }
+    ]
+}
