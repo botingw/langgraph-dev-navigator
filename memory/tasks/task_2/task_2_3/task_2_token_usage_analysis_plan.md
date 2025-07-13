@@ -4,6 +4,15 @@
 
 **Context:** The primary suspect for the excessive token usage is the summarization of documentation chunks, which is performed by a chat model. Initial observations from the OpenAI dashboard show a discrepancy between the expected and actual number of tokens consumed. This plan outlines a data-driven approach to pinpoint the source of this amplification.
 
+### Initial Findings on Token Amplification:
+Through preliminary analysis, two significant factors contributing to the high token consumption have been identified:
+1.  **Inclusion of `.ipynb` files:** The initial token counting focused primarily on `.md` files. However, the ingestion process also includes `.ipynb` (Jupyter Notebook) files. These files, due to their JSON structure and embedded code/output, contribute approximately 10 times more tokens than equivalent `.md` files.
+2.  **Prompt Engineering Overhead:** The prompt sent to the OpenAI API for contextual embedding (and potentially other chat-based operations) includes not only the specific chunk being processed but also a truncated version of the `full_document`, a system prompt, and user prompt descriptions. This means that for a document split into `n` chunks, the total token consumption for contextual embeddings can be approximated as `n * (tokens_in_chunk + tokens_in_full_document_context + tokens_in_system_prompt + tokens_in_user_instructions)`. This significantly amplifies the token usage compared to just the raw chunk tokens.
+
+### Initial Findings on Token Amplification:                                                                                                                                                                                     │
+Through preliminary analysis, two significant factors contributing to the high token consumption have been identified:                                                                                                     
+**Inclusion of `.ipynb` files:** The initial token counting focused primarily on `.md` files. However, the ingestion process also includes `.ipynb` (Jupyter Notebook) files. These files, due to their JSON structure and embedded code/output, contribute approximately 10 times more tokens than equivalent `.md` files.                                                                                                                                 │
+**Prompt Engineering Overhead:** The prompt sent to the OpenAI API for contextual embedding (and potentially other chat-based operations) includes not only the specific chunk being processed but also a truncated version of the `full_document`, a system prompt, and user prompt descriptions. This means that for a document split into `n` chunks, the total token consumption for contextual embeddings can be approximated as `n * (tokens_in_chunk tokens_in_full_document_context + tokens_in_system_prompt + tokens_in_user_instructions)`. This significantly amplifies the token usage compared to just the raw chunk tokens.
 ---
 
 ## Phase 1: High-Granularity Data Collection (Small-Scale)
@@ -30,10 +39,14 @@ The first step is to collect detailed, fine-grained data from an ingestion run o
                 *   `total_api_calls`: The total number of API calls made for this chunk.
                 *   `successful_calls`: The number of successful calls.
                 *   `failed_calls`: The number of failed calls.
-                *   `total_tokens_sent_to_apis`: The sum of all tokens sent across all API calls for this chunk.
+                *   `total_prompt_tokens_sent`: The sum of all input tokens sent for this chunk.
+                *   `total_completion_tokens_received`: The sum of all output tokens received for this chunk.
+                *   `total_billed_tokens`: The sum of prompt + completion tokens for this chunk.
                 *   `call_details`: A list of individual calls made for the chunk, each with:
                     *   `call_type`: (e.g., `chat_summary`, `create_embedding`).
-                    *   `prompt_tokens`: The token count for that specific call.
+                    *   `prompt_tokens`: The input token count for that specific call.
+                    *   `completion_tokens`: The output token count for that specific call.
+                    *   `total_tokens`: The billed token count for that specific call.
                     *   `status`: `Success` or `Fail`.
                     *   `error_details` (optional): Any error messages if the request failed.
 
