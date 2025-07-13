@@ -4,15 +4,11 @@
 
 **Context:** The primary suspect for the excessive token usage is the summarization of documentation chunks, which is performed by a chat model. Initial observations from the OpenAI dashboard show a discrepancy between the expected and actual number of tokens consumed. This plan outlines a data-driven approach to pinpoint the source of this amplification.
 
-### Initial Findings on Token Amplification:
+### Initial Findings on Token Amplification (as of 2025-07-12):
 Through preliminary analysis, two significant factors contributing to the high token consumption have been identified:
 1.  **Inclusion of `.ipynb` files:** The initial token counting focused primarily on `.md` files. However, the ingestion process also includes `.ipynb` (Jupyter Notebook) files. These files, due to their JSON structure and embedded code/output, contribute approximately 10 times more tokens than equivalent `.md` files.
 2.  **Prompt Engineering Overhead:** The prompt sent to the OpenAI API for contextual embedding (and potentially other chat-based operations) includes not only the specific chunk being processed but also a truncated version of the `full_document`, a system prompt, and user prompt descriptions. This means that for a document split into `n` chunks, the total token consumption for contextual embeddings can be approximated as `n * (tokens_in_chunk + tokens_in_full_document_context + tokens_in_system_prompt + tokens_in_user_instructions)`. This significantly amplifies the token usage compared to just the raw chunk tokens.
 
-### Initial Findings on Token Amplification:                                                                                                                                                                                     │
-Through preliminary analysis, two significant factors contributing to the high token consumption have been identified:                                                                                                     
-**Inclusion of `.ipynb` files:** The initial token counting focused primarily on `.md` files. However, the ingestion process also includes `.ipynb` (Jupyter Notebook) files. These files, due to their JSON structure and embedded code/output, contribute approximately 10 times more tokens than equivalent `.md` files.                                                                                                                                 │
-**Prompt Engineering Overhead:** The prompt sent to the OpenAI API for contextual embedding (and potentially other chat-based operations) includes not only the specific chunk being processed but also a truncated version of the `full_document`, a system prompt, and user prompt descriptions. This means that for a document split into `n` chunks, the total token consumption for contextual embeddings can be approximated as `n * (tokens_in_chunk tokens_in_full_document_context + tokens_in_system_prompt + tokens_in_user_instructions)`. This significantly amplifies the token usage compared to just the raw chunk tokens.
 ---
 
 ## Phase 1: High-Granularity Data Collection (Small-Scale)
@@ -30,11 +26,16 @@ The first step is to collect detailed, fine-grained data from an ingestion run o
             *   `total_successful_calls`
             *   `total_failed_calls`
             *   `total_tokens_from_raw_docs` (sum of tokens from all initial chunks)
-            *   `total_tokens_sent_to_chat_model` (sum of tokens in the final prompts for summarization)
-            *   Breakdown of calls and tokens by type (e.g., `summary`, `embedding`).
+            *   `total_prompt_tokens_sent`: The total number of input tokens sent to the API.
+            *   `total_completion_tokens_received`: The total number of output tokens received from the API.
+            *   `total_billed_tokens`: The sum of prompt + completion tokens.
+            *   Breakdown of calls and tokens by type (e.g., `chunk_summary`, `source_summary`, `embedding`).
+        *   **Per-Source Statistics (grouped by `source_id`):**
+            *   This tracks metrics for API calls that operate on an entire data source, such as generating a summary for a whole website.
+            *   For each source, the following is collected: the same as Per-Chunk Statistics below
         *   **Per-Chunk Statistics (grouped by file, then by chunk index):**
-            *   This provides a `GROUP BY`-style view of the process, aggregating all API call statistics for a single chunk of a document.
-            *   For each chunk, the following stats will be collected:
+            *   This tracks metrics for API calls that operate on individual chunks of a document, such as generating contextual embeddings.
+            *   For each chunk, the following is collected:
                 *   `raw_chunk_tokens`: The token count of the original, unprocessed documentation chunk.
                 *   `total_api_calls`: The total number of API calls made for this chunk.
                 *   `successful_calls`: The number of successful calls.
@@ -43,7 +44,7 @@ The first step is to collect detailed, fine-grained data from an ingestion run o
                 *   `total_completion_tokens_received`: The sum of all output tokens received for this chunk.
                 *   `total_billed_tokens`: The sum of prompt + completion tokens for this chunk.
                 *   `call_details`: A list of individual calls made for the chunk, each with:
-                    *   `call_type`: (e.g., `chat_summary`, `create_embedding`).
+                    *   `call_type`: (e.g., `chunk_summary`, `create_embedding`).
                     *   `prompt_tokens`: The input token count for that specific call.
                     *   `completion_tokens`: The output token count for that specific call.
                     *   `total_tokens`: The billed token count for that specific call.
@@ -52,12 +53,12 @@ The first step is to collect detailed, fine-grained data from an ingestion run o
 
 3.  **Integrate Stats Collection into API Call Sites:**
     *   Modify the utility functions in `src/utils_botingw.py` that wrap OpenAI API calls.
-    *   Before each API call, calculate the required token counts (`raw_chunk_tokens`, `prompt_tokens`) and log all per-request details to the `StatsCollector`.
+    *   Before each API call, calculate the required token counts (`raw_chunk_tokens`, `prompt_tokens`) and log all per-request details to the `StatsCollector` using the appropriate logging method (`log_chunk_api_call` or `log_source_api_call`).
 
 4.  **Execute and Analyze:**
     *   Run the ingestion script (`test_build_langgraph_docs_knowledge.py`) on a small repository.
     *   At the end of the run, generate a comprehensive JSON report from the `StatsCollector`.
-    *   **Analysis:** Compare the `total_tokens_from_raw_docs` with the `total_tokens_sent_to_chat_model`. The detailed per-request log will be used to identify exactly where and why token amplification is occurring.
+    *   **Analysis:** Compare the `total_tokens_from_raw_docs` with the `total_prompt_tokens_sent`. The detailed per-source and per-chunk logs will be used to identify exactly where and why token amplification is occurring.
 
 ---
 
