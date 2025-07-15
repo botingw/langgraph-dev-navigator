@@ -33,6 +33,9 @@ The first step is to collect detailed, fine-grained data from an ingestion run o
         *   **Per-Source Statistics (grouped by `source_id`):**
             *   This tracks metrics for API calls that operate on an entire data source, such as generating a summary for a whole website.
             *   For each source, the following is collected: the same as Per-Chunk Statistics below
+        *   **Per-Code-Block Statistics (grouped by `source_id`):**
+            *   This tracks metrics for API calls that operate on an code block and text before & after code block, such as generating a summary for a code block.
+            *   For each source, the following is collected: the same as Per-Chunk Statistics below
         *   **Per-Chunk Statistics (grouped by file, then by chunk index):**
             *   This tracks metrics for API calls that operate on individual chunks of a document, such as generating contextual embeddings.
             *   For each chunk, the following is collected:
