@@ -93,6 +93,7 @@ Our immediate priority is to implement and measure the impact of **Initiative B 
 4.  **Baseline and Measurement:**
     *   Establish baseline metrics for a set of standardized development tasks (e.g., "create a simple chatbot," "add a node to an existing graph").
     *   Re-run these tasks using the newly equipped agent and measure the change in the success metrics defined in 5.1.
+    *   The detailed methodology for this evaluation is documented in the [AI Assistant Evaluation Plan](</memory/tasks/evaluation_plan.md>).
 
 ---
 
