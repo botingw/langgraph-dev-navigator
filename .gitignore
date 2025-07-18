@@ -1,6 +1,7 @@
 .env
 .DS_Store
 __pycache__
+.venv
 
 # gemini cli config
 .gemini/
