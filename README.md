@@ -1,55 +1,91 @@
 # LangGraph-Dev-Navigator
 
-This repository streamlines and enhances the LangGraph development process by providing a comprehensive framework for using AI coding assistants (like Cursor, Windsurf, and Cline) in a grounded, reproducible, and efficient manner. It empowers developers to build robust, reliable, and well-documented LangGraph applications by ensuring AI-generated code adheres to best practices and leverages official documentation.
+This repository streamlines and enhances the LangGraph development process by providing a comprehensive framework for using AI coding assistants in a grounded, reproducible, and efficient manner.
 
-## Key Features:
+## How It Works
 
-*   **AI-Driven Development Guidance:** Provides a structured system of rules that guides AI assistants in understanding developer intentions and selecting the appropriate documentation for each development task, leading to more accurate and relevant code generation.
-*   **Local Repository as Source of Truth:** Enforces the use of the local `langchain-ai/langgraph` repository as the primary knowledge base, ensuring all code is aligned with the latest version-controlled documentation and eliminating reliance on outdated or external information.
-*   **IDE Integration for Development Efficiency:** 🚧 *Not Implemented Yet* - Offers pre-built configurations and best practices for seamlessly integrating these rules into popular IDEs, making AI assistance a natural part of your development workflow.
-*   **Transparent and Traceable Development:** 🚧 *Not Implemented Yet* - Encourages AI assistants to explicitly declare the rules they are following and the reasoning behind their choices, promoting greater transparency and trust in the generated code, and simplifying debugging.
-*   **Mitigation of Development Pitfalls:** 🚧 *Not Implemented Yet* - Includes a detailed roadmap for implementing key features and proactively mitigating common pitfalls in LangGraph development, such as API drift, biased outputs, and security vulnerabilities.
+This project empowers developers to build robust, reliable, and well-documented LangGraph applications by ensuring AI-generated code adheres to best practices and leverages official, version-controlled documentation. It achieves this through two primary mechanisms:
 
-## Getting Started:
+1.  **A Local Knowledge Source:** It uses a local git submodule of the official `langchain-ai/langgraph` repository as the ground truth for documentation and code structure.
+2.  **An Advanced Knowledge Server:** It includes the `mcp-crawl4ai-rag` server, which provides powerful Retrieval-Augmented Generation (RAG) for semantic search across documentation and a Knowledge Graph (KG) for validating generated code against the actual codebase structure.
 
-1.  Clone this repository.
-This single command clones both this repository and the required `langgraph` documentation repository inside it.
-```bash
-git clone --recursive https://github.com/your-username/langgraph-dev-navigator.git
-cd langgraph-dev-navigator
+## Getting Started
+
+This guide provides a comprehensive walkthrough for setting up the `langgraph-dev-navigator`, from a basic local-only configuration to the full-featured setup with the MCP Knowledge Server.
+
+### Part 1: Basic Setup (Local Knowledge Source)
+
+This initial setup clones the repository and the required `langgraph` submodule. At this stage, an AI agent can use the local files as a knowledge source.
+
+1.  **Clone the Repository:**
+    ```bash
+    git clone --recursive https://github.com/botingw/langgraph-dev-navigator.git
+    cd langgraph-dev-navigator
+    ```
+
+2.  **Initialize Submodules (if not cloned recursively):**
+    If you cloned the repository without the `--recursive` flag, you must initialize the submodules manually:
+    ```bash
+    git submodule update --init --recursive
+    ```
+
+### Part 2: Advanced Setup (MCP Knowledge Server)
+
+This setup activates the powerful RAG and Knowledge Graph capabilities of the project by configuring and launching the `mcp-crawl4ai-rag` server submodule.
+
+#### Prerequisites for Advanced Setup
+
+To enable the full functionality of the MCP Knowledge Server, you will need accounts and API keys for the following services. We recommend setting these up *before* proceeding with the installation steps.
+
+*   **OpenAI API Key:** Required for generating embeddings and using LLMs.
+    *   [Get your API Key here](https://platform.openai.com/api-keys)
+*   **Supabase:** Used as the vector database for RAG.
+    *   [Create a Supabase project](https://supabase.com/dashboard/projects)
+    *   You will need your Project URL and `service_role` key (found under Project Settings -> API).
+*   **Neo4j:** Used as the graph database for Knowledge Graph functionality (hallucination detection, code analysis).
+    *   [Sign up for Neo4j AuraDB (cloud)](https://neo4j.com/cloud/platform/aura-graph-database/) or [Install Neo4j Desktop (local)](https://neo4j.com/download/)
+    *   **Recommendation:** For local development, consider using the [Local AI Package](https://github.com/coleam00/local-ai-packaged) for an easy local Neo4j setup.
+
+#### Installation and Configuration
+
+The setup involves configuring environment variables, installing dependencies, and running a one-time knowledge ingestion script.
+
+**The complete, detailed instructions for this are maintained in the official submodule documentation.** This ensures you always have the most up-to-date information.
+
+➡️ **[Click here to follow the `mcp-crawl4ai-rag` setup guide](./mcp-crawl4ai-rag/README.md#installation)**
+
+**Key Configuration for This Project:**
+
+When you create your `.env` file as instructed in the guide, ensure the following flags are set to `true` to enable all features for the `langgraph-dev-navigator`:
+
+```dotenv
+# Recommended settings for langgraph-dev-navigator
+USE_KNOWLEDGE_GRAPH=true
+USE_AGENTIC_RAG=true
+USE_HYBRID_SEARCH=true
+USE_RERANKING=true
 ```
-2.  Clone the `langchain-ai/langgraph` repository as a submodule or sibling directory.
+
+#### Testing Your Local Server Setup
+
+Once you have completed the installation and configuration steps in the submodule's README, you can launch the server locally to confirm your setup is correct:
+
 ```bash
- git submodule init
- git submodule update
+cd mcp-crawl4ai-rag
+bash start_mcp_server.sh
 ```
 
-3. create a conda env
-```bash
-conda create --name langgraph-dev python=3.13
-conda activate langgraph-dev
-```
+This command will start the server in your terminal. You can then proceed to integrate it with your AI assistant.
 
-4. install langgraph (when install both google-generativeai and langchain-google-genai seems have conflict)
-```bash
-pip install langgraph
-pip install google-generativeai
-pip install langchain-google-genai
-pip install python-dotenv
-pip install duckduckgo-search
-```
+#### Integrating with Your AI Assistant
+
+The `mcp-crawl4ai-rag` server is designed to be integrated with various AI coding assistants (e.g., Cursor, Claude Code). Each assistant has its own method for configuring MCP servers.
+
+➡️ **[Click here for detailed integration instructions for various AI clients](./mcp-crawl4ai-rag/README.md#integration-with-mcp-clients)**
 
 
-5.  Start building!
 
-Of course. Here is a simple and concise paragraph for your README, created using a first-principles approach.
-
-**First Principles Applied:**
-1.  **Problem:** The installed code version can differ from the documentation source version.
-2.  **Solution:** Find the installed version (`pip`), then force the documentation source to that exact version (`git`).
-3.  **Audience Need:** A quick, actionable recipe, not a long tutorial.
-
----
+## Advanced Usage & Recipes
 
 ### Aligning Docs & Code Version
 
@@ -72,14 +108,11 @@ This is an optional but recommended step to ensure the documentation source (for
     ```
     *(Remember to replace `v0.0.56` with the version you found in step 1.)*
 
-## Documentation:
+## Project Documentation
 
-### For developers
-*   `docs/prd.md`: High-level plan for improving SWE agents's capabilities in agentic workflow development. 
-*   `docs/ide_integration_guide.md`: Concrete steps for integrating the rules into your IDE.
-*   `docs/task_implementation_strategies.md`: Mapping of roadmap items to implementation strategies.
-*   `docs/langgraph-ai-rules.md`: The core rules file that guides the AI assistant. It is in .clinerules folder and .windsurf/rules folder.
+*   `docs/project_management_guide.md`: The standard process for managing epics, stories, and tasks.
+*   `memory/tasks/epic_user_experience/README.md`: The strategic plan for the User Experience epic.
 
-## Contributing:
+## Contributing
 
 ... (Add your contribution guidelines here) ...
