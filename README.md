@@ -7,7 +7,9 @@ This repository streamlines and enhances the LangGraph development process by pr
 This project empowers developers to build robust, reliable, and well-documented LangGraph applications by ensuring AI-generated code adheres to best practices and leverages official, version-controlled documentation. It achieves this through two primary mechanisms:
 
 1.  **A Local Knowledge Source:** It uses a local git submodule of the official `langchain-ai/langgraph` repository as the ground truth for documentation and code structure.
-2.  **An Advanced Knowledge Server:** It includes the `mcp-crawl4ai-rag` server, which provides powerful Retrieval-Augmented Generation (RAG) for semantic search across documentation and a Knowledge Graph (KG) for validating generated code against the actual codebase structure.
+2.  **An Advanced Knowledge Server:** It includes the `mcp-crawl4ai-rag` server, which provides two powerful capabilities:
+    *   **Retrieval-Augmented Generation (RAG):** Performs semantic search across the entire LangGraph documentation. This allows an AI assistant to find the most relevant, up-to-date information to answer questions and generate accurate code.
+    *   **Knowledge Graph (KG):** Ingests the `langgraph` codebase into a graph database. This allows the server to validate AI-generated code against the actual structure of the library, drastically reducing code "hallucinations" (e.g., usage of non-existent functions or incorrect parameters).
 
 ## Getting Started
 
@@ -29,63 +31,211 @@ This initial setup clones the repository and the required `langgraph` submodule.
     git submodule update --init --recursive
     ```
 
+3. **Install Dependencies:**
+   ```bash
+   # from the root of the langgraph-dev-navigator directory
+   uv pip install -r requirements.txt
+   ```
+
 ### Part 2: Advanced Setup (MCP Knowledge Server)
 
 This setup activates the powerful RAG and Knowledge Graph capabilities of the project by configuring and launching the `mcp-crawl4ai-rag` server submodule.
 
-#### Prerequisites for Advanced Setup
+### Step 1: Prerequisites
 
-To enable the full functionality of the MCP Knowledge Server, you will need accounts and API keys for the following services. We recommend setting these up *before* proceeding with the installation steps.
+Before you begin, ensure you have the following:
 
-*   **OpenAI API Key:** Required for generating embeddings and using LLMs.
-    *   [Get your API Key here](https://platform.openai.com/api-keys)
-*   **Supabase:** Used as the vector database for RAG.
-    *   [Create a Supabase project](https://supabase.com/dashboard/projects)
-    *   You will need your Project URL and `service_role` key (found under Project Settings -> API).
-*   **Neo4j:** Used as the graph database for Knowledge Graph functionality (hallucination detection, code analysis).
-    *   [Sign up for Neo4j AuraDB (cloud)](https://neo4j.com/cloud/platform/aura-graph-database/) or [Install Neo4j Desktop (local)](https://neo4j.com/download/)
-    *   **Recommendation:** For local development, consider using the [Local AI Package](https://github.com/coleam00/local-ai-packaged) for an easy local Neo4j setup.
+*   **Docker:** For the recommended container-based setup.
+*   **Python & uv:** For advanced local setup. for user want local development and running validation scripts.
+*   **API Keys & Credentials:**
+    *   **OpenAI API Key:** Required for generating embeddings for the RAG system. [Get your API Key here](https://platform.openai.com/api-keys).
+    *   **Supabase Project:** Used as a vector database to store the LangGraph documentation for RAG. [Create a Supabase project](https://supabase.com/dashboard/projects). You will need your Project URL and `service_role` key.
+    *   **Neo4j Instance:** Used as a graph database for the Knowledge Graph. [Sign up for Neo4j AuraDB (cloud)](https://neo4j.com/cloud/platform/aura-graph-database/) or [Install Neo4j Desktop (local)](https://neo4j.com/download/).
 
-#### Installation and Configuration
+### Step 2: Configure Environment Variables
 
-The setup involves configuring environment variables, installing dependencies, and running a one-time knowledge ingestion script.
+1.  Navigate to the `mcp-crawl4ai-rag` directory.
+2.  Create a `.env` file by copying the example file. The example file is pre-configured with the recommended settings for this project.
+    ```bash
+    cp mcp-crawl4ai-rag/.env.example mcp-crawl4ai-rag/.env
+    ```
+3.  Edit `mcp-crawl4ai-rag/.env` and fill in your API keys and service URLs from Step 1.
 
-**The complete, detailed instructions for this are maintained in the official submodule documentation.** This ensures you always have the most up-to-date information.
+#### Understanding Key Configurations
 
-➡️ **[Click here to follow the `mcp-crawl4ai-rag` setup guide](./mcp-crawl4ai-rag/README.md#installation)**
+The `.env.example` file is set up with the following recommended defaults:
 
-**Key Configuration for This Project:**
+*   `TRANSPORT='stdio'`: This is the recommended setting. It allows your AI coding assistant to start and stop the MCP server on demand, which is the most seamless experience. You might change this to `sse` if you plan to have multiple different clients connect to a single, long-running server instance.
+*   `USE_KNOWLEDGE_GRAPH=true`: This enables the powerful AI code hallucination checker.
+*   `USE_AGENTIC_RAG=true`: This enables the specialized tool for finding code examples.
+*   `NEO4J_URI='bolt://host.docker.internal:7687'`: This is the correct setting for the **recommended Docker setup**, as it allows the container to connect to the Neo4j database running on your host machine. If you are using the **advanced local setup**, you should change this to `bolt://localhost:7687`.
 
-When you create your `.env` file as instructed in the guide, ensure the following flags are set to `true` to enable all features for the `langgraph-dev-navigator`:
+### Step 3: Set Up the Supabase Database
 
-```dotenv
-# Recommended settings for langgraph-dev-navigator
-USE_KNOWLEDGE_GRAPH=true
-USE_AGENTIC_RAG=true
-USE_HYBRID_SEARCH=true
-USE_RERANKING=true
+This is a one-time setup step to prepare your Supabase project to store the crawled documentation.
+
+1.  Navigate to the **SQL Editor** in your Supabase project dashboard.
+2.  Click **"New query"**.
+3.  Copy the entire content of the `mcp-crawl4ai-rag/crawled_pages.sql` file and paste it into the query editor.
+4.  Click **"Run"** to execute the script and create the necessary tables and functions.
+
+### Step 4: Choose Your Setup Path
+
+Now, choose one of the following paths to install and run the MCP server.
+
+#### Path A: Docker Setup (Recommended)
+
+This is the simplest way to get started.
+
+1.  **Build the Docker Image:**
+    ```bash
+    docker build -t mcp-crawl4ai-rag -f mcp-crawl4ai-rag/Dockerfile mcp-crawl4ai-rag
+    ```
+
+2.  **Run the One-Time Data Ingestion:**
+    This command runs a temporary container to crawl the documentation and populate your Supabase and Neo4j databases.
+    ```bash
+    docker run --rm --memory "512m" \
+      -v "$(pwd)/mcp-crawl4ai-rag/.env:/app/.env" \
+      -v "$(pwd)/mcp-crawl4ai-rag/reports:/app/reports" \
+      mcp-crawl4ai-rag \
+      python -u run_one_time_ingestion.py
+    ```
+    **Note:** `$(pwd)` must be the absolute path to the `langgraph-dev-navigator` repository.
+
+3.  **Launch the MCP Server:**
+    The following are examples of how to configure your AI coding assistant to connect to the server. For more detailed configurations, please refer to the `mcp-crawl4ai-rag/README.md`.
+
+    *   **For Gemini CLI (`.gemini/settings.json`):**
+        ```json
+        {
+          "mcpServers": {
+            "crawl4ai-rag-bash": {
+              "command": "docker",
+              "args": ["run", "-i", "--rm",
+                       "--memory", "512m",
+                       "-v", "${pwd}/.env:/app/.env",
+                       "mcp-crawl4ai-rag",
+                       "bash", "/app/start_mcp_server.sh"],
+              "timeout": 600
+            }
+          }
+        }
+        ```
+
+    *   **For GitHub Copilot (`.vscode/mcp.json`):**
+        ```json
+        {
+          "servers": {
+            "crawl4ai-rag": {
+              "type": "stdio",
+              "command": "docker",
+              "args": ["run", "-i",
+                       "--memory", "512m",
+                       "-v", "${pwd}/.env:/app/.env",
+                       "mcp-crawl4ai-rag",
+                       "bash", "/app/start_mcp_server.sh"]
+            }
+          }
+        }
+        ```
+    **Note:** `${pwd}` should be the absolute path to the `mcp-crawl4ai-rag` submodule.
+
+#### Path B: Local Development Setup (Advanced)
+
+This path is for developers who want to work on the server code directly.
+
+1. Install uv if you don't have it:
+   ```bash
+   pip install uv
+   ```
+
+2. Create and activate a virtual environment from within the `mcp-crawl4ai-rag` directory:
+   ```bash
+   cd mcp-crawl4ai-rag
+   uv venv
+   source .venv/bin/activate # On Windows, use: .venv\Scripts\activate
+   ```
+
+3. Install dependencies:
+   ```bash
+   uv pip install -e .
+   crawl4ai-setup
+   ```
+
+4.  Run the One-Time Data Ingestion:
+    ```bash
+    uv run python run_one_time_ingestion.py
+    ```
+
+5.  Launch the MCP Server:
+    The following are examples of how to configure your AI coding assistant to connect to the server. For more detailed configurations on configuring your specific AI assistant for local development, please refer to the `mcp-crawl4ai-rag/README.md`.
+
+    for gemini cli (configured in ./gemini/setting.json):
+```json
+{
+  "mcpServers": {
+    "crawl4ai-rag-local-bash": {
+      "command": "${pwd}/start_mcp_server.sh",
+      "env": {
+        "TRANSPORT": "stdio",
+        "OPENAI_API_KEY": "{api-key}",
+        "SUPABASE_URL": "https://{your-id}.supabase.co",
+        "SUPABASE_SERVICE_KEY": "api-key",
+        "USE_KNOWLEDGE_GRAPH": "true",
+        "NEO4J_URI": "bolt://localhost:7687",
+        "NEO4J_USER": "neo4j",
+        "NEO4J_PASSWORD": "{password}"
+      },
+      "timeout": 600
+    }
+  }
+}
 ```
 
-#### Testing Your Local Server Setup
+    for github copilot (configured in .vscode/mcp.json):
+```json
+{
+  // 💡 Inputs are prompted on first server start, then stored securely by VS Code.
+  "inputs": [
+    {
+      "type": "promptString",
+      "id": "perplexity-key",
+      "description": "Perplexity API Key",
+      "password": true
+    }
+  ],
+  "servers": {
+    "crawl4ai-rag": {
+      "type": "stdio",
+      "command": "${pwd}/start_mcp_server.sh"
+    }
+  }
+}
+```json
 
-Once you have completed the installation and configuration steps in the submodule's README, you can launch the server locally to confirm your setup is correct:
+    **Note:** `${pwd}` should be the absolute path to the `mcp-crawl4ai-rag` submodule.
+
+### Step 5: Validate Your Setup
+
+After completing either setup path, run the validation script from within the `mcp-crawl4ai-rag` directory to ensure everything is working correctly:
 
 ```bash
+# Ensure you are in the mcp-crawl4ai-rag directory
 cd mcp-crawl4ai-rag
-bash start_mcp_server.sh
+uv run python validate_setup.py
 ```
 
-This command will start the server in your terminal. You can then proceed to integrate it with your AI assistant.
-
-#### Integrating with Your AI Assistant
-
-The `mcp-crawl4ai-rag` server is designed to be integrated with various AI coding assistants (e.g., Cursor, Claude Code). Each assistant has its own method for configuring MCP servers.
-
-➡️ **[Click here for detailed integration instructions for various AI clients](./mcp-crawl4ai-rag/README.md#integration-with-mcp-clients)**
-
-
-
 ## Advanced Usage & Recipes
+
+### Key Tools Unlocked by the MCP Server
+
+Once the MCP server is running, your AI assistant gains access to a powerful new set of tools:
+
+*   `perform_rag_query`: Asks a natural language question (e.g., "How do I add memory to a graph?") and gets back the most relevant sections of the LangGraph documentation.
+*   `search_code_examples`: Searches specifically for runnable code snippets from the documentation.
+*   `check_ai_script_hallucinations`: Takes a Python script as input and validates it against the Knowledge Graph to check for non-existent classes, methods, or incorrect function calls.
+*   `query_knowledge_graph`: Allows for direct exploration of the LangGraph codebase structure via graph queries.
 
 ### Aligning Docs & Code Version
 

@@ -28,5 +28,3 @@ why:
         "NEO4J_PASSWORD": {your-password}
       }
     }
-
-

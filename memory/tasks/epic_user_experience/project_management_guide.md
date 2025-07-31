@@ -6,6 +6,21 @@ This guide should be considered the standard for all new initiatives.
 
 ---
 
+### Guiding Principles & Suitable Scenarios
+
+This project management process is designed to balance structure and agility, making it suitable for small-to-medium-sized projects where requirements may evolve as new information is discovered.
+
+*   **Core Principle 1: Single Source of Truth.** To prevent documentation drift, each level of the hierarchy (Epic, Story) has a single, authoritative document. The `tasks_plan.md` is the source of truth for the epic's status, and each `_spec.md` is the source of truth for a story's implementation.
+
+*   **Core Principle 2: Adapt to New Information.** The process must gracefully handle uncertainty and discovery. When an investigation (a "Spike Story") reveals new information that changes the project's direction, the plan must be formally updated. This prevents the plan from becoming misaligned with reality.
+
+This approach is ideal for:
+*   Projects where the high-level goals are clear, but the specific implementation path is not yet fully known.
+*   Teams that need a lightweight process that provides structure without creating unnecessary bureaucracy.
+*   AI-assisted development workflows where the AI needs a clear, hierarchical context to understand its tasks.
+
+---
+
 ### The Problem: Documentation Drift
 
 In any project, it's easy for plans, specifications, and task lists to become disconnected. When a requirement changes in one document, it's often not updated in another, leading to confusion and errors. This guide establishes a system to prevent this by defining a single source of truth for each level of detail.
@@ -49,6 +64,16 @@ This system relies on each document having a clear and distinct purpose.
 3.  The developer works directly from the spec file, using the embedded task checklist to guide their implementation.
 4.  If a requirement changes, the developer updates both the Acceptance Criteria and the task list *within that same spec file*, ensuring they never go out of sync.
 5.  Once all tasks are complete and the acceptance criteria are met, the developer updates the Story's status on the Epic Dashboard to "Done."
+
+### Handling Uncertainty: Spikes and Adaptation
+
+Not all work is predictable. Sometimes, a story is required simply to investigate a technical question or de-risk an approach. These are called "Spike Stories."
+
+*   **Spike Story:** A time-boxed investigation whose primary deliverable is knowledge, not a feature. The outcome of a spike (e.g., "Yes, we can use Docker for this") often changes the plan for other stories.
+
+*   **The Adaptation Step:** When a Spike Story is completed, it has one final, mandatory task: **"Update the Epic's `README.md` and `tasks_plan.md` to reflect the findings."** This ensures that the project's high-level plan is immediately brought back into alignment with the new reality, preventing context drift.
+
+*   **Status for Blocked Work:** If a story cannot proceed until a spike is complete, it should be marked with the status **"Blocked/Pending Investigation"** in the `tasks_plan.md`.
 
 ### Handling Common Scenarios
 
