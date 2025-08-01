@@ -49,11 +49,13 @@ This section activates the powerful RAG and Knowledge Graph capabilities of the 
 Before you begin, ensure you have the following:
 
 *   **Docker:** For the recommended container-based setup.
-*   **Python & uv:** For advanced local setup. for user want local development and running validation scripts.
+*   **Python 3.12+ & uv:** Required for the local development path and validation scripts.
 *   **API Keys & Credentials:**
     *   **OpenAI API Key:** Required for generating embeddings for the RAG system. [Get your API Key here](https://platform.openai.com/api-keys).
     *   **Supabase Project:** Used as a vector database to store the LangGraph documentation for RAG. [Create a Supabase project](https://supabase.com/dashboard/projects). You will need your Project URL and `service_role` key.
     *   **Neo4j Instance:** Used as a graph database for the Knowledge Graph. [Sign up for Neo4j AuraDB (cloud)](https://neo4j.com/cloud/platform/aura-graph-database/) or [Install Neo4j Desktop (local)](https://neo4j.com/download/).
+
+For more detailed information on setting up these services, refer to the [Database Setup](mcp-crawl4ai-rag/README.md#database-setup) and [Knowledge Graph Setup](mcp-crawl4ai-rag/README.md#knowledge-graph-setup-optional) sections in the submodule's README.
 
 #### 3.2: Configure Environment Variables
 
@@ -72,6 +74,8 @@ The `.env.example` file is set up with the following recommended defaults:
 *   `USE_KNOWLEDGE_GRAPH=true`: This enables the powerful AI code hallucination checker.
 *   `USE_AGENTIC_RAG=true`: This enables the specialized tool for finding code examples.
 *   `NEO4J_URI='bolt://host.docker.internal:7687'`: This is the correct setting for the **recommended Docker setup**, as it allows the container to connect to the Neo4j database running on your host machine. If you are using the **advanced local setup**, you should change this to `bolt://localhost:7687`.
+
+For a detailed explanation of all available RAG strategies and other advanced settings, please see the [Configuration](mcp-crawl4ai-rag/README.md#configuration) section in the submodule's README.
 
 #### 3.3: Set Up the Supabase Database
 
