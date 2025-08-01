@@ -99,6 +99,11 @@ This is the simplest way to get started.
     docker build -t mcp-crawl4ai-rag -f mcp-crawl4ai-rag/Dockerfile mcp-crawl4ai-rag
     ```
 
+    Then, run the validation script in a temporary container (validate your `.env` enables you to connect to neo4j and Supabase):
+    ```bash
+    docker run --rm --memory "512m" -v "$(pwd)/.env:/app/.env" mcp-crawl4ai-rag python -u validate_setup.py --stage 1
+    ```
+
 2.  **Run the One-Time Data Ingestion:**
     This command runs a temporary container to crawl the documentation and populate your Supabase and Neo4j databases.
     ```bash
@@ -108,7 +113,11 @@ This is the simplest way to get started.
       mcp-crawl4ai-rag \
       python -u run_one_time_ingestion.py
     ```
-    **Note:** `$(pwd)` must be the absolute path to the `langgraph-dev-navigator` repository.
+
+    then validate successful data ingestion.
+    ```bash
+    docker run --rm --memory "512m" -v "$(pwd)/.env:/app/.env" mcp-crawl4ai-rag python -u validate_setup.py --stage 2
+    ```
 
 3.  **Configure Your AI Assistant to Launch the Server:**
     The following are examples of how to configure your AI coding assistant to connect to the server. For more detailed configurations, please refer to the `mcp-crawl4ai-rag/README.md`.
@@ -139,14 +148,14 @@ This is the simplest way to get started.
               "command": "docker",
               "args": ["run", "-i",
                        "--memory", "512m",
-                       "-v", "${pwd}/.env:/app/.env",
+                       "-v", "$(pwd)/.env:/app/.env",
                        "mcp-crawl4ai-rag",
                        "bash", "/app/start_mcp_server.sh"]
             }
           }
         }
         ```
-    **Note:** `${pwd}` should be the absolute path to the `mcp-crawl4ai-rag` submodule.
+    **Note:** `$(pwd)` should be the absolute path to the `mcp-crawl4ai-rag` submodule.
 
 ##### Path B: Local Development Setup (Advanced)
 
@@ -170,67 +179,73 @@ This path is for developers who want to work on the server code directly.
    crawl4ai-setup
    ```
 
-4.  Run the One-Time Data Ingestion:
+4. run the validation script in a temporary container (validate your `.env` enables you to connect to neo4j and Supabase)
+    ```bash
+    uv run python validate_setup.py --stage 1
+    ```
+
+5.  Run the One-Time Data Ingestion:
     ```bash
     uv run python run_one_time_ingestion.py
     ```
 
-5.  Launch the MCP Server:
+6.  Launch the MCP Server:
     The following are examples of how to configure your AI coding assistant to connect to the server. For more detailed configurations on configuring your specific AI assistant for local development, please refer to the `mcp-crawl4ai-rag/README.md`.
     For more advanced local mcp launch options (e.g. sse server), refer to the `mcp-crawl4ai-rag/README.md` "Integration with MCP Clients" [section](mcp-crawl4ai-rag/README.md#integration-with-mcp-clients) for detailed instructions on configuring your specific AI assistant for local development.
 
     for gemini cli (configured in ./gemini/setting.json):
-```json
-{
-  "mcpServers": {
-    "crawl4ai-rag-local-bash": {
-      "command": "${pwd}/start_mcp_server.sh",
-      "env": {
-        "TRANSPORT": "stdio",
-        "OPENAI_API_KEY": "{api-key}",
-        "SUPABASE_URL": "https://{your-id}.supabase.co",
-        "SUPABASE_SERVICE_KEY": "api-key",
-        "USE_KNOWLEDGE_GRAPH": "true",
-        "NEO4J_URI": "bolt://localhost:7687",
-        "NEO4J_USER": "neo4j",
-        "NEO4J_PASSWORD": "{password}"
-      },
-      "timeout": 600
+    ```json
+    {
+      "mcpServers": {
+        "crawl4ai-rag-local-bash": {
+          "command": "${pwd}/start_mcp_server.sh",
+          "env": {
+            "TRANSPORT": "stdio",
+            "OPENAI_API_KEY": "{api-key}",
+            "SUPABASE_URL": "https://{your-id}.supabase.co",
+            "SUPABASE_SERVICE_KEY": "api-key",
+            "USE_KNOWLEDGE_GRAPH": "true",
+            "NEO4J_URI": "bolt://localhost:7687",
+            "NEO4J_USER": "neo4j",
+            "NEO4J_PASSWORD": "{password}"
+          },
+          "timeout": 600
+        }
+      }
     }
-  }
-}
-```
+    ```
 
     for github copilot (configured in .vscode/mcp.json):
-```json
-{
-  // 💡 Inputs are prompted on first server start, then stored securely by VS Code.
-  "inputs": [
-    {
-      "type": "promptString",
-      "id": "perplexity-key",
-      "description": "Perplexity API Key",
-      "password": true
-    }
-  ],
-  "servers": {
-    "crawl4ai-rag": {
-      "type": "stdio",
-      "command": "${pwd}/start_mcp_server.sh"
-    }
-  }
-}
-```json
 
-    **Note:** `${pwd}` should be the absolute path to the `mcp-crawl4ai-rag` submodule.
+    ```json
+    {
+      // 💡 Inputs are prompted on first server start, then stored securely by VS Code.
+      "inputs": [
+        {
+          "type": "promptString",
+          "id": "perplexity-key",
+          "description": "Perplexity API Key",
+          "password": true
+        }
+      ],
+      "servers": {
+        "crawl4ai-rag": {
+          "type": "stdio",
+          "command": "$(pwd)/start_mcp_server.sh"
+        }
+      }
+    }
+    ```
+
+    **Note:** `$(pwd)` should be the absolute path to the `mcp-crawl4ai-rag` submodule.
 #### 3.5: Validate the Server Setup
 
-After completing either setup path, run the validation script from within the `mcp-crawl4ai-rag` directory to ensure everything is working correctly:
+After completing either setup path, run the validation script again from within the `mcp-crawl4ai-rag` directory to ensure everything is working correctly (data write into):
 
 ```bash
 # Ensure you are in the mcp-crawl4ai-rag directory
 cd mcp-crawl4ai-rag
-uv run python validate_setup.py
+uv run python validate_setup.py --stage 2
 ```
 
 ### Step 4: Configure Your AI Assistant
