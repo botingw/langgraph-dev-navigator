@@ -13,11 +13,11 @@ This project empowers developers to build robust, reliable, and well-documented 
 
 ## Getting Started
 
-This guide provides a comprehensive walkthrough for setting up the `langgraph-dev-navigator`, from a basic local-only configuration to the full-featured setup with the MCP Knowledge Server.
+This guide provides a comprehensive, step-by-step walkthrough for setting up the `langgraph-dev-navigator` and all its features.
 
-### Part 1: Basic Setup (Local Knowledge Source)
+### Step 1: Clone the Repository and Submodules
 
-This initial setup clones the repository and the required `langgraph` submodule. At this stage, an AI agent can use the local files as a knowledge source.
+This step clones the main repository and the required `langgraph` submodule, which serves as the local knowledge source.
 
 1.  **Clone the Repository:**
     ```bash
@@ -31,17 +31,20 @@ This initial setup clones the repository and the required `langgraph` submodule.
     git submodule update --init --recursive
     ```
 
-3. **Install Dependencies:**
-   ```bash
-   # from the root of the langgraph-dev-navigator directory
-   uv pip install -r requirements.txt
-   ```
+### Step 2: Install Core Dependencies
 
-### Part 2: Advanced Setup (MCP Knowledge Server)
+Install the required Python packages for the project. they are dependencies for langgraph development.
 
-This setup activates the powerful RAG and Knowledge Graph capabilities of the project by configuring and launching the `mcp-crawl4ai-rag` server submodule.
+```bash
+# from the root of the langgraph-dev-navigator directory
+uv pip install -r requirements.txt
+```
 
-### Step 1: Prerequisites
+### Step 3: Set Up the Knowledge Server
+
+This section activates the powerful RAG and Knowledge Graph capabilities of the project by configuring and launching the `mcp-crawl4ai-rag` server submodule.
+
+#### 3.1: Prerequisites
 
 Before you begin, ensure you have the following:
 
@@ -52,16 +55,16 @@ Before you begin, ensure you have the following:
     *   **Supabase Project:** Used as a vector database to store the LangGraph documentation for RAG. [Create a Supabase project](https://supabase.com/dashboard/projects). You will need your Project URL and `service_role` key.
     *   **Neo4j Instance:** Used as a graph database for the Knowledge Graph. [Sign up for Neo4j AuraDB (cloud)](https://neo4j.com/cloud/platform/aura-graph-database/) or [Install Neo4j Desktop (local)](https://neo4j.com/download/).
 
-### Step 2: Configure Environment Variables
+#### 3.2: Configure Environment Variables
 
 1.  Navigate to the `mcp-crawl4ai-rag` directory.
 2.  Create a `.env` file by copying the example file. The example file is pre-configured with the recommended settings for this project.
     ```bash
     cp mcp-crawl4ai-rag/.env.example mcp-crawl4ai-rag/.env
     ```
-3.  Edit `mcp-crawl4ai-rag/.env` and fill in your API keys and service URLs from Step 1.
+3.  Edit `mcp-crawl4ai-rag/.env` and fill in your API keys and service URLs from the prerequisites.
 
-#### Understanding Key Configurations
+##### Understanding Key Configurations
 
 The `.env.example` file is set up with the following recommended defaults:
 
@@ -70,7 +73,7 @@ The `.env.example` file is set up with the following recommended defaults:
 *   `USE_AGENTIC_RAG=true`: This enables the specialized tool for finding code examples.
 *   `NEO4J_URI='bolt://host.docker.internal:7687'`: This is the correct setting for the **recommended Docker setup**, as it allows the container to connect to the Neo4j database running on your host machine. If you are using the **advanced local setup**, you should change this to `bolt://localhost:7687`.
 
-### Step 3: Set Up the Supabase Database
+#### 3.3: Set Up the Supabase Database
 
 This is a one-time setup step to prepare your Supabase project to store the crawled documentation.
 
@@ -79,11 +82,11 @@ This is a one-time setup step to prepare your Supabase project to store the craw
 3.  Copy the entire content of the `mcp-crawl4ai-rag/crawled_pages.sql` file and paste it into the query editor.
 4.  Click **"Run"** to execute the script and create the necessary tables and functions.
 
-### Step 4: Choose Your Setup Path
+#### 3.4: Choose Your Server Setup Path
 
 Now, choose one of the following paths to install and run the MCP server.
 
-#### Path A: Docker Setup (Recommended)
+##### Path A: Docker Setup (Recommended)
 
 This is the simplest way to get started.
 
@@ -103,7 +106,7 @@ This is the simplest way to get started.
     ```
     **Note:** `$(pwd)` must be the absolute path to the `langgraph-dev-navigator` repository.
 
-3.  **Launch the MCP Server:**
+3.  **Configure Your AI Assistant to Launch the Server:**
     The following are examples of how to configure your AI coding assistant to connect to the server. For more detailed configurations, please refer to the `mcp-crawl4ai-rag/README.md`.
 
     *   **For Gemini CLI (`.gemini/settings.json`):**
@@ -141,7 +144,7 @@ This is the simplest way to get started.
         ```
     **Note:** `${pwd}` should be the absolute path to the `mcp-crawl4ai-rag` submodule.
 
-#### Path B: Local Development Setup (Advanced)
+##### Path B: Local Development Setup (Advanced)
 
 This path is for developers who want to work on the server code directly.
 
@@ -170,6 +173,7 @@ This path is for developers who want to work on the server code directly.
 
 5.  Launch the MCP Server:
     The following are examples of how to configure your AI coding assistant to connect to the server. For more detailed configurations on configuring your specific AI assistant for local development, please refer to the `mcp-crawl4ai-rag/README.md`.
+    For more advanced local mcp launch options (e.g. sse server), refer to the `mcp-crawl4ai-rag/README.md` "Integration with MCP Clients" [section](mcp-crawl4ai-rag/README.md#integration-with-mcp-clients) for detailed instructions on configuring your specific AI assistant for local development.
 
     for gemini cli (configured in ./gemini/setting.json):
 ```json
@@ -215,8 +219,7 @@ This path is for developers who want to work on the server code directly.
 ```json
 
     **Note:** `${pwd}` should be the absolute path to the `mcp-crawl4ai-rag` submodule.
-
-### Step 5: Validate Your Setup
+#### 3.5: Validate the Server Setup
 
 After completing either setup path, run the validation script from within the `mcp-crawl4ai-rag` directory to ensure everything is working correctly:
 
@@ -224,6 +227,15 @@ After completing either setup path, run the validation script from within the `m
 # Ensure you are in the mcp-crawl4ai-rag directory
 cd mcp-crawl4ai-rag
 uv run python validate_setup.py
+```
+
+### Step 4: Configure Your AI Assistant
+
+This final step installs the project-specific instructions for your AI coding assistant, enabling it to use the knowledge server and follow the correct development methodology.
+
+Run the following command and select your assistant from the interactive menu:
+```bash
+uv run python src/setup_dev_assistant.py
 ```
 
 ## Advanced Usage & Recipes
