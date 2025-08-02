@@ -1,6 +1,34 @@
-# LangGraph-Dev-Navigator
+# LangGraph-Dev-Navigator: Build Reliable AI with Grounded Assistants
 
-This repository streamlines and enhances the LangGraph development process by providing a comprehensive framework for using AI coding assistants in a grounded, reproducible, and efficient manner.
+AI coding assistants are powerful, but their general knowledge can be outdated or lead to plausible-but-incorrect code ("hallucinations"). This repository addresses that by providing a framework to ground an AI assistant in the **executable truth** of a specific, version-controlled codebase.
+
+The goal is to create a development environment where AI-generated code is more reliable, robust, and aligned with project-specific best practices.
+
+## A Developer's Workflow: Before and After
+
+This framework is designed to transform your daily development experience.
+
+### Before: The Standard AI Assistant Workflow
+1.  **The Prompt:** A developer asks a generic AI assistant: "Show me how to add memory to a LangGraph agent."
+2.  **The AI's Response:** The AI, relying on its vast but general training data, generates a plausible-looking code snippet. However, the snippet might use a function that was deprecated two months ago, or instantiate a class with parameters that are subtly incorrect for the `langgraph` version you're using.
+3.  **The Debuging Cycle:** The code fails to run. The developer copies the error message back to the AI, starting a lengthy back-and-forth conversation to debug the AI's own hallucinated code.
+4.  **The Result:** The developer loses time and trust, doing manual debugging that the AI was supposed to prevent.
+
+### After: The Grounded Assistant Workflow
+1.  **The Prompt:** A developer asks the `LangGraph-Dev-Navigator` assistant: **"How do I add persistence to my graph?"**
+2.  **Grounded Response:** The assistant uses `perform_rag_query` to find the canonical documentation on persistence *from your specific version of LangGraph*. It then uses `search_code_examples` to find a relevant, runnable example from the same source.
+3.  **Validated Code:** The assistant generates the necessary code. It then automatically uses `check_ai_script_hallucinations` to validate its own output against the actual library structure, ensuring it uses the correct classes and methods.
+4.  **The Result:** You get working, reliable code in minutes, with high confidence that it is correct for your environment.
+
+## Our Philosophy: Metric-Driven AI Improvement
+
+We treat the enhancement of AI development assistance as a scientific endeavor. This project is a living experiment to systematically improve the reliability of AI assistants on `LangGraph` development. We measure our success by tracking key metrics:
+
+*   **Reduction in Hallucinations:** A quantifiable decrease in the generation of incorrect code.
+*   **Increased Development Autonomy:** A reduction in the number of conversational turns needed to complete a task.
+*   **Improved First-Pass Success Rate:** An increase in the percentage of AI-generated code that runs correctly without human modification.
+
+By using this framework, you are not just getting a tool; you are participating in a structured approach to making AI a more reliable and efficient development partner.
 
 ## How It Works
 
@@ -55,7 +83,9 @@ Before you begin, ensure you have the following:
     *   **Supabase Project:** Used as a vector database to store the LangGraph documentation for RAG. [Create a Supabase project](https://supabase.com/dashboard/projects). You will need your Project URL and `service_role` key.
     *   **Neo4j Instance:** Used as a graph database for the Knowledge Graph. [Sign up for Neo4j AuraDB (cloud)](https://neo4j.com/cloud/platform/aura-graph-database/) or [Install Neo4j Desktop (local)](https://neo4j.com/download/).
 
-For more detailed information on setting up these services, refer to the [Database Setup](mcp-crawl4ai-rag/README.md#database-setup) and [Knowledge Graph Setup](mcp-crawl4ai-rag/README.md#knowledge-graph-setup-optional) sections in the submodule's README.
+Here is the [video](https://youtu.be/_jaMnT0G4So?si=ZHBqm9fGg-Y3gXhk) for Supabase, Neo4j, OpenAI API key setup guide. 
+
+For more detailed information on setting up these services, refer to the [Database Setup (GitHub)](./mcp-crawl4ai-rag#database-setup) | [Database Setup (Local)](mcp-crawl4ai-rag/README.md#database-setup) and [Knowledge Graph Setup (GitHub)](./mcp-crawl4ai-rag#knowledge-graph-setup-optional) | [Knowledge Graph Setup (Local)](mcp-crawl4ai-rag/README.md#knowledge-graph-setup-optional) sections in the submodule's README.
 
 #### 3.2: Configure Environment Variables
 
@@ -64,7 +94,7 @@ For more detailed information on setting up these services, refer to the [Databa
     ```bash
     cp mcp-crawl4ai-rag/.env.example mcp-crawl4ai-rag/.env
     ```
-3.  Edit `mcp-crawl4ai-rag/.env` and fill in your API keys and service URLs from the prerequisites.
+3.  Edit `mcp-crawl4ai-rag/.env` and fill in your API keys and service URLs from the prerequisites. If do not know where to find environment variables for Supabase, neo4j, OpenAI API key, this [video](https://youtu.be/_jaMnT0G4So?si=ZHBqm9fGg-Y3gXhk) is helpful. 
 
 ##### Understanding Key Configurations
 
@@ -75,7 +105,7 @@ The `.env.example` file is set up with the following recommended defaults:
 *   `USE_AGENTIC_RAG=true`: This enables the specialized tool for finding code examples.
 *   `NEO4J_URI='bolt://host.docker.internal:7687'`: This is the correct setting for the **recommended Docker setup**, as it allows the container to connect to the Neo4j database running on your host machine. If you are using the **advanced local setup**, you should change this to `bolt://localhost:7687`.
 
-For a detailed explanation of all available RAG strategies and other advanced settings, please see the [Configuration](mcp-crawl4ai-rag/README.md#configuration) section in the submodule's README.
+For a detailed explanation of all available RAG strategies and other advanced settings, please see the [Configuration (GitHub)](./mcp-crawl4ai-rag#configuration) | [Configuration (Local)](mcp-crawl4ai-rag/README.md#configuration) section in the submodule's README.
 
 #### 3.3: Set Up the Supabase Database
 
@@ -120,7 +150,7 @@ This is the simplest way to get started.
     ```
 
 3.  **Configure Your AI Assistant to Launch the Server:**
-    The following are examples of how to configure your AI coding assistant to connect to the server. For more detailed configurations, please refer to the `mcp-crawl4ai-rag/README.md`.
+    The following are examples of how to configure your AI coding assistant to connect to the server. For more detailed configurations, please refer to the [mcp-crawl4ai-rag/README.md (GitHub)](./mcp-crawl4ai-rag) | [mcp-crawl4ai-rag/README.md (Local)](mcp-crawl4ai-rag/README.md).
 
     *   **For Gemini CLI (`.gemini/settings.json`):**
         ```json
@@ -191,7 +221,7 @@ This path is for developers who want to work on the server code directly.
 
 6.  Launch the MCP Server:
     The following are examples of how to configure your AI coding assistant to connect to the server. For more detailed configurations on configuring your specific AI assistant for local development, please refer to the `mcp-crawl4ai-rag/README.md`.
-    For more advanced local mcp launch options (e.g. sse server), refer to the `mcp-crawl4ai-rag/README.md` "Integration with MCP Clients" [section](mcp-crawl4ai-rag/README.md#integration-with-mcp-clients) for detailed instructions on configuring your specific AI assistant for local development.
+    For more advanced local mcp launch options (e.g. sse server), refer to the `mcp-crawl4ai-rag/README.md` "Integration with MCP Clients" [section (GitHub)](./mcp-crawl4ai-rag#integration-with-mcp-clients) | [section (Local)](mcp-crawl4ai-rag/README.md#integration-with-mcp-clients) for detailed instructions on configuring your specific AI assistant for local development.
 
     for gemini cli (configured in ./gemini/setting.json):
     ```json
