@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You & Survey</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="thank-you-page">
+
+    <div class="container">
+        <h1>Thanks for joining!</h1>
+        <p>You're on the list! To ensure we prioritize what matters most, please select all the features you'd be most excited to use.</p>
+
+        <form id="surveyForm">
+            <div class="feature-category">
+                <h3>Core Development Experience</h3>
+                <label class="feature-item">Automated Debugging & Fixes
+                    <input type="checkbox" name="feature" value="automated_debugging">
+                    <span class="checkmark"></span>
+                </label>
+                <label class="feature-item">AI-Powered Test Generation
+                    <input type="checkbox" name="feature" value="ai_test_generation">
+                    <span class="checkmark"></span>
+                </label>
+            </div>
+
+            <div class="feature-category">
+                <h3>Platform & Deployment</h3>
+                <label class="feature-item">Cloud-Hosted Knowledge Server (No self-hosting)
+                    <input type="checkbox" name="feature" value="cloud_hosted_knowledge_server">
+                    <span class="checkmark"></span>
+                </label>
+                <label class="feature-item">One-Click Agent Publishing
+                    <input type="checkbox" name="feature" value="one_click_publishing">
+                    <span class="checkmark"></span>
+                </label>
+            </div>
+
+            <div class="feature-category">
+                <h3>Advanced Agent Capabilities</h3>
+                <label class="feature-item">Agents built to be easily observable and evaluatable
+                    <input type="checkbox" name="feature" value="observable_agents">
+                    <span class="checkmark"></span>
+                </label>
+                <label class="feature-item">Agents with frameworks for self-improvement
+                    <input type="checkbox" name="feature" value="self_improving_agents">
+                    <span class="checkmark"></span>
+                </label>
+                <label class="feature-item">AI-powered advice on multi-agent system architecture
+                    <input type="checkbox" name="feature" value="architectural_advice">
+                    <span class="checkmark"></span>
+                </label>
+            </div>
+
+            <div class="feature-category">
+                <h3>Enterprise & Team Features</h3>
+                <label class="feature-item">On-Premise / VPC Deployment
+                    <input type="checkbox" name="feature" value="on_prem_deployment">
+                    <span class="checkmark"></span>
+                </label>
+                <label class="feature-item">Advanced IAM & Security Controls
+                    <input type="checkbox" name="feature" value="advanced_iam_security">
+                    <span class="checkmark"></span>
+                </label>
+                <label class="feature-item">CI/CD Integration for validating AI-generated code
+                    <input type="checkbox" name="feature" value="cicd_integration">
+                    <span class="checkmark"></span>
+                </label>
+            </div>
+
+            <button type="submit" id="submitSurvey">Submit My Preferences</button>
+        </form>
+        <div id="formMessage" class="form-message"></div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>Built by the LangGraph Dev Navigator team. <a href="https://github.com/botingw/langgraph-dev-navigator">View on GitHub</a></p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const surveyForm = document.getElementById('surveyForm');
+            const messageDiv = document.getElementById('formMessage');
+            const submitButton = document.getElementById('submitSurvey');
+
+            // Get userId from URL
+            const params = new URLSearchParams(window.location.search);
+            const userId = params.get('userId');
+
+            if (!userId) {
+                surveyForm.innerHTML = '<p style="color: var(--error-color);">Error: User ID not found. Please sign up again.</p>';
+                return;
+            }
+
+            surveyForm.addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                const selectedFeatures = Array.from(surveyForm.querySelectorAll('input[name="feature"]:checked'))
+                                              .map(checkbox => checkbox.value);
+
+                messageDiv.textContent = 'Submitting...';
+                messageDiv.style.color = 'var(--text-color)';
+                submitButton.disabled = true;
+
+                // SIMULATION: The backend is not built yet.
+                console.log("Simulating API call to /api/submit-survey for userId:", userId, "with features:", selectedFeatures);
+                setTimeout(() => {
+                    surveyForm.innerHTML = `<h1>Thank you!</h1><p>Your preferences have been recorded. We\'ll be in touch.</p>`;
+                    messageDiv.textContent = '';
+                }, 1000);
+
+                /*
+                // ORIGINAL BACKEND CALL (uncomment when backend is ready)
+                try {
+                    // NOTE: The API endpoint /api/submit-survey needs to be implemented as per the backend design.
+                    const response = await fetch('/api/submit-survey', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            userId: userId,
+                            selectedFeatures: selectedFeatures
+                        })
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        surveyForm.innerHTML = `<h1>Thank you!</h1><p>Your preferences have been recorded. We\'ll be in touch.</p>`;
+                        messageDiv.textContent = '';
+                    } else {
+                        throw new Error(data.message || 'An error occurred.');
+                    }
+                } catch (error) {
+                    messageDiv.textContent = error.message;
+                    messageDiv.style.color = 'var(--error-color)';
+                    submitButton.disabled = false;
+                }
+                */
+            });
+        });
+    </script>
+
+</body>
+</html>

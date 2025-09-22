@@ -16,3 +16,4 @@ __pycache__
 .idx/
 GEMINI.md
 .vscode/mcp.json
+.rulebook-ai/

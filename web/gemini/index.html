@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LangGraph Dev Navigator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <!-- Section 1: Hero -->
+        <section class="hero">
+            <h1>Stop Fighting AI Hallucinations.</h1>
+            <p>`langgraph-dev-navigator` is a framework that grounds your AI assistant in executable truth. Get reliable, production-ready code for your specific version of LangGraph.</p>
+            <form id="waitlistForm" class="waitlist-form">
+                <input type="email" id="email" name="email" placeholder="your-email@example.com" required>
+                <button type="submit">Join the Waitlist</button>
+            </form>
+            <div id="formMessage" class="form-message"></div>
+        </section>
+
+        <!-- Section 2: The Pain & The Gain -->
+        <section>
+            <h2>Tired of Plausible-but-Wrong AI Code?</h2>
+            <div class="pain-gain">
+                <div class="panel">
+                    <h3>Before</h3>
+                    <div class="terminal-placeholder before">
+$ python run_agent.py
+Traceback (most recent call last):
+  File "/app/run_agent.py", line 42, in <module>
+    app = create_graph()
+  File "/app/run_agent.py", line 31, in create_graph
+    workflow.add_node("agent", model.bind_tools(tools))
+AttributeError: 'ChatOpenAI' object has no attribute 'bind_tools'. Did you mean 'bind'?
+                    </div>
+                </div>
+                <div class="panel">
+                    <h3>After</h3>
+                    <div class="terminal-placeholder after">
+$ python run_agent.py
+[Validation Successful] Code uses correct 'bind' method.
+Agent started successfully.
+Listening on http://localhost:8000
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: The Methodical Workflow -->
+        <section class="workflow-diagram">
+            <h2>How We Ensure Correctness: The `Retrieve -> Generate -> Validate` Workflow</h2>
+            <div class="mermaid">
+    graph LR
+        classDef user fill:#D6EAF8,stroke:#5DADE2,color:#000
+        classDef assistant fill:#D5F5E3,stroke:#58D68D,color:#000
+        classDef component fill:#FDEDEC,stroke:#F1948A,color:#000
+
+        subgraph User
+            U[User Asks Question]:::user
+        end
+
+        subgraph "Grounded AI Assistant"
+            A[Retrieve Context]:::assistant
+            B[Generate Code]:::assistant
+            C[Validate Code]:::assistant
+            D[Deliver Verified Answer]:::assistant
+        end
+
+        subgraph "External Knowledge Components"
+            RAG["Supabase RAG<br>(Docs & Examples)"]:::component
+            KG["Neo4j Knowledge Graph<br>(Code Structure)"]:::component
+        end
+
+        U -- "Asks a question" --> A
+        A -- "Queries for docs" --> RAG
+        RAG -- "Returns relevant info" --> B
+        B -- "Generates code draft" --> C
+        C -- "Validates against KG" --> KG
+        KG -- "Returns validation result" --> C
+        C -- "If valid, finalizes code" --> D
+        D -- "Provides verified code" --> U
+            </div>
+            <p style="margin-top: 2rem; max-width: 700px; margin-left: auto; margin-right: auto; color: #9CA3AF;">Our system first retrieves context from documentation, then generates code, and finally validates that code against the actual library structure to ensure correctness before you ever see it.</p>
+        </section>
+
+        <!-- Section 4: The Philosophy -->
+        <section class="philosophy-metrics">
+            <h2>An Open-Source Experiment in AI Reliability</h2>
+            <div class="metrics">
+                <div class="metric">
+                    <h4>Reduction in Hallucinations</h4>
+                    <p>Our primary goal is to measurably decrease the generation of incorrect code constructs.</p>
+                </div>
+                <div class="metric">
+                    <h4>Increased Development Autonomy</h4>
+                    <p>We track a reduction in the conversational turns needed to complete a development task.</p>
+                </div>
+                <div class="metric">
+                    <h4>Improved First-Pass Success</h4>
+                    <p>We aim to increase the percentage of AI-generated code that runs correctly without human modification.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: FAQ -->
+        <section>
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq">
+                <details>
+                    <summary>What happens when I join the waitlist?</summary>
+                    <p>You'll be first in line to get access to the tool when it's released. We will also send occasional updates on our progress and key findings from our research.</p>
+                </details>
+                <details>
+                    <summary>Is this a free tool?</summary>
+                    <p>Yes, the `langgraph-dev-navigator` framework is and will be open-source (MIT License). You are responsible for your own API costs for any third-party services you use, such as OpenAI, Supabase, or Neo4j, all of which have generous free tiers.</p>
+                </details>
+                <details>
+                    <summary>What is the current status of the project?</summary>
+                    <p>The core validation engine and RAG server are built and functional. We are currently working towards a polished public release, and insights from the waitlist survey will help guide our final priorities.</p>
+                </details>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>Built by the LangGraph Dev Navigator team. <a href="https://github.com/botingw/langgraph-dev-navigator">View on GitHub</a></p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('waitlistForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const form = event.target;
+            const email = form.email.value;
+            const messageDiv = document.getElementById('formMessage');
+            const button = form.querySelector('button');
+
+            messageDiv.textContent = 'Submitting...';
+            messageDiv.style.color = 'var(--text-color)';
+            button.disabled = true;
+
+            // SIMULATION: The backend is not built yet. This simulates a successful API call for testing the frontend flow.
+            console.log("Simulating API call to /api/join-waitlist for email:", email);
+            setTimeout(() => {
+                const fakeUserId = 'a1b2c3d4-e5f6-7890-1234-567890abcdef'; // Dummy user ID for testing
+                messageDiv.textContent = 'Success! Redirecting...';
+                messageDiv.style.color = 'var(--success-color)';
+                
+                // Using a relative path is more robust for local testing.
+                window.location.href = `thank-you.html?userId=${fakeUserId}`;
+            }, 1000); // Simulate a 1-second network delay.
+        });
+    </script>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true, theme: 'dark', securityLevel: 'loose' });
+    </script>
+
+</body>
+</html>
