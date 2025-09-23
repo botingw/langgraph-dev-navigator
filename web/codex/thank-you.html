@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LangGraph Dev Navigator — Survey</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body data-page="codex-thank-you" data-api-base="" data-landing="index.html">
+  <header class="site-header" data-analytics="header">
+    <div class="container">
+      <div class="logo">LangGraph <span>Dev Navigator</span></div>
+      <nav class="primary-nav" aria-label="Secondary navigation">
+        <a href="index.html" data-track="thankyou-nav-home">Back to overview</a>
+      </nav>
+      <a class="cta" href="mailto:codex@langgraph.dev" data-track="thankyou-nav-contact">Contact</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="thankyou-hero" data-section="hero">
+      <div class="container thankyou-hero__grid">
+        <div>
+          <p class="eyebrow">Step 2 · Insight Engine Survey</p>
+          <h1>Thanks for joining. Tell us where reliability matters most.</h1>
+          <p class="lead">Select the workflows that would unlock the most value for your LangGraph teams. We build the roadmap off these answers.</p>
+          <p class="hero__proof">We only ask once per waitlist signup. Expect a roadmap update within 10 business days.</p>
+        </div>
+        <aside class="thankyou-aside" aria-label="Survey expectations">
+          <div class="aside-card">
+            <h2>What to expect</h2>
+            <ul>
+              <li>We verify your waitlist ID before recording preferences.</li>
+              <li>Survey takes under 45 seconds — four focused groups.</li>
+              <li>You can revise answers later via the confirmation email.</li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="survey" id="survey" data-section="survey">
+      <div class="container">
+        <article class="survey-card" data-survey-state>
+          <div class="survey-loading" data-view="loading">
+            <div class="skeleton title"></div>
+            <div class="skeleton body"></div>
+            <div class="skeleton body"></div>
+          </div>
+
+          <div class="survey-error" data-view="error" hidden>
+            <h2>We couldn't verify your waitlist link.</h2>
+            <p>Please ensure you followed the link from the waitlist confirmation email. If the problem persists, email <a href="mailto:codex@langgraph.dev">codex@langgraph.dev</a>.</p>
+            <div class="survey-error__actions">
+              <a class="button ghost" href="index.html" data-track="survey-error-return">Return to landing page</a>
+            </div>
+          </div>
+
+          <form id="surveyForm" data-view="form" hidden novalidate>
+            <header class="survey-progress" aria-live="polite">
+              <span class="progress-label">Progress</span>
+              <div class="progress-values">
+                Step <span data-survey-current>1</span> of <span data-survey-total>4</span>
+              </div>
+              <progress value="1" max="4" data-survey-progress></progress>
+            </header>
+
+            <p class="survey-intro">Pick the LangGraph capabilities you need to ship with confidence. Choose all that apply in each group.</p>
+
+            <div class="survey-groups">
+              <fieldset class="survey-group" data-survey-group data-group="core" aria-describedby="group-core-help">
+                <legend>Core Development Experience</legend>
+                <p id="group-core-help" class="group-help">Everything you need during daily graph development.</p>
+                <label class="option">
+                  <input type="checkbox" name="features" value="automated_debugging" data-feature-key="automated_debugging" data-feature-group="core">
+                  <span class="option__label">Automated debugging that pinpoints failing nodes with reproduction steps.</span>
+                </label>
+                <label class="option">
+                  <input type="checkbox" name="features" value="ai_test_generation" data-feature-key="ai_test_generation" data-feature-group="core">
+                  <span class="option__label">AI-powered test generation aligned with your LangGraph schema.</span>
+                </label>
+                <label class="option">
+                  <input type="checkbox" name="features" value="workflow_templates" data-feature-key="workflow_templates" data-feature-group="core">
+                  <span class="option__label">Curated workflow templates for common LangGraph agents.</span>
+                </label>
+              </fieldset>
+
+              <fieldset class="survey-group" data-survey-group data-group="platform" aria-describedby="group-platform-help">
+                <legend>Platform &amp; Deployment</legend>
+                <p id="group-platform-help" class="group-help">Make LangGraph accessible across teams without bespoke ops work.</p>
+                <label class="option">
+                  <input type="checkbox" name="features" value="cloud_hosted_knowledge_server" data-feature-key="cloud_hosted_knowledge_server" data-feature-group="platform">
+                  <span class="option__label">Managed Supabase knowledge server that mirrors your LangGraph docs.</span>
+                </label>
+                <label class="option">
+                  <input type="checkbox" name="features" value="one_click_publish" data-feature-key="one_click_publish" data-feature-group="platform">
+                  <span class="option__label">One-click agent publishing with environment promotion controls.</span>
+                </label>
+                <label class="option">
+                  <input type="checkbox" name="features" value="runtime_monitoring" data-feature-key="runtime_monitoring" data-feature-group="platform">
+                  <span class="option__label">Runtime monitoring dashboards for latency, failures, and regression alerts.</span>
+                </label>
+              </fieldset>
+
+              <fieldset class="survey-group" data-survey-group data-group="advanced" aria-describedby="group-advanced-help">
+                <legend>Advanced Agent Capabilities</legend>
+                <p id="group-advanced-help" class="group-help">Extend agents beyond static prompts while keeping them auditable.</p>
+                <label class="option">
+                  <input type="checkbox" name="features" value="observable_agents" data-feature-key="observable_agents" data-feature-group="advanced">
+                  <span class="option__label">Observable agents with step-by-step reasoning transcripts.</span>
+                </label>
+                <label class="option">
+                  <input type="checkbox" name="features" value="self_improving_agents" data-feature-key="self_improving_agents" data-feature-group="advanced">
+                  <span class="option__label">Self-improving agents that learn from production outcomes.</span>
+                </label>
+                <label class="option">
+                  <input type="checkbox" name="features" value="architectural_guidance" data-feature-key="architectural_guidance" data-feature-group="advanced">
+                  <span class="option__label">Architectural guidance assistants that critique LangGraph designs.</span>
+                </label>
+              </fieldset>
+
+              <fieldset class="survey-group" data-survey-group data-group="enterprise" aria-describedby="group-enterprise-help">
+                <legend>Enterprise &amp; Team</legend>
+                <p id="group-enterprise-help" class="group-help">Controls and integrations required for regulated environments.</p>
+                <label class="option">
+                  <input type="checkbox" name="features" value="on_prem_vpc" data-feature-key="on_prem_vpc" data-feature-group="enterprise">
+                  <span class="option__label">On-Prem/VPC deployment with secrets rotation and audit logs.</span>
+                </label>
+                <label class="option">
+                  <input type="checkbox" name="features" value="advanced_iam_security" data-feature-key="advanced_iam_security" data-feature-group="enterprise">
+                  <span class="option__label">Advanced IAM &amp; security (role-bound tool access, SSO, SCIM).</span>
+                </label>
+                <label class="option">
+                  <input type="checkbox" name="features" value="cicd_integration" data-feature-key="cicd_integration" data-feature-group="enterprise">
+                  <span class="option__label">CI/CD integration to validate agents before merging to main.</span>
+                </label>
+              </fieldset>
+            </div>
+
+            <div class="survey-nav" aria-label="Survey navigation">
+              <button type="button" class="button ghost" data-nav="prev">Previous</button>
+              <button type="button" class="button" data-nav="next">Next</button>
+              <button type="submit" class="button primary" data-role="submit">Submit my build priorities</button>
+            </div>
+
+            <div class="survey-extras">
+              <label for="notes">Critical workflow you need (optional)</label>
+              <textarea id="notes" name="notes" rows="3" placeholder="Tell us about the scenario where Codex must not fail."></textarea>
+
+              <label class="toggle" for="betaOptIn">
+                <input type="checkbox" id="betaOptIn" name="betaOptIn" value="true">
+                <span>I'm available for early beta testing and weekly feedback sessions.</span>
+              </label>
+            </div>
+
+            <p class="survey-message" data-survey-message role="status" aria-live="polite"></p>
+
+            <p class="survey-privacy">We store your preferences alongside the waitlist ID in Postgres as described in our <a href="https://github.com/langgraph-dev/langgraph-dev-navigator/blob/main/memory/tasks/story_create_landing_page/waitlist_and_survey_api_design.md" target="_blank" rel="noopener">data usage plan</a>.</p>
+          </form>
+
+          <div class="survey-success" data-view="success" hidden>
+            <h2>Preferences saved.</h2>
+            <p>Here's what we'll prioritise for you:</p>
+            <ul class="success-list" data-success-list></ul>
+            <p class="success-next">Expect a roadmap update in your inbox within 10 business days. We'll reach out if we need a deeper discovery call.</p>
+            <div class="survey-success__actions">
+              <a class="button ghost" href="index.html" data-track="survey-success-return">Back to landing page</a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="logo">LangGraph <span>Dev Navigator</span></div>
+      <div class="footer-metrics">
+        <span>MIT Licensed</span>
+        <span>Observability-first</span>
+        <span>Codex private beta</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js" defer></script>
+</body>
+</html>

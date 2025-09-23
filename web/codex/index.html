@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LangGraph Dev Navigator — Codex Edition</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body data-page="codex-landing" data-api-base="" data-thank-you="thank-you.html">
+  <header class="site-header" data-analytics="header">
+    <div class="container">
+      <div class="logo">LangGraph <span>Dev Navigator</span></div>
+      <nav class="primary-nav" aria-label="Main navigation">
+        <a href="#workflow" data-track="nav-workflow">Workflow</a>
+        <a href="#pillars" data-track="nav-pillars">Value Pillars</a>
+        <a href="#proof" data-track="nav-proof">Proof Stack</a>
+        <a href="#faq" data-track="nav-faq">FAQ</a>
+      </nav>
+      <a class="cta" href="#waitlist" data-track="nav-cta">Join Waitlist</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="hero" data-section="hero">
+      <div class="container hero__grid">
+        <div class="hero__copy">
+          <p class="eyebrow">Grounded Assistant • Zero Hallucination Tolerance</p>
+          <h1>Ship LangGraph code you can actually run.</h1>
+          <p class="lead">`langgraph-dev-navigator` is the Codex-grade workflow for developers who refuse to debug imaginary stack traces. Retrieve the right context, generate with confidence, and validate before code ever hits your repo.</p>
+          <ul class="hero__proof" role="list">
+            <li data-track="proof-before-after">Before: brittle docs, broken graphs, wasted hours.</li>
+            <li data-track="proof-before-after">After: executable answers aligned with your LangGraph version.</li>
+          </ul>
+          <div class="cta-group">
+            <a class="primary" href="#waitlist" data-track="hero-primary">Join the private beta</a>
+            <span class="cta-note">Next step: submit the metric preferences survey so we can tailor your onboarding.</span>
+            <button class="secondary" type="button" data-open-modal="evidence" data-track="hero-secondary">See instrumentation plan</button>
+          </div>
+          <div class="trust-bar" role="status">
+            <div>Built on Metric-Driven Experimentation</div>
+            <div>Validated against real LangGraph repos</div>
+            <div>MIT Licensed</div>
+          </div>
+        </div>
+        <aside class="hero__panel" aria-label="Before and After">
+          <div class="terminal before" data-track="hero-before">
+            <header>Before</header>
+            <pre><code>$ python run_agent.py
+Traceback (most recent call last):
+  File "run_agent.py", line 42, in <module>
+    app = create_graph()
+  File "run_agent.py", line 31, in create_graph
+    workflow.add_node("agent", model.bind_tools(tools))
+AttributeError: 'ChatOpenAI' object has no attribute 'bind_tools'
+            </code></pre>
+          </div>
+          <div class="terminal after" data-track="hero-after">
+            <header>After</header>
+            <pre><code>$ python run_agent.py
+[Validator] Schema verification: PASS
+[Metric] First-pass execution: SUCCESS
+Listening on http://localhost:8000
+            </code></pre>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="pillars" id="pillars" data-section="pillars">
+      <div class="container">
+        <header class="section-heading">
+          <h2>Three value pillars for production teams</h2>
+          <p>Every interaction is grounded in observable truth, so you can deploy assistants without gambling on hallucinations.</p>
+        </header>
+        <div class="pillars__grid">
+          <article class="pillar" data-track="pillar-reliability">
+            <h3>Reliability by Design</h3>
+            <p>Retrieval pipelines pin answers to the exact LangGraph release you're running. No more mismatched APIs or deprecated node signatures.</p>
+            <ul>
+              <li>Real-time doc diffing to flag breaking changes.</li>
+              <li>Knowledge Graph alignment for tool awareness.</li>
+            </ul>
+            <div class="snippet-placeholder" data-owner="Dev Advocate">TODO: embed LangGraph diff inspection clip once Story 1 assets ship.</div>
+          </article>
+          <article class="pillar" data-track="pillar-workflow">
+            <h3>Methodical Workflow</h3>
+            <p>Codex codifies the Retrieve → Generate → Validate loop, surfacing intermediate reasoning so you can audit the chain of thought.</p>
+            <ul>
+              <li>Each step emits metrics for regression tracking.</li>
+              <li>Validation gates block uncertain generations.</li>
+            </ul>
+            <div class="snippet-placeholder" data-owner="Engineering">TODO: replace with workflow run GIF sourced from Stage 2 proof video.</div>
+          </article>
+          <article class="pillar" data-track="pillar-metrics">
+            <h3>Metric-Driven Experimentation</h3>
+            <p>Instrumentation is built-in. Track hallucination rate, first-pass success, and time-to-ship from the first deployment.</p>
+            <ul>
+              <li>Automatic waitlist survey enrichment hooks.</li>
+              <li>Event stream ready for Supabase or Segment.</li>
+            </ul>
+            <div class="snippet-placeholder" data-owner="PM">TODO: include metric dashboard screencap once privacy review clears.</div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="workflow" id="workflow" data-section="workflow">
+      <div class="container">
+        <div class="section-heading">
+          <h2>How the Methodical Workflow keeps answers grounded</h2>
+          <p>Every stage is observable and replayable—no hidden leaps of faith.</p>
+        </div>
+        <figure class="workflow__diagram" role="group" aria-labelledby="workflowTitle">
+          <figcaption id="workflowTitle" class="visually-hidden">Retrieve → Generate → Validate workflow diagram describing how Codex grounds answers</figcaption>
+          <!-- Source: images/query_workflow_v2.md -->
+          <pre class="mermaid" aria-hidden="true">
+graph LR
+    classDef user fill:#D6EAF8,stroke:#5DADE2,color:#000
+    classDef assistant fill:#D5F5E3,stroke:#58D68D,color:#000
+    classDef component fill:#FDEDEC,stroke:#F1948A,color:#000
+
+    subgraph User
+        U[User Asks Question]:::user
+    end
+
+    subgraph "Grounded AI Assistant"
+        A[Retrieve Context]:::assistant
+        B[Generate Code]:::assistant
+        C[Validate Code]:::assistant
+        D[Deliver Verified Answer]:::assistant
+    end
+
+    subgraph "External Knowledge Components"
+        RAG["Supabase RAG<br>(Docs & Examples)"]:::component
+        KG["Neo4j Knowledge Graph<br>(Code Structure)"]:::component
+    end
+
+    U -- "Asks a question" --> A
+    A -- "Queries for docs" --> RAG
+    RAG -- "Returns relevant info" --> B
+    B -- "Generates code draft" --> C
+    C -- "Validates against KG" --> KG
+    KG -- "Returns validation result" --> C
+    C -- "If valid, finalizes code" --> D
+    D -- "Provides verified code" --> U
+          </pre>
+          <p class="diagram-alt">Fallback description: The workflow routes a user question through context retrieval, code generation, validation against Supabase RAG and Neo4j, and finally delivers a verified answer back to the user.</p>
+        </figure>
+        <aside class="workflow__notes">
+          <h4>What you see in Codex</h4>
+          <ul>
+            <li>Intermediate reasoning transcript linked to each metric.</li>
+            <li>Regressions automatically surface in the Proof Stack.</li>
+            <li>Exportable runbook for replicating the workflow in your CI.</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <section class="proof" id="proof" data-section="proof">
+      <div class="container">
+        <header class="section-heading">
+          <h2>The proof stack</h2>
+          <p>We collect receipts for every claim. Here are the first three.</p>
+        </header>
+        <div class="proof__grid">
+          <article class="proof-card" data-track="proof-video">
+            <h3>Validation Playback</h3>
+            <p>Watch a Codex reflection agent debug itself end-to-end — concept search, doc retrieval, and runnable fix verification.</p>
+            <footer><a href="https://youtu.be/oZZCUZ78QAc?si=YKwOiq_OdgZAJ7Nd" target="_blank" rel="noopener" data-track="proof-video-link">5-minute validation demo</a></footer>
+          </article>
+          <article class="proof-card" data-track="proof-case">
+            <h3>Case 5 Run Logs</h3>
+            <p>Side-by-side LangGraph agents instrumented with reflection show how Codex converges on an executable solution.</p>
+            <footer>
+              <a href="https://github.com/botingw/langgraph-dev-navigator/blob/main/langgraph_dev/dev_test/test_case_results/case5/agent_gemini_with_reflection.py" target="_blank" rel="noopener" data-track="proof-case-gemini">Gemini reflection agent</a>
+              ·
+              <a href="https://github.com/botingw/langgraph-dev-navigator/blob/main/langgraph_dev/dev_test/test_case_results/case5/agent_o3.py" target="_blank" rel="noopener" data-track="proof-case-o3">OpenAI o3 comparison</a>
+            </footer>
+          </article>
+          <article class="proof-card" data-track="proof-hallucination">
+            <h3>Hallucination Watchdog</h3>
+            <p>An open-source detector flags mismatched symbols before answers reach you, grounding every snippet.</p>
+            <footer><a href="https://github.com/botingw/langgraph-dev-navigator/blob/main/mcp-crawl4ai-rag/knowledge_graphs/ai_hallucination_detector.py" target="_blank" rel="noopener" data-track="proof-hallucination-link">View detector script</a></footer>
+          </article>
+          <article class="proof-card" data-track="proof-security">
+            <h3>Security &amp; Transparency</h3>
+            <p>Continuous MSeeP assessment keeps Codex compliant; privacy disclosures land before we store a byte.</p>
+            <footer><a href="https://github.com/botingw/langgraph-dev-navigator#readme" target="_blank" rel="noopener" data-track="proof-security-link">Security badge &amp; policy</a></footer>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="faq" id="faq" data-section="faq">
+      <div class="container">
+        <div class="section-heading">
+          <h2>Questions developers actually ask</h2>
+          <p>We log every question and feed the answers back into the workflow.</p>
+        </div>
+        <div class="faq__list" data-accordion>
+          <details data-track="faq-who">
+            <summary>Who is Codex for?</summary>
+            <p>Engineering teams running LangGraph in production who need observability into every AI-assisted change.</p>
+          </details>
+          <details data-track="faq-diff">
+            <summary>How is this different from vanilla LangGraph docs?</summary>
+            <p>Codex maps your repo to the knowledge graph, so answers line up with the exact nodes and edges you're actually shipping.</p>
+          </details>
+          <details data-track="faq-access">
+            <summary>What do I get as an early access partner?</summary>
+            <p>Guided onboarding, custom metric dashboards, and priority slots in the experiment queue.</p>
+          </details>
+          <details data-track="faq-open">
+            <summary>Is it open source?</summary>
+            <p>The framework is MIT licensed. We monetize enterprise support and integrations—not access to your data.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta" id="waitlist" data-section="cta">
+      <div class="container">
+        <div class="cta__inner">
+          <div>
+            <h2>Join the Codex early access waitlist</h2>
+            <p>Tell us where to send the runbook and we'll share the latest experiment results.</p>
+          </div>
+          <form id="waitlistForm" class="waitlist-form" novalidate>
+            <label for="email">Work email</label>
+            <input type="email" id="email" name="email" placeholder="you@company.com" autocomplete="email" required>
+            <label for="role">Role</label>
+            <input type="text" id="role" name="role" placeholder="e.g. Staff ML Engineer" autocomplete="organization-title">
+            <button type="submit" data-track="waitlist-submit">Join waitlist</button>
+            <p class="form-message" id="formMessage" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+        <p class="smallprint">We respect inboxes. Expect a monthly instrumentation digest and experiment invites—nothing else.</p>
+        <p class="smallprint" data-owner="PM">By joining you consent to secure storage of your email for waitlist updates and aggregated experiment reporting. See <a href="#" data-track="privacy-doc">privacy &amp; measurement disclosure</a> (publishing with Story&nbsp;5).</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" data-analytics="footer">
+    <div class="container">
+      <p>Built by the LangGraph Dev Navigator team. <a href="https://github.com/botingw/langgraph-dev-navigator" data-track="footer-github">View on GitHub</a></p>
+      <div class="footer-metrics">
+        <span>Hallucination rate target: &lt; 2%</span>
+        <span>First-pass success: 80%+</span>
+        <span>Response time SLA: &lt; 5s</span>
+      </div>
+    </div>
+  </footer>
+
+  <dialog class="modal" id="evidenceModal" aria-labelledby="modalTitle">
+    <form method="dialog">
+      <h2 id="modalTitle">Instrumentation & Evidence Plan</h2>
+      <p>Codex ships with a measurement blueprint so you can hold us accountable.</p>
+      <ul>
+        <li>Client events instrumented with semantic <code>data-track</code> attributes.</li>
+        <li>Server API designed per <code>waitlist_and_survey_api_design.md</code>.</li>
+        <li>Weekly experiment reviews with anonymized results.</li>
+      </ul>
+      <button value="close">Close</button>
+    </form>
+  </dialog>
+
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js" integrity="sha384-yMa2VINeodIZ6wO6PvxI6Bfq5lHppZArYrusS4x+h0/pk3jfbQfVIAtF+wNCz7Ys" crossorigin="anonymous"></script>
+  <script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+  <script type="module" src="script.js"></script>
+</body>
+</html>
