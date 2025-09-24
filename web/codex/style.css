@@ -30,6 +30,14 @@ body {
   line-height: 1.6;
 }
 
+a.eyebrow,
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
 a {
   color: var(--accent-strong);
   text-decoration: none;
@@ -113,13 +121,6 @@ button:focus-visible {
   align-items: center;
 }
 
-.hero__copy .eyebrow {
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  font-size: 0.75rem;
-  color: var(--muted);
-}
-
 .hero__copy h1 {
   font-size: clamp(2.5rem, 4vw, 3.6rem);
   line-height: 1.1;
@@ -158,7 +159,8 @@ button:focus-visible {
 }
 
 .cta-group .primary,
-.cta-group .secondary {
+.cta-group .secondary,
+.cta-group .link {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -182,6 +184,16 @@ button:focus-visible {
   border: 1px solid var(--border);
 }
 
+.cta-group .link {
+  background: transparent;
+  color: var(--accent-strong);
+  border: none;
+  padding-left: 0;
+  padding-right: 0;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 .cta-group .primary:hover,
 .cta-group .secondary:hover {
   transform: translateY(-2px);
@@ -189,7 +201,7 @@ button:focus-visible {
 
 .trust-bar {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
   padding: 1rem;
   border-radius: var(--radius-md);
@@ -200,32 +212,64 @@ button:focus-visible {
 }
 
 .hero__panel {
-  display: grid;
-  gap: 1.5rem;
+  display: block;
 }
 
-.terminal {
+.chat-comparison {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+  text-decoration: none;
+}
+
+.chat-card {
   background: var(--surface);
   border-radius: var(--radius-lg);
   border: 1px solid var(--border);
   box-shadow: var(--shadow);
-  overflow: hidden;
+  padding: 1.5rem;
+  color: inherit;
 }
 
-.terminal header {
-  background: rgba(255, 255, 255, 0.05);
-  padding: 0.75rem 1rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-}
-
-.terminal pre {
-  margin: 0;
-  padding: 1.25rem;
-  font-family: 'Fira Code', 'Source Code Pro', monospace;
-  font-size: 0.9rem;
+.chat-card header {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.8rem;
   color: var(--muted);
-  overflow-x: auto;
+  margin-bottom: 1rem;
+}
+
+.chat-bubble {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  margin-bottom: 0.75rem;
+  color: var(--text);
+}
+
+.chat-bubble.user {
+  border-left: 3px solid rgba(127, 91, 255, 0.6);
+}
+
+.chat-bubble.ai {
+  border-left: 3px solid rgba(76, 201, 240, 0.5);
+}
+
+.chat-bubble.ai.warning {
+  border-left-color: var(--danger);
+  color: #fca5a5;
+}
+
+.chat-bubble.ai.warning span {
+  font-size: 0.85rem;
+  display: block;
+  color: var(--muted);
+}
+
+.chat-bubble.ai.success {
+  border-left-color: var(--success);
+  color: var(--success);
 }
 
 .pillars {
@@ -242,11 +286,12 @@ button:focus-visible {
   max-width: 600px;
 }
 
+
 .pillars__grid {
   margin-top: 3rem;
   display: grid;
   gap: 1.5rem;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
 
 .pillar {
@@ -270,14 +315,33 @@ button:focus-visible {
   color: var(--muted);
 }
 
-.snippet-placeholder {
-  margin-top: 1.2rem;
-  padding: 0.75rem 1rem;
-  border-radius: var(--radius-sm);
-  border: 1px dashed rgba(127, 91, 255, 0.5);
-  color: var(--muted);
-  font-size: 0.85rem;
+.chat-asset {
+  margin: 1rem 0 0;
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(127, 91, 255, 0.35);
   background: rgba(127, 91, 255, 0.08);
+  display: grid;
+  gap: 0.75rem;
+}
+
+.chat-asset figcaption {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent-strong);
+}
+
+.chat-asset blockquote {
+  margin: 0;
+  color: var(--text);
+  font-size: 0.95rem;
+}
+
+.chat-asset a {
+  font-size: 0.85rem;
+  color: var(--accent-strong);
+  text-decoration: underline;
 }
 
 .workflow {
@@ -447,11 +511,14 @@ button:focus-visible {
   align-items: center;
 }
 
-.footer-metrics {
+.footer-nav {
   display: flex;
   gap: 1.5rem;
-  font-size: 0.85rem;
+}
+
+.footer-nav a {
   color: var(--muted);
+  font-weight: 500;
 }
 
 .modal {
@@ -799,6 +866,10 @@ button:focus-visible {
   .workflow__diagram,
   .proof__grid,
   .cta__inner {
+    grid-template-columns: 1fr;
+  }
+
+  .chat-comparison {
     grid-template-columns: 1fr;
   }
 
