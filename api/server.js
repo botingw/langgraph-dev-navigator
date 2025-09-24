@@ -360,6 +360,7 @@ app.get('/api/admin/stats', asyncHandler(async (req, res) => {
 
   const response = {
     ...stats,
+    recentSignupsCount: stats.recentSignups, // Send count for dashboard stat card
     recentSignups: users
       .slice(0, 10)
       .map(user => ({

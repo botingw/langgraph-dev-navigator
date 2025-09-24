@@ -494,15 +494,8 @@ class App {
       });
     }
 
-    // Initialize survey form if on thank-you page
-    const surveyForm = document.getElementById('surveyForm');
-    if (surveyForm) {
-      this.components.surveyForm = new FormHandler(surveyForm, {
-        apiEndpoint: '/api/submit-survey',
-        successRedirect: null
-      });
-      this.initSurveyLogic();
-    }
+    // Survey form is handled by specialized SurveyManager in survey.js
+    // No need for generic FormHandler on survey form
 
     console.log('🚀 Replit LangGraph Dev Navigator initialized');
   }
