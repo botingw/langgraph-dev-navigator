@@ -22,3 +22,15 @@ google-generativeai
 
 # gRPC, for Google Generative AI preventing WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
 grpcio==1.71.0
+anthropic
+duckduckgo-search
+google-generativeai
+grpcio
+html5lib
+langgraph
+openai
+playwright
+pytest
+pytest-asyncio
+python-dotenv
+unittest2

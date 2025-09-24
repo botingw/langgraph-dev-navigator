@@ -1,0 +1,7 @@
+modules = ["web", "nodejs-20", "python-3.11"]
+[agent]
+expertMode = true
+
+[nix]
+channel = "stable-25_05"
+packages = ["c-ares", "gitFull", "grpc", "openssl", "pkg-config", "playwright-driver", "zlib"]
