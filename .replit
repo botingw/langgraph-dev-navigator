@@ -16,27 +16,27 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "Frontend Server"
+args = "Replit Backend"
 
 [[workflows.workflow]]
-name = "Frontend Server"
+name = "Replit Backend"
 author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "python -m http.server 5000 --bind 0.0.0.0 --directory web/codex"
-waitForPort = 5000
+args = "cd api && npm start"
+waitForPort = 3001
 
 [workflows.workflow.metadata]
-outputType = "webview"
+outputType = "console"
+
+[[ports]]
+localPort = 3001
+externalPort = 3001
 
 [[ports]]
 localPort = 5000
 externalPort = 80
-
-[[ports]]
-localPort = 41569
-externalPort = 3000
 
 [deployment]
 deploymentTarget = "autoscale"

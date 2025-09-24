@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Thank you for joining the LangGraph Dev Navigator waitlist. Help us prioritize your workflows.">
+  <title>Thank You — LangGraph Dev Navigator</title>
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body data-page="replit-thank-you">
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <span class="logo-text">LangGraph <span class="logo-accent">Dev Navigator</span></span>
+          <span class="edition-badge">Replit Edition</span>
+        </div>
+        <a href="index.html" class="cta-button cta-button--header">← Back to Landing</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Thank You Hero -->
+    <section class="thank-you-hero">
+      <div class="container">
+        <div class="thank-you-content">
+          <div class="thank-you-header">
+            <h1>Thanks for joining — help us prioritize your workflows.</h1>
+            <p class="thank-you-subhead">Select the LangGraph assistant capabilities you need and we'll notify you as they launch.</p>
+            <p class="thank-you-note">Your responses stay internal and guide the experiment backlog.</p>
+          </div>
+
+          <!-- Survey Container -->
+          <div class="survey-container" id="surveyContainer">
+            <!-- Loading State -->
+            <div class="survey-state" data-state="loading" id="loadingState">
+              <div class="loading-spinner"></div>
+              <p>Verifying your waitlist status...</p>
+            </div>
+
+            <!-- Error State -->
+            <div class="survey-state" data-state="error" id="errorState" hidden>
+              <div class="error-icon">⚠️</div>
+              <h3>Unable to Load Survey</h3>
+              <p>We couldn't verify your waitlist status. Please try the link from your confirmation email, or <a href="index.html">join the waitlist</a> if you haven't already.</p>
+            </div>
+
+            <!-- Survey Form -->
+            <div class="survey-state" data-state="form" id="formState" hidden>
+              <form class="survey-form" id="surveyForm" novalidate>
+                <div class="survey-progress">
+                  <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                  </div>
+                  <div class="progress-text">
+                    Step <span id="currentStep">1</span> of <span id="totalSteps">4</span>
+                  </div>
+                </div>
+
+                <!-- Survey Groups -->
+                <div class="survey-groups">
+                  <!-- Core Development Experience -->
+                  <div class="survey-group" data-step="1">
+                    <div class="group-header">
+                      <h3>Core Development Experience</h3>
+                      <p>Essential tools for daily LangGraph development workflow.</p>
+                    </div>
+                    <div class="options-grid">
+                      <label class="option-card">
+                        <input type="checkbox" name="features" value="automated_debugging" data-feature-group="core">
+                        <div class="option-content">
+                          <div class="option-title">Automated Debugging & Fixes</div>
+                          <div class="option-description">Automated debugging runs your failing nodes through the validator and proposes fixes.</div>
+                        </div>
+                      </label>
+                      <label class="option-card">
+                        <input type="checkbox" name="features" value="ai_test_generation" data-feature-group="core">
+                        <div class="option-content">
+                          <div class="option-title">AI-Powered Test Generation</div>
+                          <div class="option-description">AI-powered test generation creates runnable graph tests for new flows.</div>
+                        </div>
+                      </label>
+                    </div>
+                  </div>
+
+                  <!-- Platform & Deployment -->
+                  <div class="survey-group" data-step="2" hidden>
+                    <div class="group-header">
+                      <h3>Platform & Deployment</h3>
+                      <p>Infrastructure and deployment capabilities for production use.</p>
+                    </div>
+                    <div class="options-grid">
+                      <label class="option-card">
+                        <input type="checkbox" name="features" value="managed_knowledge_server" data-feature-group="platform">
+                        <div class="option-content">
+                          <div class="option-title">Managed Knowledge Server</div>
+                          <div class="option-description">Managed knowledge server (Supabase + Neo4j) so your team skips the infra lift.</div>
+                        </div>
+                      </label>
+                      <label class="option-card">
+                        <input type="checkbox" name="features" value="one_click_publishing" data-feature-group="platform">
+                        <div class="option-content">
+                          <div class="option-title">One-Click Agent Publishing</div>
+                          <div class="option-description">One-click agent publishing packages validated graphs for LangServe or similar deployment.</div>
+                        </div>
+                      </label>
+                    </div>
+                  </div>
+
+                  <!-- Advanced Agent Capabilities -->
+                  <div class="survey-group" data-step="3" hidden>
+                    <div class="group-header">
+                      <h3>Advanced Agent Capabilities</h3>
+                      <p>Sophisticated features for advanced agent development and monitoring.</p>
+                    </div>
+                    <div class="options-grid">
+                      <label class="option-card">
+                        <input type="checkbox" name="features" value="observable_agents" data-feature-group="advanced">
+                        <div class="option-content">
+                          <div class="option-title">Observable Agents</div>
+                          <div class="option-description">Observable agents stream intermediate reasoning and metrics to LangSmith-compatible traces.</div>
+                        </div>
+                      </label>
+                      <label class="option-card">
+                        <input type="checkbox" name="features" value="self_improving_agents" data-feature-group="advanced">
+                        <div class="option-content">
+                          <div class="option-title">Self-Improving Agents</div>
+                          <div class="option-description">Self-improving agents re-run failed tasks with new context without manual prompts.</div>
+                        </div>
+                      </label>
+                      <label class="option-card">
+                        <input type="checkbox" name="features" value="architectural_guidance" data-feature-group="advanced">
+                        <div class="option-content">
+                          <div class="option-title">Architectural Guidance</div>
+                          <div class="option-description">Architectural guidance suggests graph patterns backed by runnable examples.</div>
+                        </div>
+                      </label>
+                    </div>
+                  </div>
+
+                  <!-- Enterprise & Team -->
+                  <div class="survey-group" data-step="4" hidden>
+                    <div class="group-header">
+                      <h3>Enterprise & Team</h3>
+                      <p>Organization-level features for teams and enterprises.</p>
+                    </div>
+                    <div class="options-grid">
+                      <label class="option-card">
+                        <input type="checkbox" name="features" value="on_prem_deployment" data-feature-group="enterprise">
+                        <div class="option-content">
+                          <div class="option-title">On-Prem / VPC Deployment</div>
+                          <div class="option-description">On-prem / VPC deployment keeps all data within your network.</div>
+                        </div>
+                      </label>
+                      <label class="option-card">
+                        <input type="checkbox" name="features" value="advanced_iam" data-feature-group="enterprise">
+                        <div class="option-content">
+                          <div class="option-title">Advanced IAM & Security</div>
+                          <div class="option-description">Advanced IAM & security auditing integrates with existing policies.</div>
+                        </div>
+                      </label>
+                      <label class="option-card">
+                        <input type="checkbox" name="features" value="cicd_integration" data-feature-group="enterprise">
+                        <div class="option-content">
+                          <div class="option-title">CI/CD Integration</div>
+                          <div class="option-description">CI/CD integration enforces validation before merges.</div>
+                        </div>
+                      </label>
+                    </div>
+
+                    <!-- Additional Inputs on Last Step -->
+                    <div class="additional-inputs">
+                      <div class="form-group">
+                        <label for="notes" class="form-label">Critical workflow you need covered (optional)</label>
+                        <textarea id="notes" name="notes" placeholder="Describe any specific workflow or capability not covered above..." class="form-textarea" rows="3"></textarea>
+                      </div>
+
+                      <label class="checkbox-option">
+                        <input type="checkbox" name="betaOptIn" id="betaOptIn">
+                        <span class="checkbox-label">Interested in beta testing? I volunteer for weekly beta reviews.</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Form Navigation -->
+                <div class="survey-navigation">
+                  <button type="button" class="nav-button nav-button--secondary" id="prevButton" hidden>
+                    ← Previous
+                  </button>
+                  <button type="button" class="nav-button nav-button--primary" id="nextButton">
+                    Next →
+                  </button>
+                  <button type="submit" class="nav-button nav-button--primary" id="submitButton" hidden>
+                    <span class="button-text">Submit my build priorities</span>
+                    <span class="button-loader" aria-hidden="true"></span>
+                  </button>
+                </div>
+
+                <div class="form-message" id="formMessage" role="status" aria-live="polite"></div>
+              </form>
+            </div>
+
+            <!-- Success State -->
+            <div class="survey-state" data-state="success" id="successState" hidden>
+              <div class="success-icon">🎉</div>
+              <h3>Thanks! Your priorities are recorded.</h3>
+              <div class="success-content">
+                <p>We'll email you as soon as the workflows you selected are ready.</p>
+                
+                <div class="selected-features">
+                  <h4>Your Selected Priorities:</h4>
+                  <ul id="selectedFeaturesList"></ul>
+                </div>
+
+                <div class="next-steps">
+                  <h4>What's Next:</h4>
+                  <ul>
+                    <li>Monthly experiment summaries with progress updates</li>
+                    <li>Priority access when selected features launch</li>
+                    <li>Direct feedback channel for beta testing</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="success-actions">
+                <a href="index.html" class="cta-button cta-button--primary">← Back to Landing</a>
+                <a href="https://github.com/botingw/langgraph-dev-navigator" target="_blank" rel="noopener" class="cta-button cta-button--header">
+                  Explore the Repo →
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Privacy Notice -->
+          <div class="privacy-notice">
+            <p>We store survey responses in Postgres per the waitlist API design and only use them to prioritize roadmap decisions.</p>
+            <p><a href="privacy.html">Privacy & measurement disclosure</a></p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-content">
+        <p class="footer-text">Built by the LangGraph Dev Navigator team.</p>
+        <nav class="footer-nav">
+          <a href="https://github.com/botingw/langgraph-dev-navigator" target="_blank" rel="noopener" class="footer-link">GitHub</a>
+          <a href="privacy.html" class="footer-link">Privacy Policy</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="assets/js/main.js"></script>
+  <script type="module" src="assets/js/survey.js"></script>
+</body>
+</html>

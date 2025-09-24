@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="LangGraph Dev Navigator - Ship LangGraph Code, Not Hallucinations. Grounded AI assistant with RAG and validation.">
+  <meta name="api-base" content="">
+  <title>LangGraph Dev Navigator — Replit Edition</title>
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body data-page="replit-landing">
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container">
+      <div class="header-content">
+        <div class="logo">
+          <span class="logo-text">LangGraph <span class="logo-accent">Dev Navigator</span></span>
+          <span class="edition-badge">Replit Edition</span>
+        </div>
+        <nav class="nav">
+          <a href="#value-pillars" class="nav-link">Features</a>
+          <a href="#workflow" class="nav-link">How It Works</a>
+          <a href="#proof" class="nav-link">Proof</a>
+          <a href="#faq" class="nav-link">FAQ</a>
+        </nav>
+        <a href="#waitlist" class="cta-button cta-button--header">Join Waitlist</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+      <div class="container">
+        <div class="hero-grid">
+          <div class="hero-content">
+            <h1 class="hero-headline">Ship LangGraph Code, Not Hallucinations.</h1>
+            <p class="hero-subhead">LangGraph Dev Navigator retrieves the right files from your repo, generates scoped code, and proves its work with a LangGraph-specific knowledge graph.</p>
+            
+            <ul class="hero-proof-bullets">
+              <li>
+                <span class="bullet-label">Before:</span>
+                <span class="bullet-text">Chasing broken links and hallucinated classes from generic AI helpers.</span>
+              </li>
+              <li>
+                <span class="bullet-label">After:</span>
+                <span class="bullet-text">Getting runnable answers traced to the exact LangGraph release you use.</span>
+              </li>
+            </ul>
+
+            <div class="hero-cta-group">
+              <a href="#waitlist" class="cta-button cta-button--primary" data-track="hero-primary">Join the waitlist</a>
+              <p class="cta-note">After you submit, we'll send a 30-second build-priorities survey so we ship the workflows you need first.</p>
+              <button class="link-button" data-modal="evidence" data-track="hero-secondary">Review the instrumentation plan</button>
+            </div>
+
+            <div class="trust-bar">
+              <div class="trust-item">Backed by Supabase RAG + Neo4j validation</div>
+              <div class="trust-item">Open source (MIT) — bring your own API keys</div>
+            </div>
+          </div>
+
+          <aside class="hero-visual">
+            <div class="chat-comparison-container">
+              <a href="https://youtu.be/oZZCUZ78QAc?t=150" target="_blank" rel="noopener" class="chat-comparison" data-track="hero-demo-link">
+                <div class="chat-card before">
+                  <div class="chat-header">Before</div>
+                  <div class="chat-messages">
+                    <div class="chat-message user">
+                      <div class="message-content">"in Langgraph, is there any method an agent can assess his previous work and decide what to do next?"</div>
+                    </div>
+                    <div class="chat-message ai">
+                      <div class="message-content">Yes, absolutely. That capability for an agent to assess its previous work and decide on the next step is a core pattern in LangGraph... The key concepts you'll use are: 1. State Management... 2. Cycles... 3. Conditional Edges...</div>
+                    </div>
+                    <div class="chat-message ai error">
+                      <div class="message-content">LangChain Blog - Reflection: https://blog.langchain.dev/reflection/ <span class="error-text">(404 Page not found)</span></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="chat-card after">
+                  <div class="chat-header">After</div>
+                  <div class="chat-messages">
+                    <div class="chat-message user">
+                      <div class="message-content">"in Langgraph, is there any method an agent can assess his previous work and decide what to do next?"</div>
+                    </div>
+                    <div class="chat-message ai">
+                      <div class="message-content">Excellent. I've analyzed the reflection.ipynb notebook, and it provides a clear example of how to build a self-assessing agent in LangGraph. The agent is built as a cyclical graph with two main nodes: generation_node and reflection_node.</div>
+                    </div>
+                    <div class="chat-message ai success">
+                      <div class="message-content">Tools: FindFiles → ReadFile → Analysis ✓ Found reflection.ipynb in local docs. Grounded answer from actual code example.</div>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- Value Pillars -->
+    <section class="value-pillars" id="value-pillars">
+      <div class="container">
+        <header class="section-header">
+          <h2>Value pillars built for grounded answers</h2>
+          <p>Every response is backed by your repo so you can ship with confidence instead of debugging guesswork.</p>
+        </header>
+
+        <div class="pillars-grid">
+          <article class="pillar-card" data-track="pillar-retrieval">
+            <div class="pillar-content">
+              <h3>Repo-Grounded Retrieval</h3>
+              <p>Stop debugging answers from the public web. The Navigator uses RAG to search your local LangGraph docs and source code, so every response is grounded in runnable, version-correct references.</p>
+              
+              <ul class="pillar-features">
+                <li>Finds the right context using the <code>perform_rag_query</code>, <code>FindFiles</code>, and <code>ReadFile</code> tools.</li>
+                <li>See it in action: The assistant finds <code>reflection.ipynb</code> to answer a complex question instead of returning a broken link.</li>
+                <li>Examples trace back to <code>langgraph_dev/dev_test/test_case_results/case5</code>.</li>
+              </ul>
+            </div>
+            
+            <div class="pillar-asset">
+              <div class="asset-caption">Grounded response excerpt</div>
+              <blockquote class="asset-quote">
+                "I analyzed the <code>reflection.ipynb</code> notebook… The graph cycles generation_node → reflection_node so the agent critiques and revises its work."
+              </blockquote>
+              <a href="https://youtu.be/oZZCUZ78QAc?t=273" target="_blank" rel="noopener" class="asset-link">Watch the retrieval pass (YouTube)</a>
+            </div>
+          </article>
+
+          <article class="pillar-card" data-track="pillar-validation">
+            <div class="pillar-content">
+              <h3>Validation Before Delivery</h3>
+              <p>Don't guess if AI-generated code will run. Every generation is validated against a knowledge graph of your specific LangGraph version, ensuring structural correctness before it ever reaches your editor.</p>
+              
+              <ul class="pillar-features">
+                <li>Leverages the <code>check_ai_script_hallucinations</code> tool.</li>
+                <li>Verifies classes, methods, and parameters against a Neo4j graph built from your repo.</li>
+              </ul>
+            </div>
+            
+            <div class="pillar-asset">
+              <div class="asset-caption">Validation transcript</div>
+              <blockquote class="asset-quote">
+                "Validation succeeded — all nodes matched the Neo4j schema. Delivering the verified fix with inline provenance."
+              </blockquote>
+              <a href="https://youtu.be/oZZCUZ78QAc?t=390" target="_blank" rel="noopener" class="asset-link">Jump to the validation loop (YouTube)</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Workflow -->
+    <section class="workflow" id="workflow">
+      <div class="container">
+        <header class="section-header">
+          <h2>How the workflow keeps answers grounded</h2>
+          <p>The assistant follows a transparent Retrieve → Generate → Validate loop so every step can be audited.</p>
+        </header>
+
+        <div class="workflow-diagram">
+          <div class="mermaid-container">
+            <pre class="mermaid">
+graph LR
+    classDef user fill:#D6EAF8,stroke:#5DADE2,color:#000
+    classDef assistant fill:#D5F5E3,stroke:#58D68D,color:#000
+    classDef component fill:#FDEDEC,stroke:#F1948A,color:#000
+
+    subgraph User
+        U[User Asks Question]:::user
+    end
+
+    subgraph "Grounded AI Assistant"
+        A[Retrieve Context]:::assistant
+        B[Generate Code]:::assistant
+        C[Validate Code]:::assistant
+        D[Deliver Verified Answer]:::assistant
+    end
+
+    subgraph "External Knowledge Components"
+        RAG["Supabase RAG<br>(Docs & Examples)"]:::component
+        KG["Neo4j Knowledge Graph<br>(Code Structure)"]:::component
+    end
+
+    U -- "Asks a question" --> A
+    A -- "Queries for docs" --> RAG
+    RAG -- "Returns relevant info" --> B
+    B -- "Generates code draft" --> C
+    C -- "Validates against KG" --> KG
+    KG -- "Returns validation result" --> C
+    C -- "If valid, finalizes code" --> D
+    D -- "Provides verified code" --> U
+            </pre>
+          </div>
+
+          <div class="workflow-benefits">
+            <h4>What you get</h4>
+            <ul>
+              <li>Step-by-step reasoning transcripts paired with validation status.</li>
+              <li>Exportable runbook for replicating the workflow inside CI.</li>
+              <li>Hooks for tracing tools like LangSmith (planned integration).</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Proof Stack -->
+    <section class="proof" id="proof">
+      <div class="container">
+        <header class="section-header">
+          <h2>Proof that it already runs</h2>
+          <p>We document each claim with runnable evidence. Start with these.</p>
+        </header>
+
+        <div class="proof-grid">
+          <article class="proof-card" data-track="proof-video">
+            <div class="proof-icon">🎥</div>
+            <h3>Validation Playback</h3>
+            <p>Watch the reflection agent locate the right docs, regenerate the fix, and pass validation.</p>
+            <footer>
+              <a href="https://youtu.be/oZZCUZ78QAc" target="_blank" rel="noopener" data-track="proof-video-link" class="proof-link">90-second YouTube demo</a>
+            </footer>
+          </article>
+
+          <article class="proof-card" data-track="proof-case">
+            <div class="proof-icon">📝</div>
+            <h3>Case 5 Run Logs</h3>
+            <p>Review the full, unedited run log of the reflection agent successfully solving the Case 5 benchmark using Gemini.</p>
+            <footer>
+              <a href="https://github.com/botingw/langgraph-dev-navigator/blob/main/langgraph_dev/dev_test/test_case_results/case5/agent_gemini_with_reflection.log" target="_blank" rel="noopener" data-track="proof-case-gemini" class="proof-link">Open run log</a>
+            </footer>
+          </article>
+
+          <article class="proof-card" data-track="proof-hallucination">
+            <div class="proof-icon">🛡️</div>
+            <h3>Hallucination Watchdog</h3>
+            <p>Open-source detector that blocks mismatched symbols before responses ship.</p>
+            <footer>
+              <a href="https://github.com/botingw/langgraph-dev-navigator/blob/main/mcp-crawl4ai-rag/knowledge_graphs/ai_hallucination_detector.py" target="_blank" rel="noopener" data-track="proof-hallucination-link" class="proof-link">View detector script</a>
+            </footer>
+          </article>
+
+          <article class="proof-card" data-track="proof-security">
+            <div class="proof-icon">🔒</div>
+            <h3>Security &amp; Transparency</h3>
+            <p>MSeeP security assessment and README policy keep expectations clear.</p>
+            <footer>
+              <a href="https://github.com/botingw/langgraph-dev-navigator#readme" target="_blank" rel="noopener" data-track="proof-security-link" class="proof-link">View repo badge</a>
+            </footer>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq" id="faq">
+      <div class="container">
+        <header class="section-header">
+          <h2>Questions LangGraph developers ask</h2>
+          <p>Answers stay short and direct; link deeper docs where needed.</p>
+        </header>
+
+        <div class="faq-list" data-accordion>
+          <details class="faq-item" data-track="faq-who">
+            <summary class="faq-question">Who is it for?</summary>
+            <div class="faq-answer">
+              <p>Individual LangGraph developers and teams who need grounded, version-correct assistants.</p>
+            </div>
+          </details>
+
+          <details class="faq-item" data-track="faq-diff">
+            <summary class="faq-question">How is it different from the docs?</summary>
+            <div class="faq-answer">
+              <p>The assistant maps your repo into the knowledge graph, so responses reference the exact nodes and edges you run.</p>
+            </div>
+          </details>
+
+          <details class="faq-item" data-track="faq-access">
+            <summary class="faq-question">What do early partners receive?</summary>
+            <div class="faq-answer">
+              <p>Guided onboarding, direct access to experiment summaries, and priority on feature requests collected via the insight survey.</p>
+            </div>
+          </details>
+
+          <details class="faq-item" data-track="faq-open">
+            <summary class="faq-question">Is it open source?</summary>
+            <div class="faq-answer">
+              <p>Yes. The framework is MIT licensed; you host your own API keys and data.</p>
+            </div>
+          </details>
+
+          <details class="faq-item" data-track="faq-privacy">
+            <summary class="faq-question">How is my data handled?</summary>
+            <div class="faq-answer">
+              <p>Waitlist emails and survey responses follow the storage plan in the API design doc. Detailed privacy note publishes with Stage 5.</p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- Waitlist CTA -->
+    <section class="waitlist-cta" id="waitlist">
+      <div class="container">
+        <div class="waitlist-content">
+          <header class="waitlist-header">
+            <h2>Join the LangGraph Dev Navigator waitlist</h2>
+            <p>Tell us where to send the onboarding runbook and we'll share new validation results as they land.</p>
+          </header>
+
+          <form class="waitlist-form" id="waitlistForm" novalidate>
+            <div class="form-group">
+              <label for="email" class="form-label">Work email</label>
+              <input type="email" id="email" name="email" placeholder="you@company.com" autocomplete="email" required class="form-input">
+              <div class="form-error" id="emailError"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="role" class="form-label">Role</label>
+              <input type="text" id="role" name="role" placeholder="e.g. Staff ML Engineer" autocomplete="organization-title" class="form-input">
+            </div>
+
+            <button type="submit" class="cta-button cta-button--primary cta-button--full" data-track="waitlist-submit">
+              <span class="button-text">Join the waitlist</span>
+              <span class="button-loader" aria-hidden="true"></span>
+            </button>
+
+            <div class="form-message" id="formMessage" role="status" aria-live="polite"></div>
+          </form>
+
+          <div class="legal-text">
+            <p>We respect inboxes. Expect a monthly update with experiment summaries—nothing more.</p>
+            <p>By joining, you consent to secure storage of your email for waitlist updates and aggregated experiment reporting. See the <a href="privacy.html" data-track="privacy-doc">privacy &amp; measurement disclosure</a>.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-content">
+        <p class="footer-text">Built by the LangGraph Dev Navigator team.</p>
+        <nav class="footer-nav">
+          <a href="https://github.com/botingw/langgraph-dev-navigator" target="_blank" rel="noopener" data-track="footer-github" class="footer-link">GitHub</a>
+          <a href="privacy.html" data-track="footer-privacy" class="footer-link">Privacy Policy</a>
+        </nav>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modal - Instrumentation Plan -->
+  <dialog class="modal" id="evidenceModal" aria-labelledby="modalTitle">
+    <div class="modal-content">
+      <header class="modal-header">
+        <h2 id="modalTitle">Instrumentation &amp; Evidence Plan</h2>
+        <button class="modal-close" aria-label="Close modal">&times;</button>
+      </header>
+      <div class="modal-body">
+        <ul class="modal-list">
+          <li>Client-side events follow the analytics spec (cta_click_primary, waitlist_submit_success, survey_start, etc.).</li>
+          <li>Backend adheres to waitlist &amp; survey API design (email storage, userId issuance, survey payload schema).</li>
+          <li>Weekly experiment summaries shared with the waitlist (aggregated, anonymized).</li>
+        </ul>
+      </div>
+      <footer class="modal-footer">
+        <button class="cta-button" data-modal-close>Close</button>
+      </footer>
+    </div>
+  </dialog>
+
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js" crossorigin="anonymous"></script>
+  <script type="module" src="assets/js/main.js"></script>
+</body>
+</html>
