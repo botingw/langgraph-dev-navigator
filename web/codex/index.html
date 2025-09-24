@@ -27,44 +27,37 @@
     <section class="hero" id="hero" data-section="hero">
       <div class="container hero__grid">
         <div class="hero__copy">
-          <p class="eyebrow">Grounded Assistant • Zero Hallucination Tolerance</p>
-          <h1>Ship LangGraph code you can actually run.</h1>
-          <p class="lead">`langgraph-dev-navigator` is the Codex-grade workflow for developers who refuse to debug imaginary stack traces. Retrieve the right context, generate with confidence, and validate before code ever hits your repo.</p>
+          <h1>Ship LangGraph Code, Not Hallucinations.</h1>
+          <p class="lead">LangGraph Dev Navigator retrieves the right files from your repo, generates scoped code, and proves its work with a LangGraph-specific knowledge graph.</p>
           <ul class="hero__proof" role="list">
-            <li data-track="proof-before-after">Before: brittle docs, broken graphs, wasted hours.</li>
-            <li data-track="proof-before-after">After: executable answers aligned with your LangGraph version.</li>
+            <li data-track="proof-before-after">Before: Chasing broken links and hallucinated classes from generic AI helpers.</li>
+            <li data-track="proof-before-after">After: Getting runnable answers traced to the exact LangGraph release you use.</li>
           </ul>
           <div class="cta-group">
-            <a class="primary" href="#waitlist" data-track="hero-primary">Join the private beta</a>
-            <span class="cta-note">Next step: submit the metric preferences survey so we can tailor your onboarding.</span>
-            <button class="secondary" type="button" data-open-modal="evidence" data-track="hero-secondary">See instrumentation plan</button>
+            <a class="primary" href="#waitlist" data-track="hero-primary">Join the waitlist</a>
+            <span class="cta-note">After you submit, we’ll send a 30-second build-priorities survey so we ship the workflows you need first.</span>
+            <button class="link" type="button" data-open-modal="evidence" data-track="hero-secondary">Review the instrumentation plan</button>
           </div>
           <div class="trust-bar" role="status">
-            <div>Built on Metric-Driven Experimentation</div>
-            <div>Validated against real LangGraph repos</div>
-            <div>MIT Licensed</div>
+            <div>Backed by Supabase RAG + Neo4j validation</div>
+            <div>Open source (MIT) — bring your own API keys</div>
           </div>
         </div>
         <aside class="hero__panel" aria-label="Before and After">
-          <div class="terminal before" data-track="hero-before">
-            <header>Before</header>
-            <pre><code>$ python run_agent.py
-Traceback (most recent call last):
-  File "run_agent.py", line 42, in <module>
-    app = create_graph()
-  File "run_agent.py", line 31, in create_graph
-    workflow.add_node("agent", model.bind_tools(tools))
-AttributeError: 'ChatOpenAI' object has no attribute 'bind_tools'
-            </code></pre>
-          </div>
-          <div class="terminal after" data-track="hero-after">
-            <header>After</header>
-            <pre><code>$ python run_agent.py
-[Validator] Schema verification: PASS
-[Metric] First-pass execution: SUCCESS
-Listening on http://localhost:8000
-            </code></pre>
-          </div>
+          <a class="chat-comparison" href="https://youtu.be/oZZCUZ78QAc?t=150" target="_blank" rel="noopener" data-track="hero-demo-link">
+            <div class="chat-card before" data-track="hero-before">
+              <header>Before</header>
+              <div class="chat-bubble user">“in Langgraph, is there any method an agent can assess his previous work and decide what to do next?”</div>
+              <div class="chat-bubble ai">“Yes, absolutely. That capability ... The key concepts you'll use are: 1. State Management ... 2. Cycles ... 3. Conditional Edges ...”</div>
+              <div class="chat-bubble ai warning">Top result: https://blog.langchain.dev/reflection/ <span>(404 not found)</span></div>
+            </div>
+            <div class="chat-card after" data-track="hero-after">
+              <header>After</header>
+              <div class="chat-bubble user">“in Langgraph, is there any method an agent can assess his previous work and decide what to do next?”</div>
+              <div class="chat-bubble ai">“I analyzed reflection.ipynb in your repo. It wires a cyclical graph with generation_node and reflection_node so the agent critiques and revises its work.”</div>
+              <div class="chat-bubble ai success">Tools: FindFiles → ReadFile → Validation ✓ Grounded answer from local notebook.</div>
+            </div>
+          </a>
         </aside>
       </div>
     </section>
@@ -72,36 +65,36 @@ Listening on http://localhost:8000
     <section class="pillars" id="pillars" data-section="pillars">
       <div class="container">
         <header class="section-heading">
-          <h2>Three value pillars for production teams</h2>
-          <p>Every interaction is grounded in observable truth, so you can deploy assistants without gambling on hallucinations.</p>
+          <h2>Value pillars built for grounded answers</h2>
+          <p>Every response is backed by your repo so you can ship with confidence instead of debugging guesswork.</p>
         </header>
         <div class="pillars__grid">
-          <article class="pillar" data-track="pillar-reliability">
-            <h3>Reliability by Design</h3>
-            <p>Retrieval pipelines pin answers to the exact LangGraph release you're running. No more mismatched APIs or deprecated node signatures.</p>
+          <article class="pillar" data-track="pillar-retrieval">
+            <h3>Repo-Grounded Retrieval</h3>
+            <p>Stop debugging answers from the public web. The Navigator uses RAG to search your local LangGraph docs and source code, so every response is grounded in runnable, version-correct references.</p>
             <ul>
-              <li>Real-time doc diffing to flag breaking changes.</li>
-              <li>Knowledge Graph alignment for tool awareness.</li>
+              <li>Finds the right context using the <code>perform_rag_query</code>, <code>FindFiles</code>, and <code>ReadFile</code> tools.</li>
+              <li>See it in action: The assistant finds <code>reflection.ipynb</code> to answer a complex question instead of returning a broken link.</li>
+              <li>Examples trace back to <code>langgraph_dev/dev_test/test_case_results/case5</code>.</li>
             </ul>
-            <div class="snippet-placeholder" data-owner="Dev Advocate">TODO: embed LangGraph diff inspection clip once Story 1 assets ship.</div>
+            <figure class="chat-asset">
+              <figcaption>Grounded response excerpt</figcaption>
+              <blockquote>“I analyzed the <code>reflection.ipynb</code> notebook… The graph cycles generation_node → reflection_node so the agent critiques and revises its work.”</blockquote>
+              <a href="https://youtu.be/oZZCUZ78QAc?t=273" target="_blank" rel="noopener">Watch the retrieval pass (YouTube)</a>
+            </figure>
           </article>
-          <article class="pillar" data-track="pillar-workflow">
-            <h3>Methodical Workflow</h3>
-            <p>Codex codifies the Retrieve → Generate → Validate loop, surfacing intermediate reasoning so you can audit the chain of thought.</p>
+          <article class="pillar" data-track="pillar-validation">
+            <h3>Validation Before Delivery</h3>
+            <p>Don't guess if AI-generated code will run. Every generation is validated against a knowledge graph of your specific LangGraph version, ensuring structural correctness before it ever reaches your editor.</p>
             <ul>
-              <li>Each step emits metrics for regression tracking.</li>
-              <li>Validation gates block uncertain generations.</li>
+              <li>Leverages the <code>check_ai_script_hallucinations</code> tool.</li>
+              <li>Verifies classes, methods, and parameters against a Neo4j graph built from your repo.</li>
             </ul>
-            <div class="snippet-placeholder" data-owner="Engineering">TODO: replace with workflow run GIF sourced from Stage 2 proof video.</div>
-          </article>
-          <article class="pillar" data-track="pillar-metrics">
-            <h3>Metric-Driven Experimentation</h3>
-            <p>Instrumentation is built-in. Track hallucination rate, first-pass success, and time-to-ship from the first deployment.</p>
-            <ul>
-              <li>Automatic waitlist survey enrichment hooks.</li>
-              <li>Event stream ready for Supabase or Segment.</li>
-            </ul>
-            <div class="snippet-placeholder" data-owner="PM">TODO: include metric dashboard screencap once privacy review clears.</div>
+            <figure class="chat-asset">
+              <figcaption>Validation transcript</figcaption>
+              <blockquote>“Validation succeeded — all nodes matched the Neo4j schema. Delivering the verified fix with inline provenance.”</blockquote>
+              <a href="https://youtu.be/oZZCUZ78QAc?t=390" target="_blank" rel="noopener">Jump to the validation loop (YouTube)</a>
+            </figure>
           </article>
         </div>
       </div>
@@ -110,11 +103,11 @@ Listening on http://localhost:8000
     <section class="workflow" id="workflow" data-section="workflow">
       <div class="container">
         <div class="section-heading">
-          <h2>How the Methodical Workflow keeps answers grounded</h2>
-          <p>Every stage is observable and replayable—no hidden leaps of faith.</p>
+          <h2>How the workflow keeps answers grounded</h2>
+          <p>The assistant follows a transparent Retrieve → Generate → Validate loop so every step can be audited.</p>
         </div>
         <figure class="workflow__diagram" role="group" aria-labelledby="workflowTitle">
-          <figcaption id="workflowTitle" class="visually-hidden">Retrieve → Generate → Validate workflow diagram describing how Codex grounds answers</figcaption>
+          <figcaption id="workflowTitle" class="visually-hidden">Retrieve → Generate → Validate workflow diagram describing how the Navigator grounds answers</figcaption>
           <!-- Source: images/query_workflow_v2.md -->
           <pre class="mermaid" aria-hidden="true">
 graph LR
@@ -150,11 +143,11 @@ graph LR
           <p class="diagram-alt">Fallback description: The workflow routes a user question through context retrieval, code generation, validation against Supabase RAG and Neo4j, and finally delivers a verified answer back to the user.</p>
         </figure>
         <aside class="workflow__notes">
-          <h4>What you see in Codex</h4>
+          <h4>What you get</h4>
           <ul>
-            <li>Intermediate reasoning transcript linked to each metric.</li>
-            <li>Regressions automatically surface in the Proof Stack.</li>
-            <li>Exportable runbook for replicating the workflow in your CI.</li>
+            <li>Step-by-step reasoning transcripts paired with validation status.</li>
+            <li>Exportable runbook for replicating the workflow inside CI.</li>
+            <li>Hooks for tracing tools like LangSmith (planned integration).</li>
           </ul>
         </aside>
       </div>
@@ -163,33 +156,29 @@ graph LR
     <section class="proof" id="proof" data-section="proof">
       <div class="container">
         <header class="section-heading">
-          <h2>The proof stack</h2>
-          <p>We collect receipts for every claim. Here are the first three.</p>
+          <h2>Proof that it already runs</h2>
+          <p>We document each claim with runnable evidence. Start with these.</p>
         </header>
         <div class="proof__grid">
           <article class="proof-card" data-track="proof-video">
             <h3>Validation Playback</h3>
-            <p>Watch a Codex reflection agent debug itself end-to-end — concept search, doc retrieval, and runnable fix verification.</p>
-            <footer><a href="https://youtu.be/oZZCUZ78QAc?si=YKwOiq_OdgZAJ7Nd" target="_blank" rel="noopener" data-track="proof-video-link">5-minute validation demo</a></footer>
+            <p>Watch the reflection agent locate the right docs, regenerate the fix, and pass validation.</p>
+            <footer><a href="https://youtu.be/oZZCUZ78QAc" target="_blank" rel="noopener" data-track="proof-video-link">90-second YouTube demo</a></footer>
           </article>
           <article class="proof-card" data-track="proof-case">
             <h3>Case 5 Run Logs</h3>
-            <p>Side-by-side LangGraph agents instrumented with reflection show how Codex converges on an executable solution.</p>
-            <footer>
-              <a href="https://github.com/botingw/langgraph-dev-navigator/blob/main/langgraph_dev/dev_test/test_case_results/case5/agent_gemini_with_reflection.py" target="_blank" rel="noopener" data-track="proof-case-gemini">Gemini reflection agent</a>
-              ·
-              <a href="https://github.com/botingw/langgraph-dev-navigator/blob/main/langgraph_dev/dev_test/test_case_results/case5/agent_o3.py" target="_blank" rel="noopener" data-track="proof-case-o3">OpenAI o3 comparison</a>
-            </footer>
+            <p>Review the full, unedited run log of the reflection agent successfully solving the Case 5 benchmark using Gemini.</p>
+            <footer><a href="https://github.com/botingw/langgraph-dev-navigator/blob/main/langgraph_dev/dev_test/test_case_results/case5/agent_gemini_with_reflection.log" target="_blank" rel="noopener" data-track="proof-case-gemini">Open run log</a></footer>
           </article>
           <article class="proof-card" data-track="proof-hallucination">
             <h3>Hallucination Watchdog</h3>
-            <p>An open-source detector flags mismatched symbols before answers reach you, grounding every snippet.</p>
+            <p>Open-source detector that blocks mismatched symbols before responses ship.</p>
             <footer><a href="https://github.com/botingw/langgraph-dev-navigator/blob/main/mcp-crawl4ai-rag/knowledge_graphs/ai_hallucination_detector.py" target="_blank" rel="noopener" data-track="proof-hallucination-link">View detector script</a></footer>
           </article>
           <article class="proof-card" data-track="proof-security">
             <h3>Security &amp; Transparency</h3>
-            <p>Continuous MSeeP assessment keeps Codex compliant; privacy disclosures land before we store a byte.</p>
-            <footer><a href="https://github.com/botingw/langgraph-dev-navigator#readme" target="_blank" rel="noopener" data-track="proof-security-link">Security badge &amp; policy</a></footer>
+            <p>MSeeP security assessment and README policy keep expectations clear.</p>
+            <footer><a href="https://github.com/botingw/langgraph-dev-navigator#readme" target="_blank" rel="noopener" data-track="proof-security-link">View repo badge</a></footer>
           </article>
         </div>
       </div>
@@ -198,25 +187,29 @@ graph LR
     <section class="faq" id="faq" data-section="faq">
       <div class="container">
         <div class="section-heading">
-          <h2>Questions developers actually ask</h2>
-          <p>We log every question and feed the answers back into the workflow.</p>
+          <h2>Questions LangGraph developers ask</h2>
+          <p>Answers stay short and direct; link deeper docs where needed.</p>
         </div>
         <div class="faq__list" data-accordion>
           <details data-track="faq-who">
-            <summary>Who is Codex for?</summary>
-            <p>Engineering teams running LangGraph in production who need observability into every AI-assisted change.</p>
+            <summary>Who is it for?</summary>
+            <p>Individual LangGraph developers and teams who need grounded, version-correct assistants.</p>
           </details>
           <details data-track="faq-diff">
-            <summary>How is this different from vanilla LangGraph docs?</summary>
-            <p>Codex maps your repo to the knowledge graph, so answers line up with the exact nodes and edges you're actually shipping.</p>
+            <summary>How is it different from the docs?</summary>
+            <p>The assistant maps your repo into the knowledge graph, so responses reference the exact nodes and edges you run.</p>
           </details>
           <details data-track="faq-access">
-            <summary>What do I get as an early access partner?</summary>
-            <p>Guided onboarding, custom metric dashboards, and priority slots in the experiment queue.</p>
+            <summary>What do early partners receive?</summary>
+            <p>Guided onboarding, direct access to experiment summaries, and priority on feature requests collected via the insight survey.</p>
           </details>
           <details data-track="faq-open">
             <summary>Is it open source?</summary>
-            <p>The framework is MIT licensed. We monetize enterprise support and integrations—not access to your data.</p>
+            <p>Yes. The framework is MIT licensed; you host your own API keys and data.</p>
+          </details>
+          <details data-track="faq-privacy">
+            <summary>How is my data handled?</summary>
+            <p>Waitlist emails and survey responses follow the storage plan in the API design doc. Detailed privacy note publishes with Stage 5.</p>
           </details>
         </div>
       </div>
@@ -226,43 +219,41 @@ graph LR
       <div class="container">
         <div class="cta__inner">
           <div>
-            <h2>Join the Codex early access waitlist</h2>
-            <p>Tell us where to send the runbook and we'll share the latest experiment results.</p>
+            <h2>Join the LangGraph Dev Navigator waitlist</h2>
+            <p>Tell us where to send the onboarding runbook and we’ll share new validation results as they land.</p>
           </div>
           <form id="waitlistForm" class="waitlist-form" novalidate>
             <label for="email">Work email</label>
             <input type="email" id="email" name="email" placeholder="you@company.com" autocomplete="email" required>
             <label for="role">Role</label>
             <input type="text" id="role" name="role" placeholder="e.g. Staff ML Engineer" autocomplete="organization-title">
-            <button type="submit" data-track="waitlist-submit">Join waitlist</button>
+            <button type="submit" data-track="waitlist-submit">Join the waitlist</button>
             <p class="form-message" id="formMessage" role="status" aria-live="polite"></p>
           </form>
         </div>
-        <p class="smallprint">We respect inboxes. Expect a monthly instrumentation digest and experiment invites—nothing else.</p>
-        <p class="smallprint" data-owner="PM">By joining you consent to secure storage of your email for waitlist updates and aggregated experiment reporting. See <a href="#" data-track="privacy-doc">privacy &amp; measurement disclosure</a> (publishing with Story&nbsp;5).</p>
+        <p class="smallprint">We respect inboxes. Expect a monthly update with experiment summaries—nothing more.</p>
+        <p class="smallprint">By joining, you consent to secure storage of your email for waitlist updates and aggregated experiment reporting. See the <a href="#" data-track="privacy-doc">privacy &amp; measurement disclosure</a>.</p>
       </div>
     </section>
   </main>
 
   <footer class="site-footer" data-analytics="footer">
     <div class="container">
-      <p>Built by the LangGraph Dev Navigator team. <a href="https://github.com/botingw/langgraph-dev-navigator" data-track="footer-github">View on GitHub</a></p>
-      <div class="footer-metrics">
-        <span>Hallucination rate target: &lt; 2%</span>
-        <span>First-pass success: 80%+</span>
-        <span>Response time SLA: &lt; 5s</span>
-      </div>
+      <p>Built by the LangGraph Dev Navigator team.</p>
+      <nav class="footer-nav" aria-label="Footer">
+        <a href="https://github.com/botingw/langgraph-dev-navigator" data-track="footer-github">GitHub</a>
+        <a href="privacy.html" data-track="footer-privacy">Privacy Policy</a>
+      </nav>
     </div>
   </footer>
 
   <dialog class="modal" id="evidenceModal" aria-labelledby="modalTitle">
     <form method="dialog">
       <h2 id="modalTitle">Instrumentation & Evidence Plan</h2>
-      <p>Codex ships with a measurement blueprint so you can hold us accountable.</p>
       <ul>
-        <li>Client events instrumented with semantic <code>data-track</code> attributes.</li>
-        <li>Server API designed per <code>waitlist_and_survey_api_design.md</code>.</li>
-        <li>Weekly experiment reviews with anonymized results.</li>
+        <li>Client-side events follow the analytics spec (cta_click_primary, waitlist_submit_success, survey_start, etc.).</li>
+        <li>Backend adheres to waitlist &amp; survey API design (email storage, userId issuance, survey payload schema).</li>
+        <li>Weekly experiment summaries shared with the waitlist (aggregated, anonymized).</li>
       </ul>
       <button value="close">Close</button>
     </form>

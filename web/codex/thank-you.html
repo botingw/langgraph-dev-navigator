@@ -25,9 +25,9 @@
       <div class="container thankyou-hero__grid">
         <div>
           <p class="eyebrow">Step 2 · Insight Engine Survey</p>
-          <h1>Thanks for joining. Tell us where reliability matters most.</h1>
-          <p class="lead">Select the workflows that would unlock the most value for your LangGraph teams. We build the roadmap off these answers.</p>
-          <p class="hero__proof">We only ask once per waitlist signup. Expect a roadmap update within 10 business days.</p>
+          <h1>Thanks for joining — help us prioritize your workflows.</h1>
+          <p class="lead">Select the LangGraph assistant capabilities you need and we’ll notify you as they launch.</p>
+          <p class="hero__proof">Your responses stay internal and guide the experiment backlog.</p>
         </div>
         <aside class="thankyou-aside" aria-label="Survey expectations">
           <div class="aside-card">
@@ -76,15 +76,11 @@
                 <p id="group-core-help" class="group-help">Everything you need during daily graph development.</p>
                 <label class="option">
                   <input type="checkbox" name="features" value="automated_debugging" data-feature-key="automated_debugging" data-feature-group="core">
-                  <span class="option__label">Automated debugging that pinpoints failing nodes with reproduction steps.</span>
+                  <span class="option__label">Automated debugging runs your failing nodes through the validator and proposes fixes.</span>
                 </label>
                 <label class="option">
                   <input type="checkbox" name="features" value="ai_test_generation" data-feature-key="ai_test_generation" data-feature-group="core">
-                  <span class="option__label">AI-powered test generation aligned with your LangGraph schema.</span>
-                </label>
-                <label class="option">
-                  <input type="checkbox" name="features" value="workflow_templates" data-feature-key="workflow_templates" data-feature-group="core">
-                  <span class="option__label">Curated workflow templates for common LangGraph agents.</span>
+                  <span class="option__label">AI-powered test generation creates runnable graph tests for new flows.</span>
                 </label>
               </fieldset>
 
@@ -92,16 +88,12 @@
                 <legend>Platform &amp; Deployment</legend>
                 <p id="group-platform-help" class="group-help">Make LangGraph accessible across teams without bespoke ops work.</p>
                 <label class="option">
-                  <input type="checkbox" name="features" value="cloud_hosted_knowledge_server" data-feature-key="cloud_hosted_knowledge_server" data-feature-group="platform">
-                  <span class="option__label">Managed Supabase knowledge server that mirrors your LangGraph docs.</span>
+                  <input type="checkbox" name="features" value="managed_knowledge_server" data-feature-key="managed_knowledge_server" data-feature-group="platform">
+                  <span class="option__label">Managed knowledge server (Supabase + Neo4j) so your team skips the infra lift.</span>
                 </label>
                 <label class="option">
                   <input type="checkbox" name="features" value="one_click_publish" data-feature-key="one_click_publish" data-feature-group="platform">
-                  <span class="option__label">One-click agent publishing with environment promotion controls.</span>
-                </label>
-                <label class="option">
-                  <input type="checkbox" name="features" value="runtime_monitoring" data-feature-key="runtime_monitoring" data-feature-group="platform">
-                  <span class="option__label">Runtime monitoring dashboards for latency, failures, and regression alerts.</span>
+                  <span class="option__label">One-click agent publishing packages validated graphs for LangServe or similar deployment.</span>
                 </label>
               </fieldset>
 
@@ -110,15 +102,15 @@
                 <p id="group-advanced-help" class="group-help">Extend agents beyond static prompts while keeping them auditable.</p>
                 <label class="option">
                   <input type="checkbox" name="features" value="observable_agents" data-feature-key="observable_agents" data-feature-group="advanced">
-                  <span class="option__label">Observable agents with step-by-step reasoning transcripts.</span>
+                  <span class="option__label">Observable agents stream intermediate reasoning and metrics to LangSmith-compatible traces.</span>
                 </label>
                 <label class="option">
                   <input type="checkbox" name="features" value="self_improving_agents" data-feature-key="self_improving_agents" data-feature-group="advanced">
-                  <span class="option__label">Self-improving agents that learn from production outcomes.</span>
+                  <span class="option__label">Self-improving agents re-run failed tasks with new context without manual prompts.</span>
                 </label>
                 <label class="option">
                   <input type="checkbox" name="features" value="architectural_guidance" data-feature-key="architectural_guidance" data-feature-group="advanced">
-                  <span class="option__label">Architectural guidance assistants that critique LangGraph designs.</span>
+                  <span class="option__label">Architectural guidance suggests graph patterns backed by runnable examples.</span>
                 </label>
               </fieldset>
 
@@ -127,15 +119,15 @@
                 <p id="group-enterprise-help" class="group-help">Controls and integrations required for regulated environments.</p>
                 <label class="option">
                   <input type="checkbox" name="features" value="on_prem_vpc" data-feature-key="on_prem_vpc" data-feature-group="enterprise">
-                  <span class="option__label">On-Prem/VPC deployment with secrets rotation and audit logs.</span>
+                  <span class="option__label">On-prem / VPC deployment keeps all data within your network.</span>
                 </label>
                 <label class="option">
                   <input type="checkbox" name="features" value="advanced_iam_security" data-feature-key="advanced_iam_security" data-feature-group="enterprise">
-                  <span class="option__label">Advanced IAM &amp; security (role-bound tool access, SSO, SCIM).</span>
+                  <span class="option__label">Advanced IAM &amp; security auditing integrates with existing policies.</span>
                 </label>
                 <label class="option">
                   <input type="checkbox" name="features" value="cicd_integration" data-feature-key="cicd_integration" data-feature-group="enterprise">
-                  <span class="option__label">CI/CD integration to validate agents before merging to main.</span>
+                  <span class="option__label">CI/CD integration enforces validation before merges.</span>
                 </label>
               </fieldset>
             </div>
@@ -158,14 +150,14 @@
 
             <p class="survey-message" data-survey-message role="status" aria-live="polite"></p>
 
-            <p class="survey-privacy">We store your preferences alongside the waitlist ID in Postgres as described in our <a href="https://github.com/langgraph-dev/langgraph-dev-navigator/blob/main/memory/tasks/story_create_landing_page/waitlist_and_survey_api_design.md" target="_blank" rel="noopener">data usage plan</a>.</p>
+            <p class="survey-privacy">We store survey responses in Postgres per the waitlist API design and only use them to prioritize roadmap decisions. See the <a href="#" data-track="survey-privacy-note">privacy &amp; measurement disclosure</a>.</p>
           </form>
 
           <div class="survey-success" data-view="success" hidden>
-            <h2>Preferences saved.</h2>
-            <p>Here's what we'll prioritise for you:</p>
+            <h2>Thanks! Preferences saved.</h2>
+            <p>Here’s what we’ll prioritize for you:</p>
             <ul class="success-list" data-success-list></ul>
-            <p class="success-next">Expect a roadmap update in your inbox within 10 business days. We'll reach out if we need a deeper discovery call.</p>
+            <p class="success-next">We’ll email you as soon as the workflows you selected are ready.</p>
             <div class="survey-success__actions">
               <a class="button ghost" href="index.html" data-track="survey-success-return">Back to landing page</a>
             </div>
