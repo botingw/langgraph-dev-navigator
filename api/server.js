@@ -92,6 +92,9 @@ function isValidEmail(email) {
   return emailRegex.test(email);
 }
 
+// Simple rate limiting with in-memory cache for performance
+const rateLimitCache = new Map();
+
 function rateLimitCheck(ip, action) {
   // Simple rate limiting - in production, use Redis
   const now = Date.now();
@@ -99,9 +102,7 @@ function rateLimitCheck(ip, action) {
   const windowMs = 60000; // 1 minute
   const maxRequests = action === 'waitlist' ? 5 : 10;
   
-  if (!storage.rateLimits) storage.rateLimits = new Map();
-  
-  const requests = storage.rateLimits.get(key) || [];
+  const requests = rateLimitCache.get(key) || [];
   const recentRequests = requests.filter(time => now - time < windowMs);
   
   if (recentRequests.length >= maxRequests) {
@@ -109,8 +110,28 @@ function rateLimitCheck(ip, action) {
   }
   
   recentRequests.push(now);
-  storage.rateLimits.set(key, recentRequests);
+  rateLimitCache.set(key, recentRequests);
+  
+  // Clean up old entries periodically
+  if (Math.random() < 0.01) { // 1% chance on each call
+    cleanupRateLimit();
+  }
+  
   return true;
+}
+
+function cleanupRateLimit() {
+  const now = Date.now();
+  const windowMs = 60000;
+  
+  for (const [key, requests] of rateLimitCache.entries()) {
+    const recentRequests = requests.filter(time => now - time < windowMs);
+    if (recentRequests.length === 0) {
+      rateLimitCache.delete(key);
+    } else {
+      rateLimitCache.set(key, recentRequests);
+    }
+  }
 }
 
 // Error handling middleware
@@ -304,11 +325,18 @@ app.post('/api/analytics', asyncHandler(async (req, res) => {
     userAgent: req.get('User-Agent')
   };
 
-  storage.analytics.push(event);
-
-  // Keep only last 1000 events to prevent memory bloat
-  if (storage.analytics.length > 1000) {
-    storage.analytics = storage.analytics.slice(-1000);
+  // Store analytics in database
+  try {
+    // Simple analytics storage - in a real app, you might use a separate analytics service
+    await db.ensureConnection();
+    const query = `
+      INSERT INTO analytics (event_name, payload, ip_address)
+      VALUES ($1, $2, $3)
+    `;
+    await db.client.query(query, [event.name, JSON.stringify(event.payload), clientIP]);
+  } catch (error) {
+    console.error('Analytics storage error:', error);
+    // Don't fail the request if analytics fails
   }
 
   res.status(200).json({ status: 'ok' });
