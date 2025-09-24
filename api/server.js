@@ -34,6 +34,21 @@ app.use(morgan('combined'));
 app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true }));
 
+// Admin authentication middleware
+const adminAuth = (req, res, next) => {
+  const providedPassword = req.headers['x-admin-password'] || req.body.adminPassword || req.query.adminPassword;
+  
+  if (!providedPassword) {
+    return res.status(401).json({ error: 'Admin authentication required' });
+  }
+  
+  if (providedPassword !== process.env.ADMIN_PASSWORD) {
+    return res.status(401).json({ error: 'Invalid admin credentials' });
+  }
+  
+  next();
+};
+
 // Serve static files from Replit frontend
 app.use(express.static(path.join(__dirname, '../web/replit')));
 
@@ -343,7 +358,7 @@ app.post('/api/analytics', asyncHandler(async (req, res) => {
 }));
 
 // Admin endpoints for data access
-app.get('/api/admin/stats', asyncHandler(async (req, res) => {
+app.get('/api/admin/stats', adminAuth, asyncHandler(async (req, res) => {
   const stats = await db.getUserStats();
   const users = await db.getAllUsers();
   const surveys = await db.getAllSurveys();
@@ -378,19 +393,19 @@ app.get('/api/admin/stats', asyncHandler(async (req, res) => {
 }));
 
 // Get all waitlist users
-app.get('/api/admin/waitlist', asyncHandler(async (req, res) => {
+app.get('/api/admin/waitlist', adminAuth, asyncHandler(async (req, res) => {
   const users = await db.getAllUsers();
   res.json(users);
 }));
 
 // Get all survey responses  
-app.get('/api/admin/surveys', asyncHandler(async (req, res) => {
+app.get('/api/admin/surveys', adminAuth, asyncHandler(async (req, res) => {
   const surveys = await db.getAllSurveys();
   res.json(surveys);
 }));
 
 // Export data as CSV
-app.get('/api/admin/export', asyncHandler(async (req, res) => {
+app.get('/api/admin/export', adminAuth, asyncHandler(async (req, res) => {
   const users = await db.getAllUsers();
   const surveys = await db.getAllSurveys();
   
