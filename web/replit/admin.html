@@ -282,7 +282,7 @@
 
         <div class="actions">
             <button class="btn" onclick="refreshData()">Refresh Data</button>
-            <a href="/api/admin/export" class="btn btn-secondary" download>Export CSV</a>
+            <button class="btn btn-secondary" onclick="downloadCSV()">Export CSV</button>
             <button class="btn btn-secondary" onclick="toggleSection('waitlistSection')">Toggle Waitlist</button>
             <button class="btn btn-secondary" onclick="toggleSection('surveySection')">Toggle Surveys</button>
         </div>
@@ -421,7 +421,7 @@
                                 `).join('')}
                             </tbody>
                         </table>
-                        ${waitlistData.length > 20 ? `<p style="margin-top: 1rem; color: #64748b;">Showing 20 of ${waitlistData.length} users. <a href="/api/admin/export" download>Download full export</a></p>` : ''}
+                        ${waitlistData.length > 20 ? `<p style="margin-top: 1rem; color: #64748b;">Showing 20 of ${waitlistData.length} users. <button onclick="downloadCSV()" style="background:none;border:none;color:#3b82f6;text-decoration:underline;cursor:pointer;">Download full export</button></p>` : ''}
                     `;
                     waitlistDiv.innerHTML = tableHtml;
                 } else {
@@ -470,7 +470,7 @@
                                 `).join('')}
                             </tbody>
                         </table>
-                        ${surveyData.length > 20 ? `<p style="margin-top: 1rem; color: #64748b;">Showing 20 of ${surveyData.length} surveys. <a href="/api/admin/export" download>Download full export</a></p>` : ''}
+                        ${surveyData.length > 20 ? `<p style="margin-top: 1rem; color: #64748b;">Showing 20 of ${surveyData.length} surveys. <button onclick="downloadCSV()" style="background:none;border:none;color:#3b82f6;text-decoration:underline;cursor:pointer;">Download full export</button></p>` : ''}
                     `;
                     surveyDiv.innerHTML = tableHtml;
                 } else {
@@ -487,6 +487,12 @@
         async function refreshData() {
             document.querySelectorAll('.loading').forEach(el => el.innerHTML = 'Loading...');
             await Promise.all([loadStats(), loadWaitlist(), loadSurveys()]);
+        }
+        
+        function downloadCSV() {
+            const url = new URL('/api/admin/export', window.location.origin);
+            url.searchParams.append('adminPassword', adminPassword);
+            window.open(url.toString(), '_blank');
         }
 
         function toggleSection(sectionId) {

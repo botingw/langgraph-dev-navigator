@@ -36,7 +36,9 @@ app.use(express.urlencoded({ extended: true }));
 
 // Admin authentication middleware
 const adminAuth = (req, res, next) => {
-  const providedPassword = req.headers['x-admin-password'] || req.body.adminPassword || req.query.adminPassword;
+  const providedPassword = req.headers['x-admin-password'] || 
+                           (req.body && req.body.adminPassword) || 
+                           (req.query && req.query.adminPassword);
   
   if (!providedPassword) {
     return res.status(401).json({ error: 'Admin authentication required' });
