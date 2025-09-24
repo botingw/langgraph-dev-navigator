@@ -36,9 +36,8 @@ app.use(express.urlencoded({ extended: true }));
 
 // Admin authentication middleware
 const adminAuth = (req, res, next) => {
-  const providedPassword = req.headers['x-admin-password'] || 
-                           (req.body && req.body.adminPassword) || 
-                           (req.query && req.query.adminPassword);
+  // Only accept password from custom header to prevent logging
+  const providedPassword = req.headers['x-admin-password'];
   
   if (!providedPassword) {
     return res.status(401).json({ error: 'Admin authentication required' });

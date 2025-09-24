@@ -490,9 +490,32 @@
         }
         
         function downloadCSV() {
-            const url = new URL('/api/admin/export', window.location.origin);
-            url.searchParams.append('adminPassword', adminPassword);
-            window.open(url.toString(), '_blank');
+            // Create a form to submit with password in header via fetch, then download
+            fetch('/api/admin/export', {
+                headers: {
+                    'x-admin-password': adminPassword
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.blob();
+                }
+                throw new Error('Export failed');
+            })
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'waitlist-export.csv';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            })
+            .catch(error => {
+                alert('Failed to download CSV export');
+                console.error('CSV export error:', error);
+            });
         }
 
         function toggleSection(sectionId) {

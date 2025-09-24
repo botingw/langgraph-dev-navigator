@@ -19,6 +19,7 @@ The core architecture follows a microservices pattern with specialized component
 
 ### Main Application Layer
 - **Node.js/Express API Server**: Handles HTTP requests, CORS, security middleware, and serves static content
+- **Admin Authentication System**: Password-protected access to admin dashboard and all `/api/admin/*` endpoints via Replit secrets
 - **Python Tools Layer**: Command-line utilities for web scraping, search, screenshot capture, and LLM API interactions
 - **Configuration Management**: Environment-based configuration with `.env` file support and VS Code debug configurations
 
@@ -38,9 +39,19 @@ The system implements a dual-pipeline approach for different types of knowledge:
 
 ### Data Storage Strategy
 The architecture uses a polyglot persistence approach:
+- **PostgreSQL Database**: Persistent storage for waitlist signups, survey responses, and user data with automatic reconnection handling
 - **Vector Database**: Supabase (PostgreSQL with pgvector) for RAG content and embeddings
 - **Graph Database**: Neo4j for code structure and validation
 - **In-Memory Storage**: JavaScript Map objects for development/testing scenarios
+
+### Security Architecture
+- **Admin Authentication**: Password-based protection for admin dashboard and API endpoints
+  - Password stored securely in Replit environment variables (`ADMIN_PASSWORD`)
+  - Authentication required for all `/api/admin/*` routes
+  - Frontend login overlay prevents unauthorized access to admin dashboard
+  - CSV export functionality protected with authentication
+- **API Protection**: All admin endpoints protected by middleware authentication
+- **Database Security**: Robust error handling and automatic reconnection for database operations
 
 ## External Dependencies
 
