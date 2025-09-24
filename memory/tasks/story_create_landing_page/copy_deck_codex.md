@@ -7,43 +7,42 @@ This document is the source of truth for the Stage 1 landing page (waitlist funn
 ## Stage 1 — Hook / Waitlist Page
 
 ### 1. Hero (Above the Fold)
-- **Headline:** `Ship LangGraph assistants that validate before they ship.`
-- **Sub-head:** `LangGraph Dev Navigator retrieves the right files from your repo, generates scoped code, and blocks hallucinations with a LangGraph-specific knowledge graph.`
+- **Headline:** `Ship LangGraph Code, Not Hallucinations.`
+- **Sub-head:** `LangGraph Dev Navigator retrieves the right files from your repo, generates scoped code, and proves its work with a LangGraph-specific knowledge graph.`
 - **Lead-in proof bullets:**
-  - `Before: chasing deprecated APIs and hallucinated classes from generic AI helpers.`
-  - `After: runnable answers traced to the exact LangGraph release you use.`
-- **Primary CTA:** Button copy `Join the waitlist` (scroll target `#waitlist`). Keep the CTA outcome-focused.
+  - `Before: Chasing broken links and hallucinated classes from generic AI helpers.`
+  - `After: Getting runnable answers traced to the exact LangGraph release you use.`
+- **Primary CTA:** Button copy `Join the waitlist` (scroll target `#waitlist`).
 - **Next-step note:** `After you submit, we’ll send a 30-second build-priorities survey so we ship the workflows you need first.`
 - **Secondary CTA:** Text link `Review the instrumentation plan` opening a modal that summarizes analytics + measurement commitments.
-- **Trust bar (3 items):**
-  1. `Grounded in Metric-Driven Experimentation`
-  2. `Backed by Supabase RAG + Neo4j validation`
-  3. `Open source (MIT) — bring your own API keys`
-- **Hero visual:** Side-by-side terminal/log panel.
-  - **Left (Before):** Hallucinated error referencing a nonexistent LangGraph method (reuse real trace from dev tests if available).
-  - **Right (After):** Validation script output from `check_ai_script_hallucinations` + successful LangGraph run. **TBD:** Capture a current run log; replace placeholder copy from existing HTML.
+- **Trust bar (2 items):**
+  1. `Backed by Supabase RAG + Neo4j validation`
+  2. `Open source (MIT) — bring your own API keys`
+- **Hero visual:** A side-by-side text comparison of a "Before" and "After" chat interaction.
+  - **Asset (Before):** A styled text block showing a generic AI providing a broken link. (Content sourced from `relection_question_before_navigator_text.md`). (Source: Video `2:30` - `4:33`)
+  - **Asset (After):** A styled text block showing the Navigator providing a grounded answer from a local file. (Content sourced from `reflection_question_after_navigator_text.md`). (Source: Video `4:33` - `6:30`)
+  - **Link:** The entire visual block should be accompanied by a link to the YouTube demo: `https://youtu.be/oZZCUZ78QAc?t=150`.
+  - **Status:** Final text content is in the `/sources/` folder. Web implementation should style these text blocks to resemble a chat interface. No media creation is needed.
 
-### 2. Value Pillars (Three-column block)
-1. **Pillar title:** `Repo-grounded retrieval`
-   - **Body copy:** `Semantic search (Supabase RAG) scopes every answer to your LangGraph docs and local source so responses cite runnable references.`
+### 2. Value Pillars (Two-column block)
+1. **Pillar title:** `Repo-Grounded Retrieval`
+   - **Body copy:** `Stop debugging answers from the public web. The Navigator uses RAG to search your local LangGraph docs and source code, so every response is grounded in runnable, version-correct references.`
    - **Bullets:**
-     - `Powered by the `perform_rag_query` tool exposed in the repo.`
+     - `Finds the right context using the `perform_rag_query` and `FindFiles` and `ReadFile` tools.`
+     - `See it in action: The assistant finds `reflection.ipynb` to answer a complex question instead of returning a broken link.`
      - `Examples trace back to `langgraph_dev/dev_test/test_case_results/case5`.`
-   - **Asset:** Code snippet or screenshot of `perform_rag_query` returning a relevant file path. **Status:** Requires capture from Case 5 artifacts.
+   - **Asset:** A styled text block displaying the chat interaction from `reflection_question_after_navigator_text.md`. (Source: Video `4:33` - `6:30`)
+   - **Link:** Accompany the asset with a link to the YouTube video at the relevant timestamp (`https://youtu.be/oZZCUZ78QAc?t=273`).
+   - **Status:** Final text content is in the `/sources/` folder. No media creation needed.
 
-2. **Pillar title:** `Validation before delivery`
-   - **Body copy:** `Every generation runs through the knowledge-graph checker so nonexistent nodes or parameters are rejected before you see them.`
+2. **Pillar title:** `Validation Before Delivery`
+   - **Body copy:** `Don't guess if AI-generated code will run. Every generation is validated against a knowledge graph of your specific LangGraph version, ensuring structural correctness before it ever reaches your editor.`
    - **Bullets:**
-     - `Leverages `check_ai_script_hallucinations` from the MCP server.`
-     - `References the Neo4j graph built from your LangGraph clone.`
-   - **Asset:** Animated terminal or GIF showing the validator blocking a bad call and passing the corrected run. Source: validation video at <https://youtu.be/oZZCUZ78QAc?si=YKwOiq_OdgZAJ7Nd>. **Status:** Asset needs to be edited down to 10–15 second clip.
-
-3. **Pillar title:** `Metric-driven improvement`
-   - **Body copy:** `We publish hallucination rate, first-pass success, and iteration count targets so you can hold the workflow accountable.`
-   - **Bullets:**
-     - `Targets pulled from Metric-Driven Experimentation PRD.`
-     - `Instrumentation hooks align with the waitlist & survey API spec.`
-   - **Asset:** Static chart template illustrating target metrics (label as prototype). **Status:** Placeholder acceptable until real data captured; annotate as **TBD** in UI.
+     - `Leverages the `check_ai_script_hallucinations` tool.`
+     - `Verifies classes, methods, and parameters against a Neo4j graph built from your repo.`
+   - **Asset:** A styled text block displaying the chat interaction from `reflection_agent_build_after_navigator_text.md`, including the successful validation report. (Source: Video `6:30` - `8:48`)
+   - **Link:** Accompany the asset with a link to the YouTube video at the relevant timestamp (`https://youtu.be/oZZCUZ78QAc?t=390`).
+   - **Status:** Final text content is in the `/sources/` folder. No media creation needed.
 
 ### 3. Methodical Workflow Section
 - **Section title:** `How the workflow keeps answers grounded`
@@ -59,7 +58,7 @@ This document is the source of truth for the Stage 1 landing page (waitlist funn
 - **Intro copy:** `We document each claim with runnable evidence. Start with these.`
 - **Cards:**
   1. **Validation Playback** — `Watch the reflection agent locate the right docs, regenerate the fix, and pass validation.` Link to the 90-second YouTube demo (`oZZCUZ78QAc`). Note: keep duration honest; trim video if final cut differs.
-  2. **Case 5 Run Logs** — `Compare Gemini and OpenAI runs instrumented against the same LangGraph scenario.` Link to both log files in `langgraph_dev/dev_test/test_case_results/case5/`.
+  2. **Reflection Agent Run Log** — `Review the full, unedited run log of the reflection agent successfully solving the Case 5 benchmark using Gemini.` Link to the log file in `langgraph_dev/dev_test/test_case_results/case5/agent_gemini_with_reflection.log`.
   3. **Hallucination Watchdog** — `Open-source detector that blocks mismatched symbols before responses ship.` Link to `mcp-crawl4ai-rag/knowledge_graphs/ai_hallucination_detector.py`.
   4. **Security & Transparency** — `MSeeP security assessment and README policy keep expectations clear.` Link to repo README badge.
 - **Note:** Remove marketing phrases like “Codex-grade”; anchor all copy in observable artifacts.
@@ -88,9 +87,9 @@ This document is the source of truth for the Stage 1 landing page (waitlist funn
 
 ### 7. Footer
 - **Body copy:** `Built by the LangGraph Dev Navigator team.`
-- **Link:** GitHub repo URL.
-- **Metric targets:** `Hallucination rate target <2% • First-pass success target ≥50% (baseline TBD) • Response time SLA <5s`
-  - Mark these explicitly as **targets** sourced from the PRD; do not imply live data until instrumentation confirms.
+- **Links:**
+  - `GitHub repo URL` (Text: `GitHub`)
+  - `privacy.html` (Text: `Privacy Policy`)
 
 ### 8. Modal — Instrumentation & Evidence Plan
 - **Title:** `Instrumentation & Evidence Plan`
@@ -149,8 +148,6 @@ Use four accordion or card groups with checkbox lists. Each option needs short h
 ---
 
 ## Outstanding Follow-ups (Summary)
-- Replace placeholder hero log output with current validation run (Engineering).
-- Produce pillar assets (code snippet, validator GIF, metric chart prototype) — owners listed above.
-- Publish privacy & measurement disclosure referenced in CTA + Stage 2 callout (PM/Legal).
-- Confirm managed knowledge server offer before locking copy (Product).
+- **Publish privacy & measurement disclosure:** Referenced in the Waitlist CTA and Stage 2. (Owner: PM/Legal, tracked in Story 5).
+- **Confirm managed knowledge server offering:** The survey includes this as a potential feature. (Owner: Product).
 

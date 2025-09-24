@@ -34,16 +34,13 @@
 - Keep form minimal (email only). Clarify "No spam. Updates when new validated workflows ship."
 - Immediately under CTA, state the next step: "You'll answer a 30-second build-priorities survey after joining."
 
-## 4. Stage 1 — Outcome-first Value Pillars (3 max)
+## 4. Stage 1 — Outcome-first Value Pillars (2 max)
 1. **Ground truth retrieval on your repo**
    - Copy: "Embed Supabase RAG over LangGraph docs + your source so responses quote runnable references." (Source: README + META_DOC.)
    - Asset: Inline code snippet showing `perform_rag_query` returning relevant file path. Pull the example from the Case 5 reflection agent run stored at `langgraph_dev/dev_test/test_case_results/case5/agent_gemini_with_reflection.py`. Case 5 is the "Agentic Loop" prompt defined in `langgraph_dev/dev_test/langgraph_test_cases.md`, so even a new contributor can trace how the snippet was generated.
 2. **Validation before delivery**
    - Copy: "`check_ai_script_hallucinations` blocks non-existent classes before they ship." (Source: README + `product_requirement_docs.md` focus on correctness.)
    - Asset: GIF or log snippet with pass/fail result referencing the validation clip from https://youtu.be/oZZCUZ78QAc?si=YKwOiq_OdgZAJ7Nd. The video demonstrates the assistant failing Case 5 until it searches docs for the reflection agent pattern, then re-running the validation successfully.
-3. **Measured improvement loop**
-   - Copy: "Track hallucination rate, first-pass success, and iteration count per task." (Source: README + `product_requirement_docs.md`.)
-   - Asset: Simple chart placeholder (plan for actual metric once data captured) annotated with placeholder ranges we expect to collect via Stage 2 analytics.
 
 **Layout guidance:** Each pillar should complete "With this, you can…" and call out the tangible change.
 
@@ -94,7 +91,6 @@
 | Hero terminal/gif demonstrating validated code | Engineering | Case 5 reflection agent logs in `langgraph_dev/dev_test/test_case_results/case5/` + validation video | To produce |
 | Value pillar copy + snippets | PM/Writer + Eng | README, META_DOC, `langgraph_dev/dev_test/test_case_results/case5/agent_gemini_with_reflection.py`, `langgraph_dev/dev_test/test_case_results/case5/agent_o3.py` | Draft required |
 | Proof video (90s) | Developer advocate | Validation video script + live run of Case 5 | To produce |
-| Metrics chart template | Data | Stage 2 analytics (feature selections, hallucination rate targets) | Blocked until data |
 | FAQ answers | PM + Eng | README setup steps, waitlist API design, MCP privacy constraints (see `memory/tasks/story_create_landing_page/waitlist_and_survey_api_design.md`) | Draft required |
 | Insight Engine copy | PM | Gemini taxonomy + survey intent from `memory/tasks/story_create_landing_page/landing_page_discuss_with_gemini.md` | Needs rewrite with benefit framing |
 | Privacy blurb | Legal/PM | Waitlist API design + storage notes, local-first deployment plan (refs: `memory/tasks/story_create_landing_page/waitlist_and_survey_api_design.md`) | To draft |
@@ -108,7 +104,6 @@
 5. **Launch & Measure (Week 3):** Deploy, monitor baseline metrics, schedule experiment backlog.
 
 ## 11. Risks & Mitigations
-- **Risk:** Lack of credible metrics before launch. → Mitigation: Publish methodology + target metrics even if baseline TBD; collect initial runs to populate chart ASAP.
 - **Risk:** Survey fatigue post-conversion. → Mitigation: Keep Stage 2 under 45 seconds, add progress indicator, allow skip while promising follow-up email to complete later.
 - **Risk:** Mixed personas diluting message. → Mitigation: Keep dev-first language in hero; reserve enterprise promises for survey stage and FAQ.
 
