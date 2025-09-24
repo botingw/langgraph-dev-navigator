@@ -97,6 +97,70 @@
             background: #475569;
         }
         
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .login-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+        
+        .login-form h2 {
+            margin-bottom: 1.5rem;
+            color: #0f172a;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #374151;
+            font-weight: 500;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .error-message {
+            color: #ef4444;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
         .data-section {
             background: white;
             border-radius: 12px;
@@ -176,7 +240,22 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <!-- Login Overlay -->
+    <div id="loginOverlay" class="login-overlay">
+        <div class="login-form">
+            <h2>Admin Access</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="adminPassword">Admin Password:</label>
+                    <input type="password" id="adminPassword" name="adminPassword" required>
+                    <div id="errorMessage" class="error-message hidden">Invalid password. Please try again.</div>
+                </div>
+                <button type="submit" class="btn">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="container" id="adminContent" style="display: none;">
         <div class="header">
             <h1>Admin Dashboard</h1>
             <p>LangGraph Dev Navigator - Waitlist & Survey Data Management</p>
@@ -225,12 +304,51 @@
     </div>
 
     <script>
+        // Admin authentication
+        let adminPassword = '';
+        const loginOverlay = document.getElementById('loginOverlay');
+        const adminContent = document.getElementById('adminContent');
+        const loginForm = document.getElementById('loginForm');
+        const errorMessage = document.getElementById('errorMessage');
+        
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const password = document.getElementById('adminPassword').value;
+            
+            try {
+                // Test password by making an authenticated request
+                const response = await fetch('/api/admin/stats', {
+                    headers: {
+                        'x-admin-password': password
+                    }
+                });
+                
+                if (response.ok) {
+                    adminPassword = password;
+                    loginOverlay.style.display = 'none';
+                    adminContent.style.display = 'block';
+                    loadStats();
+                } else {
+                    errorMessage.classList.remove('hidden');
+                    document.getElementById('adminPassword').value = '';
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                errorMessage.classList.remove('hidden');
+                document.getElementById('adminPassword').value = '';
+            }
+        });
+
         let statsData = null;
         let waitlistData = null;
         let surveyData = null;
 
         async function fetchData(endpoint) {
-            const response = await fetch(endpoint);
+            const response = await fetch(endpoint, {
+                headers: {
+                    'x-admin-password': adminPassword
+                }
+            });
             if (!response.ok) {
                 throw new Error(`HTTP ${response.status}: ${response.statusText}`);
             }
