@@ -5,17 +5,15 @@ const morgan = require('morgan');
 const { v4: uuidv4 } = require('uuid');
 const { Validator } = require('jsonschema');
 const path = require('path');
+const createCsvWriter = require('csv-writer').createObjectCsvWriter;
+const DatabaseStorage = require('./database');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 const validator = new Validator();
 
-// In-memory storage (in production, use PostgreSQL)
-const storage = {
-  users: new Map(),
-  surveys: new Map(),
-  analytics: []
-};
+// Database storage
+const db = new DatabaseStorage();
 
 // Security middleware
 app.use(helmet({
@@ -125,14 +123,15 @@ function asyncHandler(fn) {
 // Routes
 
 // Health check
-app.get('/api/health', (req, res) => {
+app.get('/api/health', asyncHandler(async (req, res) => {
+  const stats = await db.getUserStats();
   res.json({ 
     status: 'ok', 
     timestamp: new Date().toISOString(),
-    users: storage.users.size,
-    surveys: storage.surveys.size
+    users: stats.totalUsers,
+    surveys: stats.totalSurveys
   });
-});
+}));
 
 // Join waitlist endpoint
 app.post('/api/join-waitlist', asyncHandler(async (req, res) => {
@@ -165,18 +164,12 @@ app.post('/api/join-waitlist', asyncHandler(async (req, res) => {
   }
 
   // Check if user already exists
-  let existingUser = null;
-  for (const [userId, userData] of storage.users.entries()) {
-    if (userData.email.toLowerCase() === email.toLowerCase()) {
-      existingUser = { userId, ...userData };
-      break;
-    }
-  }
-
+  const existingUser = await db.getUserByEmail(email);
+  
   if (existingUser) {
     return res.status(200).json({
       message: 'Successfully joined the waitlist.',
-      userId: existingUser.userId,
+      userId: existingUser.id,
       alreadyExists: true
     });
   }
@@ -186,11 +179,10 @@ app.post('/api/join-waitlist', asyncHandler(async (req, res) => {
   const userData = {
     email: email.toLowerCase(),
     role: role || null,
-    createdAt: new Date().toISOString(),
     ip: clientIP
   };
 
-  storage.users.set(userId, userData);
+  await db.createUser(userId, userData);
 
   console.log(`New waitlist signup: ${email} (${userId})`);
 
@@ -211,7 +203,8 @@ app.head('/api/verify-user/:userId', asyncHandler(async (req, res) => {
   }
 
   // Check if user exists in waitlist
-  if (!storage.users.has(userId)) {
+  const user = await db.getUserById(userId);
+  if (!user) {
     return res.status(404).json({ 
       error: 'User not found', 
       message: 'User not found in waitlist. Please join the waitlist first.' 
@@ -245,7 +238,8 @@ app.post('/api/submit-survey', asyncHandler(async (req, res) => {
   const { userId, selectedFeatures = [], notes, betaOptIn = false } = req.body;
 
   // Check if user exists
-  if (!storage.users.has(userId)) {
+  const user = await db.getUserById(userId);
+  if (!user) {
     return res.status(404).json({ 
       error: 'User not found', 
       message: 'Invalid user ID. Please join the waitlist first.' 
@@ -280,11 +274,10 @@ app.post('/api/submit-survey', asyncHandler(async (req, res) => {
     selectedFeatures,
     notes: notes ? notes.trim() : null,
     betaOptIn,
-    submittedAt: new Date().toISOString(),
     ip: clientIP
   };
 
-  storage.surveys.set(userId, surveyData);
+  await db.createSurvey(surveyData);
 
   console.log(`Survey submitted by ${userId}: ${selectedFeatures.length} features, beta: ${betaOptIn}`);
 
@@ -321,35 +314,102 @@ app.post('/api/analytics', asyncHandler(async (req, res) => {
   res.status(200).json({ status: 'ok' });
 }));
 
-// Admin endpoint to view data (basic auth in production)
-app.get('/api/admin/stats', (req, res) => {
-  const stats = {
-    totalUsers: storage.users.size,
-    totalSurveys: storage.surveys.size,
-    totalAnalytics: storage.analytics.length,
-    recentSignups: Array.from(storage.users.values())
-      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+// Admin endpoints for data access
+app.get('/api/admin/stats', asyncHandler(async (req, res) => {
+  const stats = await db.getUserStats();
+  const users = await db.getAllUsers();
+  const surveys = await db.getAllSurveys();
+
+  // Calculate feature popularity
+  const features = {};
+  surveys.forEach(survey => {
+    if (survey.selected_features) {
+      survey.selected_features.forEach(feature => {
+        features[feature] = (features[feature] || 0) + 1;
+      });
+    }
+  });
+
+  const response = {
+    ...stats,
+    recentSignups: users
       .slice(0, 10)
       .map(user => ({
+        id: user.id,
         email: user.email.replace(/(.{2}).*(@.*)/, '$1***$2'),
         role: user.role,
-        createdAt: user.createdAt
+        createdAt: user.created_at
       })),
-    featurePopularity: (() => {
-      const features = {};
-      for (const survey of storage.surveys.values()) {
-        survey.selectedFeatures.forEach(feature => {
-          features[feature] = (features[feature] || 0) + 1;
-        });
-      }
-      return Object.entries(features)
-        .sort(([,a], [,b]) => b - a)
-        .slice(0, 10);
-    })()
+    featurePopularity: Object.entries(features)
+      .sort(([,a], [,b]) => b - a)
+      .slice(0, 10)
   };
 
-  res.json(stats);
-});
+  res.json(response);
+}));
+
+// Get all waitlist users
+app.get('/api/admin/waitlist', asyncHandler(async (req, res) => {
+  const users = await db.getAllUsers();
+  res.json(users);
+}));
+
+// Get all survey responses  
+app.get('/api/admin/surveys', asyncHandler(async (req, res) => {
+  const surveys = await db.getAllSurveys();
+  res.json(surveys);
+}));
+
+// Export data as CSV
+app.get('/api/admin/export', asyncHandler(async (req, res) => {
+  const users = await db.getAllUsers();
+  const surveys = await db.getAllSurveys();
+  
+  // Create combined data for CSV
+  const csvData = users.map(user => {
+    const userSurvey = surveys.find(s => s.user_id === user.id);
+    return {
+      userId: user.id,
+      email: user.email,
+      role: user.role || 'Not specified',
+      joinedAt: user.created_at,
+      completedSurvey: userSurvey ? 'Yes' : 'No',
+      selectedFeatures: userSurvey ? userSurvey.selected_features.join(', ') : '',
+      betaOptIn: userSurvey ? (userSurvey.beta_opt_in ? 'Yes' : 'No') : '',
+      notes: userSurvey ? userSurvey.notes || '' : '',
+      surveySubmittedAt: userSurvey ? userSurvey.submitted_at : ''
+    };
+  });
+
+  // Set CSV headers
+  res.setHeader('Content-Type', 'text/csv');
+  res.setHeader('Content-Disposition', 'attachment; filename="waitlist-export.csv"');
+  
+  // Create CSV writer
+  const csvWriter = createCsvWriter({
+    path: '/tmp/temp-export.csv',
+    header: [
+      { id: 'userId', title: 'User ID' },
+      { id: 'email', title: 'Email' },
+      { id: 'role', title: 'Role' },
+      { id: 'joinedAt', title: 'Joined At' },
+      { id: 'completedSurvey', title: 'Completed Survey' },
+      { id: 'selectedFeatures', title: 'Selected Features' },
+      { id: 'betaOptIn', title: 'Beta Opt-in' },
+      { id: 'notes', title: 'Notes' },
+      { id: 'surveySubmittedAt', title: 'Survey Submitted At' }
+    ]
+  });
+
+  await csvWriter.writeRecords(csvData);
+  
+  // Stream the CSV file
+  const fs = require('fs');
+  const csvContent = fs.readFileSync('/tmp/temp-export.csv');
+  fs.unlinkSync('/tmp/temp-export.csv'); // Clean up temp file
+  
+  res.send(csvContent);
+}));
 
 // Serve frontend index.html for non-API routes (SPA fallback)
 app.use((req, res, next) => {
@@ -391,20 +451,34 @@ app.use((req, res) => {
 });
 
 // Graceful shutdown
-process.on('SIGTERM', () => {
+process.on('SIGTERM', async () => {
   console.log('SIGTERM received, shutting down gracefully');
+  await db.close();
   process.exit(0);
 });
 
-process.on('SIGINT', () => {
+process.on('SIGINT', async () => {
   console.log('SIGINT received, shutting down gracefully');
+  await db.close();
   process.exit(0);
 });
 
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`🚀 Replit LangGraph Dev Navigator API server running on port ${PORT}`);
-  console.log(`Frontend served from: ${path.join(__dirname, '../web/replit')}`);
-  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-});
+// Initialize database and start server
+async function startServer() {
+  try {
+    await db.connect();
+    
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(`🚀 Replit LangGraph Dev Navigator API server running on port ${PORT}`);
+      console.log(`Frontend served from: ${path.join(__dirname, '../web/replit')}`);
+      console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+    });
+  } catch (error) {
+    console.error('Failed to start server:', error);
+    process.exit(1);
+  }
+}
+
+startServer();
 
 module.exports = app;

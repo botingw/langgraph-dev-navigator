@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LangGraph Dev Navigator - Admin Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .header {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            color: #0f172a;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .header p {
+            color: #64748b;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #3b82f6;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+        
+        .actions {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            background: #3b82f6;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
+            transition: background 0.2s;
+        }
+        
+        .btn:hover {
+            background: #2563eb;
+        }
+        
+        .btn-secondary {
+            background: #64748b;
+        }
+        
+        .btn-secondary:hover {
+            background: #475569;
+        }
+        
+        .data-section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #0f172a;
+        }
+        
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        .table th,
+        .table td {
+            text-align: left;
+            padding: 0.75rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .table th {
+            background: #f1f5f9;
+            font-weight: 600;
+            color: #475569;
+        }
+        
+        .table tr:hover {
+            background: #f8fafc;
+        }
+        
+        .loading {
+            text-align: center;
+            color: #64748b;
+            font-style: italic;
+        }
+        
+        .error {
+            background: #fef2f2;
+            color: #dc2626;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        
+        .feature-list {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .feature-tag {
+            background: #eff6ff;
+            color: #2563eb;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #64748b;
+        }
+        
+        @media (max-width: 768px) {
+            .container { padding: 1rem; }
+            .actions { flex-direction: column; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Admin Dashboard</h1>
+            <p>LangGraph Dev Navigator - Waitlist & Survey Data Management</p>
+        </div>
+
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <div class="stat-number" id="totalUsers">-</div>
+                <div class="stat-label">Total Users</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalSurveys">-</div>
+                <div class="stat-label">Completed Surveys</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="betaSignups">-</div>
+                <div class="stat-label">Beta Opt-ins</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="recentSignups">-</div>
+                <div class="stat-label">This Week</div>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button class="btn" onclick="refreshData()">Refresh Data</button>
+            <a href="/api/admin/export" class="btn btn-secondary" download>Export CSV</a>
+            <button class="btn btn-secondary" onclick="toggleSection('waitlistSection')">Toggle Waitlist</button>
+            <button class="btn btn-secondary" onclick="toggleSection('surveySection')">Toggle Surveys</button>
+        </div>
+
+        <div class="data-section" id="waitlistSection">
+            <h2 class="section-title">Recent Waitlist Signups</h2>
+            <div id="waitlistData" class="loading">Loading waitlist data...</div>
+        </div>
+
+        <div class="data-section" id="surveySection">
+            <h2 class="section-title">Survey Responses</h2>
+            <div id="surveyData" class="loading">Loading survey data...</div>
+        </div>
+
+        <div class="data-section">
+            <h2 class="section-title">Feature Popularity</h2>
+            <div id="featureData" class="loading">Loading feature data...</div>
+        </div>
+    </div>
+
+    <script>
+        let statsData = null;
+        let waitlistData = null;
+        let surveyData = null;
+
+        async function fetchData(endpoint) {
+            const response = await fetch(endpoint);
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            return response.json();
+        }
+
+        function formatDate(dateString) {
+            return new Date(dateString).toLocaleString();
+        }
+
+        function formatEmail(email) {
+            return email.replace(/(.{2}).*(@.*)/, '$1***$2');
+        }
+
+        async function loadStats() {
+            try {
+                statsData = await fetchData('/api/admin/stats');
+                
+                document.getElementById('totalUsers').textContent = statsData.totalUsers || 0;
+                document.getElementById('totalSurveys').textContent = statsData.totalSurveys || 0;
+                document.getElementById('betaSignups').textContent = statsData.betaSignups || 0;
+                document.getElementById('recentSignups').textContent = statsData.recentSignups || 0;
+
+                // Update feature popularity
+                const featureDiv = document.getElementById('featureData');
+                if (statsData.featurePopularity && statsData.featurePopularity.length > 0) {
+                    const featureHtml = statsData.featurePopularity
+                        .map(([feature, count]) => `
+                            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0; border-bottom: 1px solid #e2e8f0;">
+                                <span>${feature.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</span>
+                                <span class="feature-tag">${count} votes</span>
+                            </div>
+                        `).join('');
+                    featureDiv.innerHTML = featureHtml;
+                } else {
+                    featureDiv.innerHTML = '<div class="empty-state">No feature data available yet</div>';
+                }
+
+            } catch (error) {
+                console.error('Error loading stats:', error);
+                document.getElementById('statsGrid').innerHTML = 
+                    `<div class="error">Error loading stats: ${error.message}</div>`;
+            }
+        }
+
+        async function loadWaitlist() {
+            try {
+                waitlistData = await fetchData('/api/admin/waitlist');
+                
+                const waitlistDiv = document.getElementById('waitlistData');
+                if (waitlistData && waitlistData.length > 0) {
+                    const tableHtml = `
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Joined</th>
+                                    <th>IP Address</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${waitlistData.slice(0, 20).map(user => `
+                                    <tr>
+                                        <td>${formatEmail(user.email)}</td>
+                                        <td>${user.role || 'Not specified'}</td>
+                                        <td>${formatDate(user.created_at)}</td>
+                                        <td>${user.ip_address || 'N/A'}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                        ${waitlistData.length > 20 ? `<p style="margin-top: 1rem; color: #64748b;">Showing 20 of ${waitlistData.length} users. <a href="/api/admin/export" download>Download full export</a></p>` : ''}
+                    `;
+                    waitlistDiv.innerHTML = tableHtml;
+                } else {
+                    waitlistDiv.innerHTML = '<div class="empty-state">No waitlist signups yet</div>';
+                }
+
+            } catch (error) {
+                console.error('Error loading waitlist:', error);
+                document.getElementById('waitlistData').innerHTML = 
+                    `<div class="error">Error loading waitlist: ${error.message}</div>`;
+            }
+        }
+
+        async function loadSurveys() {
+            try {
+                surveyData = await fetchData('/api/admin/surveys');
+                
+                const surveyDiv = document.getElementById('surveyData');
+                if (surveyData && surveyData.length > 0) {
+                    const tableHtml = `
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Email</th>
+                                    <th>Features</th>
+                                    <th>Beta Opt-in</th>
+                                    <th>Submitted</th>
+                                    <th>Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${surveyData.slice(0, 20).map(survey => `
+                                    <tr>
+                                        <td>${formatEmail(survey.email)}</td>
+                                        <td>
+                                            <div class="feature-list">
+                                                ${(survey.selected_features || []).map(feature => 
+                                                    `<span class="feature-tag">${feature.replace(/_/g, ' ')}</span>`
+                                                ).join('')}
+                                            </div>
+                                        </td>
+                                        <td>${survey.beta_opt_in ? '✅ Yes' : '❌ No'}</td>
+                                        <td>${formatDate(survey.submitted_at)}</td>
+                                        <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${survey.notes || ''}">${survey.notes || 'None'}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                        ${surveyData.length > 20 ? `<p style="margin-top: 1rem; color: #64748b;">Showing 20 of ${surveyData.length} surveys. <a href="/api/admin/export" download>Download full export</a></p>` : ''}
+                    `;
+                    surveyDiv.innerHTML = tableHtml;
+                } else {
+                    surveyDiv.innerHTML = '<div class="empty-state">No survey responses yet</div>';
+                }
+
+            } catch (error) {
+                console.error('Error loading surveys:', error);
+                document.getElementById('surveyData').innerHTML = 
+                    `<div class="error">Error loading surveys: ${error.message}</div>`;
+            }
+        }
+
+        async function refreshData() {
+            document.querySelectorAll('.loading').forEach(el => el.innerHTML = 'Loading...');
+            await Promise.all([loadStats(), loadWaitlist(), loadSurveys()]);
+        }
+
+        function toggleSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            section.style.display = section.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Load data on page load
+        document.addEventListener('DOMContentLoaded', refreshData);
+
+        // Auto-refresh every 30 seconds
+        setInterval(refreshData, 30000);
+    </script>
+</body>
+</html>
