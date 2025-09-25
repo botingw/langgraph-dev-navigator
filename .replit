@@ -41,4 +41,4 @@ externalPort = 80
 
 [deployment]
 deploymentTarget = "autoscale"
-run = ["python", "-m", "http.server", "5000", "--bind", "0.0.0.0", "--directory", "web/codex"]
+run = ["bash", "-c", "cd api && npm install && npm start"]
