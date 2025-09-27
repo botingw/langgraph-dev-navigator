@@ -135,7 +135,7 @@ class FormHandler {
     });
 
     if (!isValid) {
-      analytics.track('form_validation_failed', { form: this.form.id });
+      analytics.track('waitlist_validation_failed', { form: this.form.id });
       return;
     }
 
@@ -143,7 +143,7 @@ class FormHandler {
     const data = Object.fromEntries(formData.entries());
 
     this.setLoadingState(true);
-    analytics.track('form_submit_start', { form: this.form.id, email: data.email });
+    analytics.track('waitlist_submit_start', { form: this.form.id, email: data.email });
 
     try {
       const response = await fetch(this.getApiUrl(this.options.apiEndpoint), {
@@ -158,7 +158,7 @@ class FormHandler {
 
       const result = await response.json();
       
-      analytics.track('form_submit_success', { 
+      analytics.track('waitlist_submit_success', { 
         form: this.form.id, 
         email: data.email,
         userId: result.userId 
@@ -167,7 +167,7 @@ class FormHandler {
       this.handleSuccess(result);
     } catch (error) {
       console.error('Form submission error:', error);
-      analytics.track('form_submit_error', { 
+      analytics.track('waitlist_submit_error', { 
         form: this.form.id, 
         error: error.message 
       });
@@ -288,6 +288,7 @@ class ModalHandler {
 class SectionObserver {
   constructor() {
     this.observedSections = new Set();
+    this.heroDepthTracked = false;
     this.init();
   }
 
@@ -301,6 +302,18 @@ class SectionObserver {
           analytics.track('section_viewed', {
             sectionId: entry.target.id,
             sectionName: entry.target.dataset.section || entry.target.id,
+            intersectionRatio: entry.intersectionRatio.toFixed(2)
+          });
+        }
+
+        if (
+          entry.target.id === 'hero' &&
+          entry.intersectionRatio >= 0.5 &&
+          !this.heroDepthTracked
+        ) {
+          this.heroDepthTracked = true;
+          analytics.track('hero_scroll_50', {
+            sectionId: entry.target.id,
             intersectionRatio: entry.intersectionRatio.toFixed(2)
           });
         }
@@ -321,19 +334,39 @@ class ClickTracker {
   }
 
   init() {
+    const EVENT_NAME_MAP = {
+      'hero-primary': 'cta_click_primary',
+      'waitlist-submit': 'cta_click_primary',
+      'hero-secondary': 'cta_click_secondary',
+      'faq-privacy': 'faq_click',
+      'footer-privacy': 'privacy_link_click',
+      'privacy-doc': 'privacy_link_click'
+    };
+
     document.addEventListener('click', (e) => {
       const tracked = e.target.closest('[data-track]');
       if (tracked) {
         const trackingId = tracked.dataset.track;
         const elementType = tracked.tagName.toLowerCase();
         const text = tracked.textContent?.trim().substring(0, 50);
-        
-        analytics.track('element_clicked', {
+
+        const eventName = EVENT_NAME_MAP[trackingId] || 'ui_click';
+        const payload = {
           trackingId,
           elementType,
           text,
           href: tracked.href || null
-        });
+        };
+
+        if (trackingId === 'hero-primary') {
+          payload.placement = 'hero';
+        }
+
+        if (trackingId === 'waitlist-submit') {
+          payload.placement = 'waitlist_form';
+        }
+
+        analytics.track(eventName, payload);
       }
     });
   }
@@ -386,10 +419,12 @@ class FAQHandler {
     faqContainer.addEventListener('toggle', (e) => {
       if (e.target.tagName === 'DETAILS') {
         const questionId = e.target.dataset.track || 'unknown';
-        analytics.track('faq_toggled', {
+        const question = e.target.querySelector('summary')?.textContent?.trim();
+        const eventName = e.target.open ? 'faq_expand' : 'faq_collapse';
+        analytics.track(eventName, {
           questionId,
-          opened: e.target.open,
-          question: e.target.querySelector('summary')?.textContent?.trim()
+          question,
+          opened: e.target.open
         });
       }
     }, true);
