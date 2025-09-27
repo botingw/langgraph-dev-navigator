@@ -89,7 +89,8 @@ This Replit-specific plan mirrors the Codex structure but tracks the modernized 
     - [ ] Write automated tests (Pytest) + coverage report.
     - [ ] Add observability hooks (structured logs, optional OpenTelemetry exporter).
     - [ ] Document API usage + env variables in README section.
-    - [ ] Refactor the Replit backend schema so `survey_responses` becomes row-per-feature per `memory/tasks/story_create_landing_page/waitlist_and_survey_api_design.md:20-108`; right now `api/database.js:95-118` + `api/server.js:286-317` store arrays, breaking dedupe + analytics. Include migration notes and update tests consuming the new join table.
+    - [x] Refactor the Replit backend schema so `survey_responses` becomes row-per-feature per `memory/tasks/story_create_landing_page/waitlist_and_survey_api_design.md:20-108`; right now `api/database.js:95-118` + `api/server.js:286-317` store arrays, breaking dedupe + analytics. Include migration notes and update tests consuming the new join table.
+    - [ ] Replit to run the PostgreSQL migration: add `survey_submissions`/`survey_responses` tables, backfill any existing data from the legacy `surveys` table, and drop/retire the array column once prod data is copied. Document the playbook (owner: Replit infra; coordinate via `replit.md` because prod secrets live there).
 
 ## Story 5 — Deployment, Instrumentation, and Growth Loop
 - **Objective:** Make the funnel publicly accessible, instrumented, and ready for experimentation.
