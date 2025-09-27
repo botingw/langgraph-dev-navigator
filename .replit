@@ -39,10 +39,6 @@ externalPort = 3001
 localPort = 5000
 externalPort = 80
 
-[[ports]]
-localPort = 44391
-externalPort = 3000
-
 [deployment]
 deploymentTarget = "gce"
 run = ["bash", "-c", "cd api && npm install && npm start"]
