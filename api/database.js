@@ -1,4 +1,5 @@
 const { Client } = require('pg');
+const { v4: uuidv4 } = require('uuid');
 
 class DatabaseStorage {
   constructor() {
@@ -91,15 +92,26 @@ class DatabaseStorage {
       );
     `;
 
-    const createSurveysTable = `
-      CREATE TABLE IF NOT EXISTS surveys (
-        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-        user_id UUID REFERENCES users(id),
-        selected_features TEXT[],
+    const createSurveySubmissionsTable = `
+      CREATE TABLE IF NOT EXISTS survey_submissions (
+        id UUID PRIMARY KEY,
+        user_id UUID REFERENCES users(id) ON DELETE CASCADE,
         notes TEXT,
         beta_opt_in BOOLEAN DEFAULT false,
         submitted_at TIMESTAMP DEFAULT NOW(),
         ip_address INET
+      );
+    `;
+
+    const createSurveyResponsesTable = `
+      CREATE TABLE IF NOT EXISTS survey_responses (
+        id BIGSERIAL PRIMARY KEY,
+        submission_id UUID REFERENCES survey_submissions(id) ON DELETE CASCADE,
+        user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+        feature_key VARCHAR(100) NOT NULL,
+        created_at TIMESTAMP DEFAULT NOW(),
+        UNIQUE (submission_id, feature_key),
+        UNIQUE (user_id, feature_key)
       );
     `;
 
@@ -114,7 +126,8 @@ class DatabaseStorage {
     `;
 
     await this.client.query(createUsersTable);
-    await this.client.query(createSurveysTable);
+    await this.client.query(createSurveySubmissionsTable);
+    await this.client.query(createSurveyResponsesTable);
     await this.client.query(createAnalyticsTable);
     
     console.log('Database tables initialized');
@@ -180,23 +193,63 @@ class DatabaseStorage {
 
   async createSurvey(surveyData) {
     await this.ensureConnection();
-    const { userId, selectedFeatures, notes, betaOptIn, ip } = surveyData;
-    const query = `
-      INSERT INTO surveys (user_id, selected_features, notes, beta_opt_in, ip_address)
-      VALUES ($1, $2, $3, $4, $5)
-      RETURNING *;
-    `;
-    const values = [userId, selectedFeatures, notes, betaOptIn, ip];
+    const {
+      userId,
+      selectedFeatures = [],
+      notes,
+      betaOptIn = false,
+      ip
+    } = surveyData;
+
+    const submissionId = uuidv4();
+
     try {
-      const result = await this.client.query(query, values);
-      return result.rows[0];
+      await this.client.query('BEGIN');
+
+      // Remove prior submissions/responses for this user to keep data authoritative
+      await this.client.query('DELETE FROM survey_responses WHERE user_id = $1', [userId]);
+      await this.client.query('DELETE FROM survey_submissions WHERE user_id = $1', [userId]);
+
+      const submissionResult = await this.client.query(
+        `
+          INSERT INTO survey_submissions (id, user_id, notes, beta_opt_in, ip_address)
+          VALUES ($1, $2, $3, $4, $5)
+          RETURNING *;
+        `,
+        [submissionId, userId, notes || null, betaOptIn, ip]
+      );
+
+      for (const featureKey of selectedFeatures) {
+        await this.client.query(
+          `
+            INSERT INTO survey_responses (submission_id, user_id, feature_key)
+            VALUES ($1, $2, $3)
+            ON CONFLICT (user_id, feature_key) DO NOTHING;
+          `,
+          [submissionId, userId, featureKey]
+        );
+      }
+
+      await this.client.query('COMMIT');
+
+      return {
+        ...submissionResult.rows[0],
+        selected_features: selectedFeatures
+      };
     } catch (error) {
+      try {
+        await this.client.query('ROLLBACK');
+      } catch (rollbackError) {
+        console.error('Failed to rollback survey transaction:', rollbackError);
+      }
+
       console.error('Error creating survey:', error);
+
       if (!this.connected) {
         await this.connect();
-        const result = await this.client.query(query, values);
-        return result.rows[0];
+        return this.createSurvey(surveyData);
       }
+
       throw error;
     }
   }
@@ -225,10 +278,21 @@ class DatabaseStorage {
   async getAllSurveys() {
     await this.ensureConnection();
     const query = `
-      SELECT s.*, u.email 
-      FROM surveys s 
-      JOIN users u ON s.user_id = u.id 
-      ORDER BY s.submitted_at DESC;
+      SELECT
+        ss.id AS submission_id,
+        ss.user_id,
+        ss.notes,
+        ss.beta_opt_in,
+        ss.submitted_at,
+        ss.ip_address,
+        u.email,
+        u.role,
+        COALESCE(array_agg(sr.feature_key ORDER BY sr.feature_key) FILTER (WHERE sr.feature_key IS NOT NULL), ARRAY[]::TEXT[]) AS selected_features
+      FROM survey_submissions ss
+      JOIN users u ON ss.user_id = u.id
+      LEFT JOIN survey_responses sr ON sr.submission_id = ss.id
+      GROUP BY ss.id, ss.user_id, ss.notes, ss.beta_opt_in, ss.submitted_at, ss.ip_address, u.email, u.role
+      ORDER BY ss.submitted_at DESC;
     `;
     try {
       const result = await this.client.query(query);
@@ -248,8 +312,8 @@ class DatabaseStorage {
     await this.ensureConnection();
     const queries = [
       'SELECT COUNT(*) as total_users FROM users',
-      'SELECT COUNT(*) as total_surveys FROM surveys',
-      'SELECT COUNT(*) as beta_signups FROM surveys WHERE beta_opt_in = true',
+      'SELECT COUNT(*) as total_surveys FROM survey_submissions',
+      'SELECT COUNT(*) as beta_signups FROM survey_submissions WHERE beta_opt_in = true',
       `SELECT COUNT(*) as recent_signups FROM users 
        WHERE created_at > NOW() - INTERVAL '7 days'`
     ];

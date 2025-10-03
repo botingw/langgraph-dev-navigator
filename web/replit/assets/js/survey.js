@@ -88,7 +88,7 @@ class SurveyManager {
       }
 
       this.showForm();
-      analytics.track('survey_verification_success', { userId: this.userId });
+    analytics.track('survey_verify_success', { userId: this.userId });
       
     } catch (error) {
       console.error('User verification failed:', error);
@@ -99,7 +99,7 @@ class SurveyManager {
       }
       
       this.showError(errorMessage);
-      analytics.track('survey_verification_failed', { 
+      analytics.track('survey_verify_failed', { 
         userId: this.userId,
         error: error.message 
       });
@@ -139,7 +139,7 @@ class SurveyManager {
       this.totalStepsEl.textContent = this.totalSteps;
     }
 
-    analytics.track('survey_started', { 
+    analytics.track('survey_start', { 
       userId: this.userId,
       totalSteps: this.totalSteps 
     });
@@ -225,7 +225,7 @@ class SurveyManager {
       this.selectedFeatures.delete(featureValue);
     }
 
-    analytics.track('survey_feature_selected', {
+    analytics.track('feature_select', {
       userId: this.userId,
       feature: featureValue,
       group: featureGroup,
@@ -261,7 +261,7 @@ class SurveyManager {
 
     this.setSubmittingState(true);
 
-    analytics.track('survey_submit_start', {
+    analytics.track('survey_submit_attempt', {
       userId: this.userId,
       selectedFeatures,
       notesLength: notes?.length || 0,
@@ -287,11 +287,12 @@ class SurveyManager {
 
       await response.json();
 
-      analytics.track('survey_submit_success', {
+      analytics.track('survey_submit', {
         userId: this.userId,
         selectedFeatures,
         betaOptIn,
-        totalFeatures: selectedFeatures.length
+        totalFeatures: selectedFeatures.length,
+        status: 'success'
       });
 
       this.showSuccess(selectedFeatures, notes, betaOptIn);
@@ -299,7 +300,7 @@ class SurveyManager {
       console.error('Survey submission error:', error);
       this.showMessage('Something went wrong submitting preferences. Try again in a moment.', 'error');
       
-      analytics.track('survey_submit_error', {
+      analytics.track('survey_error', {
         userId: this.userId,
         error: error.message,
         selectedFeatures,

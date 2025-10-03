@@ -159,13 +159,13 @@
     <section class="workflow" id="workflow">
       <div class="container">
         <header class="section-header">
-          <h2>How the workflow keeps answers grounded</h2>
+          <h2 id="workflow-diagram-title">How the workflow keeps answers grounded</h2>
           <p>The assistant follows a transparent Retrieve → Generate → Validate loop so every step can be audited.</p>
         </header>
 
         <div class="workflow-diagram">
-          <div class="mermaid-container">
-            <pre class="mermaid">
+          <div class="mermaid-container" role="img" aria-labelledby="workflow-diagram-title" aria-describedby="workflow-diagram-description">
+            <pre class="mermaid" aria-hidden="true">
 graph LR
     classDef user fill:#D6EAF8,stroke:#5DADE2,color:#000
     classDef assistant fill:#D5F5E3,stroke:#58D68D,color:#000
@@ -196,6 +196,9 @@ graph LR
     C -- "If valid, finalizes code" --> D
     D -- "Provides verified code" --> U
             </pre>
+            <div id="workflow-diagram-description" class="visually-hidden">
+              The diagram shows a Retrieve → Generate → Validate loop: the user asks a question, the assistant retrieves context from Supabase RAG, generates code, validates it against a Neo4j knowledge graph, and only then delivers a verified answer back to the user.
+            </div>
           </div>
 
           <div class="workflow-benefits">
