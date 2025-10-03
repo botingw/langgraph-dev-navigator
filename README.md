@@ -1,5 +1,9 @@
 [![MSeeP.ai Security Assessment Badge](https://mseep.net/pr/botingw-langgraph-dev-navigator-badge.png)](https://mseep.ai/app/botingw-langgraph-dev-navigator)
 
+- For bug report, use issues
+- For real-time chat, community support, and to share your ideas, [Join our Discord](https://discord.gg/j7hqkas36K) 
+- Have specific feedback or want a personal demo? [Book a Chat on my Calendar](https://calendar.app.google/xx3S3CuKSBAt9d9Y7)
+
 # LangGraph-Dev-Navigator: Build Reliable AI with Grounded Assistants
 
 AI coding assistants are powerful, but their general knowledge can be outdated or lead to plausible-but-incorrect code ("hallucinations"). This repository addresses that by providing a framework to ground an AI assistant in the **executable truth** of a specific, version-controlled codebase.
