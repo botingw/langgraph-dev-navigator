@@ -37,3 +37,7 @@ This epic will be executed in a series of prioritized phases. This approach deli
 *   **Phase 3 (P2): Full Containerization**
     *   **Strategy:** The ultimate goal for simplicity and reproducibility is a one-command Docker launch. This is the final phase, as it is dependent on the previous steps and currently has external blockers.
     *   **Story:** [Full Containerization](./04_containerization_spec.md)
+
+### Related Epics
+
+- **Enterprise MCP Configuration Hardening:** See `../epic_improve_mcp_for_enterprice/README.md` for the configuration-focused initiative that complements the user experience workstream.
