@@ -26,3 +26,12 @@ This epic focuses on making the `mcp-crawl4ai-rag` server production-ready for e
 - FastMCP local server guide: `running_server.md`
 - FastMCP HTTP deployment guide: `http.md`
 - Cloud Run SSE diagnostic: `fix_cloud_run_sse_server_disconnect_context.md`
+
+---
+
+### Key Discoveries & Decisions
+
+*   **Initial SSE Instability:** The original SSE disconnect issue (periodic 6-7 second timeouts) appears to have been resolved as a side effect of upgrading the `fastmcp` library during the HTTP transport enablement.
+*   **New Startup Crash Identified:** After the library upgrade, a more severe issue was uncovered. The server would fail to start on Cloud Run, crashing with a `playwright._impl._errors.Error: Executable doesn't exist`. This indicated that the Playwright browser dependency was not correctly installed or accessible in the Cloud Run container.
+*   **Workaround Implemented:** To ensure the availability of critical RAG and knowledge graph tools, a workaround was implemented. A "crawler-less" server version (`crawl4ai_mcp_debug_2_3.py`) was created by removing all `crawl4ai` and `playwright` dependencies. This version starts reliably on Cloud Run.
+*   **Future Work:** This workaround creates a known technical debt. The remote MCP server currently **cannot** support any crawler-based tools. A future story, "Properly Fix Crawler Dependencies on Cloud Run," is now tracked to find a robust solution, likely involving adjustments to the Dockerfile to ensure Playwright's browser binaries are correctly installed and available in the production environment.
