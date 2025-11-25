@@ -4,3 +4,6 @@
 [submodule "mcp-crawl4ai-rag"]
 	path = mcp-crawl4ai-rag
 	url = https://github.com/botingw/mcp-crawl4ai-rag.git
+[submodule "langsmith-docs"]
+	path = langsmith-docs
+	url = https://github.com/langchain-ai/langsmith-docs.git

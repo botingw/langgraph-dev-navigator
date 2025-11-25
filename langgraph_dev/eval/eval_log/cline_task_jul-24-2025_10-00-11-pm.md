@@ -23,23 +23,22 @@ META_DOC.md
 README.md
 requirements.txt
 tmp.txt
-doc_crawl4ai/
-doc_crawl4ai/architecture_analysis.md
-doc_crawl4ai/boting_experience.md
-doc_crawl4ai/Crawl4AI_Function_Detail.md
-doc_crawl4ai/Crawl4AI_Function_Summary.md
-doc_crawl4ai/crawl4ai_integrate_into_langgraph_dev_navigator_strategies.md
-doc_crawl4ai/database_models.md
-doc_crawl4ai/feature_plan_github_rag.md
-doc_crawl4ai/gemini_configuration.md
-doc_crawl4ai/mcp_crawl4ai_context_summary.md
-doc_crawl4ai/python-script-usage.md
-doc_crawl4ai/agents_enhanced_by_knowledge_graph/
-doc_crawl4ai/agents_enhanced_by_knowledge_graph/google_search_agent.py
-doc_crawl4ai/agents_enhanced_by_knowledge_graph/weather_agent.py
-docs/
-docs/guide_to_maintain_langgraph_submodule.md
-docs/mcp_crawl4ai_rag_setup_troubleshooting.md
+memory/docs/docs_local/doc_crawl4ai/
+memory/docs/docs_local/doc_crawl4ai/architecture_analysis.md
+memory/docs/docs_local/doc_crawl4ai/boting_experience.md
+memory/docs/docs_local/doc_crawl4ai/Crawl4AI_Function_Detail.md
+memory/docs/docs_local/doc_crawl4ai/Crawl4AI_Function_Summary.md
+memory/docs/docs_local/doc_crawl4ai/crawl4ai_integrate_into_langgraph_dev_navigator_strategies.md
+memory/docs/docs_local/doc_crawl4ai/database_models.md
+memory/docs/docs_local/doc_crawl4ai/feature_plan_github_rag.md
+memory/docs/docs_local/doc_crawl4ai/gemini_configuration.md
+memory/docs/docs_local/doc_crawl4ai/mcp_crawl4ai_context_summary.md
+memory/docs/docs_local/doc_crawl4ai/python-script-usage.md
+memory/docs/docs_local/doc_crawl4ai/agents_enhanced_by_knowledge_graph/
+memory/docs/docs_local/doc_crawl4ai/agents_enhanced_by_knowledge_graph/google_search_agent.py
+memory/docs/docs_local/doc_crawl4ai/agents_enhanced_by_knowledge_graph/weather_agent.py
+memory/docs/docs_local/guide_to_maintain_langgraph_submodule.md
+memory/docs/docs_local/mcp_crawl4ai_rag_setup_troubleshooting.md
 langgraph/
 langgraph/.git
 langgraph/.gitignore
@@ -3299,4 +3298,3 @@ PLAN MODE
 In this mode you should focus on information gathering, asking questions, and architecting a solution. Once you have a plan, use the plan_mode_respond tool to engage in a conversational back and forth with the user. Do not use the plan_mode_respond tool until you've gathered all the information you need e.g. with read_file or ask_followup_question.
 (Remember: If it seems the user wants you to use tools only available in Act Mode, you should ask the user to "toggle to Act mode" (use those words) - they will have to manually do this themselves with the Plan/Act toggle button below. You do not have the ability to switch to Act Mode yourself, and must wait for the user to do it themselves once they are satisfied with the plan. You also cannot present an option to toggle to Act mode, as this will be something you need to direct the user to do manually themselves.)
 </environment_details>
-

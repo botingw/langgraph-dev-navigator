@@ -7,7 +7,7 @@ This document tracks the tasks required to integrate and enhance the `mcp-crawl4
 | 1 | **Fork and Submodule** | High | - | Done |
 | | Fork the `coleam00/mcp-crawl4ai-rag` repository to `botingw/mcp-crawl4ai-rag` and add it as a submodule to the main project. | | |
 | | **1.1 Verify MCP Server Setup** | High | Task 1 | Done |
-| | Confirmed that the `mcp-crawl4ai-rag` submodule server runs locally and is accessible by Gemini CLI and Cline. Documented troubleshooting in `docs/mcp_crawl4ai_rag_setup_troubleshooting.md`. | | |
+| | Confirmed that the `mcp-crawl4ai-rag` submodule server runs locally and is accessible by Gemini CLI and Cline. Documented troubleshooting in `memory/docs/docs_local/mcp_crawl4ai_rag_setup_troubleshooting.md`. | | |
 | 2 | **Refactor Core Logic** | High | Task 1 | In Progress |
 | | **2.1 Abstract Core Logic** | High | Task 1 | In Progress |
 | | Abstract the core ingestion logic from MCP tools into a new `src/ingestion_engine.py` within the submodule. | | |

@@ -4,7 +4,7 @@ This summary outlines how an AI assistant should approach tasks related to the `
 
 **Objective**: The `mcp-crawl4ai-rag` directory is a Git submodule that functions as a standalone server. Its purpose is to provide this project with powerful **Retrieval-Augmented Generation (RAG)** and **Code Analysis** capabilities.
 
-**How to Read**: For the overall integration strategy and the "why" behind this submodule, the primary document is `doc_crawl4ai/crawl4ai_integrate_into_langgraph_dev_navigator_strategies.md`.
+**How to Read**: For the overall integration strategy and the "why" behind this submodule, the primary document is `memory/docs/docs_local/doc_crawl4ai/crawl4ai_integrate_into_langgraph_dev_navigator_strategies.md`.
 
 ### 2. Architecture Overview
 
@@ -14,8 +14,8 @@ The server has two distinct architectural pillars:
 2.  **Knowledge Graph (KG) System**: Parses Python code from GitHub repositories, builds a model of the code's structure (classes, methods, etc.) in a **Neo4j** graph database, and uses this model to detect "hallucinations" in AI-generated code.
 
 **How to Read**:
-*   To understand the complete architecture, component interactions, and data flows, consult **`doc_crawl4ai/architecture_analysis.md`**.
-*   For the specific database schemas (table structures in Supabase, node/relationship models in Neo4j), refer to **`doc_crawl4ai/database_models.md`**.
+*   To understand the complete architecture, component interactions, and data flows, consult **`memory/docs/docs_local/doc_crawl4ai/architecture_analysis.md`**.
+*   For the specific database schemas (table structures in Supabase, node/relationship models in Neo4j), refer to **`memory/docs/docs_local/doc_crawl4ai/database_models.md`**.
 
 ### 3. Core Functionality & Tools
 
@@ -45,8 +45,8 @@ The server's functionality is exposed via a set of tools in `mcp-crawl4ai-rag/sr
 | `query_knowledge_graph` | Allows direct exploration of the Neo4j graph with specific commands. | Requires `USE_KNOWLEDGE_GRAPH=true`. |
 
 **How to Read**:
-*   For a quick overview of all tools, read **`doc_crawl4ai/Crawl4AI_Function_Summary.md`**.
-*   For a **detailed breakdown of each tool's parameters, return values, and internal logic**, the most important file is **`doc_crawl4ai/Crawl4AI_Function_Detail.md`**.
+*   For a quick overview of all tools, read **`memory/docs/docs_local/doc_crawl4ai/Crawl4AI_Function_Summary.md`**.
+*   For a **detailed breakdown of each tool's parameters, return values, and internal logic**, the most important file is **`memory/docs/docs_local/doc_crawl4ai/Crawl4AI_Function_Detail.md`**.
 *   The ultimate source of truth for implementation is the main server file: **`mcp-crawl4ai-rag/src/crawl4ai_mcp.py`**.
 *   For setup instructions, environment variables, and recommended configurations, consult **`mcp-crawl4ai-rag/README.md`**.
 
