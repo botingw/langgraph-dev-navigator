@@ -1,8 +1,33 @@
+import argparse
 import os
 import shutil
+import sys
 
 def main():
-    source_file = "langgraph_dev/langgraph_dev_instruction/llm_onboarding_langgraph_dev_instruction/langgraph-ai-rules-v2_1.md"
+    parser = argparse.ArgumentParser(description="Install LangGraph assistant rules for your AI coding assistant.")
+    parser.add_argument(
+        "--rule-file",
+        "-r",
+        help="Rule filename in llm_onboarding_langgraph_dev_instruction (e.g., langgraph-ai-rules_v4_1.md). Defaults to langgraph-ai-rules-v2_1.md.",
+    )
+    args = parser.parse_args()
+
+    rules_dir = "langgraph_dev/langgraph_dev_instruction/llm_onboarding_langgraph_dev_instruction"
+    default_rule = "langgraph-ai-rules-v2_1.md"
+
+    if args.rule_file:
+        if "/" in args.rule_file or "\\" in args.rule_file:
+            print("❌ Please provide only the rule filename, not a path.")
+            sys.exit(1)
+        candidate = os.path.join(rules_dir, args.rule_file)
+        if not os.path.isfile(candidate):
+            print(f"❌ Rule file not found: {candidate}")
+            sys.exit(1)
+        source_file = candidate
+    else:
+        source_file = os.path.join(rules_dir, default_rule)
+
+    print(f"Using rule file: {os.path.basename(source_file)}")
 
     assistants = {
         "Claude Code": {"path": "CLAUDE.md", "type": "shared"},

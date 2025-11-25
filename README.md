@@ -115,6 +115,10 @@ uv pip install -r requirements.txt
 
 This section activates the powerful RAG and Knowledge Graph capabilities of the project by configuring and launching the `mcp-crawl4ai-rag` server submodule.
 
+You have three paths:
+- **Path A/B (Local):** Run your own backend. Complete all substeps (3.1–3.5).
+- **Path C (Hosted MCP / Remote only):** If you received the hosted URL from the maintainer, skip local backend setup, use Path C to configure your client, then jump to Step 4. The real URL is shared privately; the placeholder remains in this repo.
+
 #### 3.1: Prerequisites
 
 Before you begin, ensure you have the following:
@@ -163,7 +167,7 @@ This is a one-time setup step to prepare your Supabase project to store the craw
 
 Now, choose one of the following paths to install and run the MCP server.
 
-##### Path A: Docker Setup (Recommended)
+##### Path A: Docker Setup (Local, Recommended)
 
 This is the simplest way to get started.
 
@@ -311,9 +315,36 @@ This path is for developers who want to work on the server code directly.
     ```
 
     **Note:** `$(pwd)` should be the absolute path to the `mcp-crawl4ai-rag` submodule.
+
+##### Path C: Hosted MCP Server (Remote Only, No Backend Setup)
+
+If you are an early adopter using the hosted deployment, you **do not** need any backend setup. Ask the maintainer privately for the actual URL (kept out of this public repo). Replace `{deployed-remote-http-mcp-server-url}` with the URL you receive:
+
+- **Claude CLI**
+  ```bash
+  claude mcp add --transport http crawl4ai-rag-http-remote {deployed-remote-http-mcp-server-url}
+  ```
+
+- **GitHub Copilot**
+  ```json
+  {
+    "servers": {
+      "crawl4ai-rag-http-remote": {
+        "url": "{deployed-remote-http-mcp-server-url}",
+        "type": "http"
+      }
+    },
+    "inputs": []
+  }
+  ```
+
+Remote users should continue to Step 4 using the `langgraph-ai-rules_v4_1.md` instructions; local install users keep their existing rule selection.
+
 #### 3.5: Validate the Server Setup
 
-After completing either setup path, run the validation script again from within the `mcp-crawl4ai-rag` directory to ensure everything is working correctly (data write into):
+Only required for local Path A/B. Remote Path C users can skip this step.
+
+After completing your local setup path, run the validation script again from within the `mcp-crawl4ai-rag` directory to ensure everything is working correctly (data write into):
 
 ```bash
 # Ensure you are in the mcp-crawl4ai-rag directory
@@ -324,6 +355,9 @@ uv run python validate_setup.py --stage 2
 ### Step 4: Configure Your AI Assistant
 
 This final step installs the project-specific instructions for your AI coding assistant, enabling it to use the knowledge server and follow the correct development methodology.
+
+* Remote users (hosted MCP) should use the v4.1 rules: `uv run python src/setup_dev_assistant.py --rule-file langgraph-ai-rules_v4_1.md`
+* Local install users should keep their current rule selection (no change required), i.e., run without `--rule-file`.
 
 Run the following command and select your assistant from the interactive menu:
 ```bash
