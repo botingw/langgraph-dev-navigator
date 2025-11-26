@@ -34,7 +34,7 @@ This Codex replaces the previous plan. It is organized by Epic → Story → Tas
     - [ ] Script and storyboard proof video + hero terminal run referencing https://youtu.be/oZZCUZ78QAc?si=YKwOiq_OdgZAJ7Nd and Case 5 reflection agent logs located at `langgraph_dev/dev_test/test_case_results/case5/` (owner: Dev Advocate, dependency: Eng for runnable scenario).
     - [ ] Draft privacy & data usage blurb consistent with waitlist API storage and MCP deployment expectations (owner: PM, dependency: backend design doc).
     - [ ] Define analytics tracking plan (events, dataLayer schema, tooling). (owner: PM + Eng)
-    - [ ] Inventory all trust assets (README security badge, `ai_hallucination_detector.py` at `https://github.com/botingw/langgraph-dev-navigator/blob/main/mcp-crawl4ai-rag/knowledge_graphs/ai_hallucination_detector.py`, `check_ai_script_hallucinations` workflow documented in `docs/doc_crawl4ai/Crawl4AI_Function_Detail.md`) and ensure usage rights cleared.
+    - [ ] Inventory all trust assets (README security badge, `ai_hallucination_detector.py` at `https://github.com/botingw/langgraph-dev-navigator/blob/main/mcp-crawl4ai-rag/knowledge_graphs/ai_hallucination_detector.py`, `check_ai_script_hallucinations` workflow documented in `memory/docs/docs_local/doc_crawl4ai/Crawl4AI_Function_Detail.md`) and ensure usage rights cleared.
     - [ ] Review all assets for persona alignment and tone; secure approvals.
 
 ## Story 2 — Implement Stage 1 Frontend (Hook)

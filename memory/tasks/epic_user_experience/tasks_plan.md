@@ -11,3 +11,4 @@ This document is the high-level dashboard for the "Improve User Experience" epic
 | 5 | [Standardize ADRs](./05_standardize_adrs_spec.md) | P2 | - | Not Started |
 | 6 | [Refactor Epic Plan & Docs](./06_epic_refactor_spec.md) | P0 | Story 4 | Done |
 | 7 | [AI Assistant Instruction Setup](./07_assistant_instruction_setup_spec.md) | P0 | - | Not Started |
+| 8 | [Remote MCP Client UX](./08_remote_mcp_client_spec.md) | P0 | - | Done |
