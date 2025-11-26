@@ -40,5 +40,5 @@ localPort = 5000
 externalPort = 80
 
 [deployment]
-deploymentTarget = "gce"
+deploymentTarget = "cloudrun"
 run = ["bash", "-c", "cd api && npm install && npm start"]
