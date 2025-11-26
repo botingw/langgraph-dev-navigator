@@ -10,6 +10,12 @@ def main():
         "-r",
         help="Rule filename in llm_onboarding_langgraph_dev_instruction (e.g., langgraph-ai-rules_v4_1.md). Defaults to langgraph-ai-rules-v2_1.md.",
     )
+    parser.add_argument(
+        "--workspace",
+        "-w",
+        default=".",
+        help="Target workspace where assistant config files are written (default: current directory).",
+    )
     args = parser.parse_args()
 
     rules_dir = "langgraph_dev/langgraph_dev_instruction/llm_onboarding_langgraph_dev_instruction"
@@ -28,6 +34,8 @@ def main():
         source_file = os.path.join(rules_dir, default_rule)
 
     print(f"Using rule file: {os.path.basename(source_file)}")
+    workspace_root = os.path.abspath(os.path.expanduser(args.workspace))
+    print(f"Target workspace: {workspace_root}")
 
     assistants = {
         "Claude Code": {"path": "CLAUDE.md", "type": "shared"},
@@ -53,7 +61,7 @@ def main():
             if 0 <= choice_index < len(options):
                 selected_assistant_name = options[choice_index]
                 assistant_info = assistants[selected_assistant_name]
-                dest_file = assistant_info["path"]
+                dest_file = os.path.join(workspace_root, assistant_info["path"])
                 assistant_type = assistant_info["type"]
 
                 dest_dir = os.path.dirname(dest_file)

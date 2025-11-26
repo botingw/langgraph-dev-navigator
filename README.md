@@ -115,6 +115,8 @@ uv pip install -r requirements.txt
 
 This section activates the powerful RAG and Knowledge Graph capabilities of the project by configuring and launching the `mcp-crawl4ai-rag` server submodule.
 
+**Are you a hosted (remote) MCP client only?** Skip local setup and read the [Remote MCP Client Quickstart](memory/docs/remote_client/README.md) for the lightweight flow (hosted URL + attached `langgraph-ai-rules_v4_1.md`, no need to clone this repo).
+
 You have three paths:
 - **Path A/B (Local):** Run your own backend. Complete all substeps (3.1–3.5).
 - **Path C (Hosted MCP / Remote only):** If you received the hosted URL from the maintainer, skip local backend setup, use Path C to configure your client, then jump to Step 4. The real URL is shared privately; the placeholder remains in this repo.
