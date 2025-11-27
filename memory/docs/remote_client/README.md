@@ -62,6 +62,9 @@ Choose one:
 - Many assistants ignore system rule files dropped into default paths. The reliable method—and the one that actually empowers the assistant to follow the LangChain-specific workflow—is to **attach the rule file inside the chat** so it becomes part of the conversation context. Example for Copilot PLAN mode:  
   “Give me a plan to implement a web search multi-agent with checkpoint feature. I attach `langgraph-ai-rules_v4_1.md` for how to work with LangChain ecosystem tasks.”
 - Reminder: **Copilot ASK mode cannot access MCP**; use PLAN mode (or equivalent) when you need MCP tools.
+- Want to see realistic workflows? Review these step-by-step examples that show how users finish LangGraph tasks with the hosted MCP server:
+  - [Chat history inspection via MCP](../../../langgraph_dev/dev_test/test_case_results/case_checkpoint/chat_history_with_mcp_server.md)
+  - [Code test run with MCP tools](../../../langgraph_dev/dev_test/test_case_results/case_checkpoint/code_test_with_mcp_server.md)
 
 ---
 
