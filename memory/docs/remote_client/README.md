@@ -38,6 +38,7 @@ claude mcp add --transport http crawl4ai-rag-http-remote {deployed-remote-http-m
 }
 ```
 - Copilot note: **ASK mode cannot access MCP**; use PLAN mode (or equivalent) when you need MCP tools.
+- Connection tip: Copilot PLAN mode may take several minutes (sometimes ~7 mins) to connect to the hosted MCP server, especially because the server is a serverless deployment that may cold-start. Prompt the AI to run a simple MCP tool (e.g., `get_available_sources`) to confirm the connection once it comes up.
 
 ### Other MCP-capable editors (Cursor/Windsurf/etc.)
 - Add a server entry pointing to `{deployed-remote-http-mcp-server-url}` with `type/http` (or your editor’s MCP schema).
@@ -82,3 +83,10 @@ This matches the doc map referenced by the LangGraph rules.
 ## You’re Ready
 - Use your assistant with MCP configured to the hosted server and the attached `langgraph-ai-rules_v4_1.md`.
 - No other folders from `langgraph-dev-navigator` are needed for remote-only usage.
+
+---
+
+## Notes & Troubleshooting
+- `check_ai_script_hallucinations` currently has a known bug for remote MCP environments and is disabled; rely on other MCP tools until a fix is deployed.
+- Because the MCP server is hosted on a serverless platform, cold starts can increase connection time. If a tool request stalls, wait and rerun (starting with a light-weight call such as `get_available_sources`).
+- For best local search performance when you clone docs yourself, install ripgrep (`sudo apt install ripgrep` on Debian/Ubuntu or `brew install ripgrep` on macOS).
