@@ -173,9 +173,10 @@ This Replit-specific plan mirrors the Codex structure but tracks the modernized 
     - [x] Validate canonical tags across indexable pages.
     - [x] Add baseline `og:*` and `twitter:*` metadata on `web/replit/index.html`.
     - [x] Align metadata and key copy surfaces with the locked priority query set, without changing section order.
-    - [ ] Record CWV baseline (`LCP`, `INP`, `CLS`) and open a triage checklist for regressions.
+    - [ ] Record CWV baseline (`LCP`, `INP`, `CLS`) for landing template.
+    - [x] Open a CWV triage checklist document for regressions (`memory/tasks/story_create_landing_page/cwv_baseline_and_triage_replit.md`).
     - [x] Write Search Console runbook for Replit domain verification and sitemap submission.
-    - [ ] Execute Search Console ownership verification and submit sitemap (manual owner action).
+    - [x] Execute Search Console ownership verification and submit sitemap (manual owner action; owner reported success on 2026-02-07).
     - [ ] Document admin exposure mitigation path (move dashboard behind authenticated server route).
 
 ---

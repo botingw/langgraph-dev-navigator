@@ -38,8 +38,9 @@ Improve search discoverability for the existing landing page with minimal UI dis
   - `langgraph developer tools`
 
 ## Current Gap Snapshot
-- Search Console ownership verification is not executed yet (manual owner action).
-- Sitemap submission in Search Console is not executed yet (manual owner action).
+- Search Console ownership verification completed by owner (2026-02-07).
+- Sitemap submission completed by owner with `Success` status (2026-02-07).
+- `Indexing -> Pages` report is still in initial processing state; results pending data population.
 - No documented CWV baseline or optimization loop for `LCP`, `INP`, `CLS`.
 - Admin page remains publicly reachable as static asset; only API routes are password-gated.
 
@@ -70,7 +71,7 @@ Improve search discoverability for the existing landing page with minimal UI dis
 
 ### P1: Performance measurement loop (CWV focused)
 - [ ] Record baseline for `LCP`, `INP`, `CLS` on landing template.
-- [ ] Add a triage checklist for potential bottlenecks (Mermaid loading, JS execution, font loading, layout stability).
+- [x] Add a triage checklist for potential bottlenecks (Mermaid loading, JS execution, font loading, layout stability).
 - [ ] Define pass thresholds and weekly re-check cadence.
 
 ### P2: Operations and governance
@@ -78,8 +79,8 @@ Improve search discoverability for the existing landing page with minimal UI dis
   - ownership verification options,
   - sitemap submission steps,
   - coverage and query monitoring checklist.
-- [ ] Execute Search Console ownership verification (manual owner action).
-- [ ] Submit sitemap in Search Console (manual owner action).
+- [x] Execute Search Console ownership verification (manual owner action).
+- [x] Submit sitemap in Search Console (manual owner action).
 - [ ] Add monthly SEO/AEO maintenance checklist (broken links, stale copy, schema validity, privacy date review).
 - [ ] Add backlog item to move admin UI behind authenticated route (not only API password headers).
 
@@ -107,5 +108,6 @@ Improve search discoverability for the existing landing page with minimal UI dis
 
 ## Open Questions
 - None for current phase.
-- Remaining blockers are execution-only:
-  - Owner must complete Search Console verification and sitemap submission manually.
+- Remaining blockers:
+  - Wait for Search Console `Pages` report to finish initial processing before judging exclusion buckets.
+  - Record CWV baseline metrics and define weekly threshold tracking.

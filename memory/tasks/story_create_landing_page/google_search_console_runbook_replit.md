@@ -5,6 +5,13 @@
 - Owner: Boting Wang.
 - Last updated: 2026-02-07.
 
+## Execution Log
+- 2026-02-07:
+  - Step 1 (Create URL-prefix property): completed by owner.
+  - Step 2 (HTML tag verification): completed by owner after redeploy.
+  - Step 3 (Sitemap submission): completed with `Success` status.
+  - Step 4 (Pages report): still showing initial processing message; re-check after 24-72 hours.
+
 ## Scope
 This runbook covers:
 - Search Console property setup for `https://langgraph-dev-navigator.replit.app/`
