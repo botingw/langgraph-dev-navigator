@@ -17,7 +17,7 @@ These files guided the strategic approach for the landing page.
 *   `memory/tasks/story_create_landing_page/Landing_Page_Guide.md`: The foundational guide that provided the first principles of landing page design.
 *   `memory/tasks/story_create_landing_page/landing_page_plan_replit.md`: The final, authoritative strategic plan for the landing page, superseding earlier versions (landing_page_plan_codex.md and landing_page_plan_v4.md).
 *   `images/query_workflow_v2.md`: The source code for the Mermaid diagram used to visually explain the "Methodical Workflow."
-*   `memory/tasks/story_create_landing_page/implementation_plan_codex.md`: implementation plan for latest plan (landing_page_plan_replit.md)
+*   `memory/tasks/story_create_landing_page/implementation_plan_replit.md`: implementation plan for latest plan (landing_page_plan_replit.md)
 
 ## 3. Content & Asset Source Documents
 
