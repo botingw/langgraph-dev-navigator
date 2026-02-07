@@ -74,6 +74,7 @@ Primary SEO recommendation sources:
 Planning artifact:
 *   `memory/tasks/story_create_landing_page/seo_technical_hardening_plan_replit.md`
 *   `memory/tasks/story_create_landing_page/google_search_console_runbook_replit.md`
+*   `memory/tasks/story_create_landing_page/cwv_baseline_and_triage_replit.md`
 
 Locked context for SEO execution:
 *   `thank-you.html` should be non-indexable using `noindex,follow`.

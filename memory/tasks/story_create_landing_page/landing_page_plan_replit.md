@@ -176,6 +176,7 @@ This addendum captures post-AEO SEO hardening work derived from:
 Execution planning reference:
 - `memory/tasks/story_create_landing_page/seo_technical_hardening_plan_replit.md`
 - `memory/tasks/story_create_landing_page/google_search_console_runbook_replit.md`
+- `memory/tasks/story_create_landing_page/cwv_baseline_and_triage_replit.md`
 
 Locked planning context:
 - Keep current page structure and design unchanged unless technically required.
