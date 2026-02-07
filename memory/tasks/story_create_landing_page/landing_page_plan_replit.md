@@ -149,6 +149,24 @@ POST /api/analytics (optional)
 - **Real-time updates**: WebSocket ready architecture
 - **Multi-language support**: i18n structure prepared
 
+## AEO Addendum (2026-02-07)
+
+This addendum captures the approved direction for Answer Engine Optimization work without changing the existing landing-page information architecture.
+
+- **Design constraint:** Preserve current section order, layout structure, and core copy hierarchy unless a change is strictly required for technical AEO.
+- **Priority focus:** metadata optimization, JSON-LD schema, canonical URL, trust identity signals, and privacy/freshness consistency.
+- **Execution plan reference:** `memory/tasks/story_create_landing_page/aeo_implementation_plan_replit.md`
+- **Locked context:**
+  - Canonical URL: `https://langgraph-dev-navigator.replit.app/`
+  - Team identity:
+    - `Boting Wang`, former software engineer in Microsoft, physics PhD in Southern Methodist University
+    - LinkedIn: `https://www.linkedin.com/in/bo-ting-wang/`
+    - GitHub: `https://github.com/botingw`
+  - VideoObject:
+    - URL: `https://youtu.be/oZZCUZ78QAc`
+    - Upload date: `2025-07-23`
+    - thumbnailUrl: `https://img.youtube.com/vi/oZZCUZ78QAc/hqdefault.jpg`
+
 ## Conclusion
 
 The Replit implementation successfully delivers the same proven content strategy and conversion funnel as the codex plan while providing a significantly enhanced technical foundation. The modern architecture ensures better performance, accessibility, security, and maintainability without compromising the validated content approach.

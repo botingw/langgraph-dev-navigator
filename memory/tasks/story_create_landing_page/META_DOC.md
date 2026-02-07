@@ -33,8 +33,34 @@ These files provided the blueprint for the execution of the plan.
 *   `memory/tasks/epic_user_experience/project_management_guide.md`: Defined the Epic -> Story -> Task hierarchy that was used to structure the formal implementation plan.
 *   `memory/tasks/story_create_landing_page/implementation_plan_codex.md`: The detailed, task-oriented execution plan for building the landing page and backend.
 *   `memory/tasks/story_create_landing_page/waitlist_and_survey_api_design.md`: Served as the complete technical specification for the backend API.
+*   `memory/tasks/story_create_landing_page/aeo_implementation_plan_replit.md`: Planning-only AEO execution backlog for Replit landing page (metadata, schema, trust signals, freshness hygiene).
 
 ## 5. code implementation
 `web/replit` folder contains all implementation
 `api` folder contains backend implementation
 context handled by replit is in `replit.md`, configuration is in `.replit` , and other environment variables, secrets, etc are in replit's environment. so if dev env is not replit, these configs are not accesible. 
+
+## 6. AEO Optimization Context (Added 2026-02-07)
+
+Primary AEO recommendation source:
+*   `memory/docs/seo/AEO_VC_for_langgraph_dev_navigator/summary.md`
+*   `memory/docs/seo/AEO_VC_for_langgraph_dev_navigator/Schema_and_AEO_Agent.md`
+*   `memory/docs/seo/AEO_VC_for_langgraph_dev_navigator/Authority_and_Trust_Agent.md`
+*   `memory/docs/seo/AEO_VC_for_langgraph_dev_navigator/Freshness_and_Update_Agent.md`
+
+Implementation planning artifact:
+*   `memory/tasks/story_create_landing_page/aeo_implementation_plan_replit.md`
+
+Locked context for upcoming AEO execution:
+*   Canonical URL: `https://langgraph-dev-navigator.replit.app/`
+*   Team identity to expose in footer/org schema:
+    *   Name: `Boting Wang`
+    *   Background: `former software engineer in Microsoft; physics PhD in Southern Methodist University`
+    *   LinkedIn: `https://www.linkedin.com/in/bo-ting-wang/`
+    *   GitHub: `https://github.com/botingw`
+*   VideoObject source:
+    *   URL: `https://youtu.be/oZZCUZ78QAc`
+    *   Upload date: `2025-07-23`
+
+Resolved context item:
+*   `VideoObject.thumbnailUrl` resolved as `https://img.youtube.com/vi/oZZCUZ78QAc/hqdefault.jpg` (confirmed 2026-02-07).

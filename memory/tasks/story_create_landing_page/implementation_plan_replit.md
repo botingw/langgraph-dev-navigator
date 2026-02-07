@@ -105,9 +105,38 @@ This Replit-specific plan mirrors the Codex structure but tracks the modernized 
     - [ ] Choose hosting stack, configure CI/CD pipelines.
     - [ ] Replace local fetch stubs with production endpoints + error telemetry.
     - [ ] Validate instrumentation end-to-end (event inspector screenshots, sample payloads).
-    - [ ] Publish privacy/data usage doc referenced on both pages.
+    - [x] Publish privacy/data usage doc referenced on both pages.
     - [ ] Run lighthouse + performance profiling; fix regressions >10% vs. local.
     - [ ] Draft launch comms + doc update summarizing funnel metrics plan.
+
+## Story 6 — AEO Hardening for Landing Page Discovery
+- **Objective:** Improve answer-engine discoverability without changing approved information architecture or core visual design.
+- **Dependencies:** Story 1 approved copy; current Replit implementation in `web/replit` as baseline.
+- **Acceptance Criteria:**
+    - `web/replit/index.html` includes optimized `<title>`, `<meta name="description">`, and canonical URL.
+    - JSON-LD schema is present and valid for `Organization`, `SoftwareApplication`, `FAQPage`, `VideoObject`, and `WebPage`.
+    - Footer identity signals are no longer anonymous and include verifiable public profile links.
+    - `web/replit/privacy.html` is no longer placeholder content.
+    - No section reordering or major layout redesign is introduced.
+- **Locked Context (2026-02-07):**
+    - Canonical URL: `https://langgraph-dev-navigator.replit.app/`
+    - Team identity:
+        - `Boting Wang`, former software engineer in Microsoft, physics PhD in Southern Methodist University
+        - LinkedIn: `https://www.linkedin.com/in/bo-ting-wang/`
+        - GitHub: `https://github.com/botingw`
+    - VideoObject source:
+        - URL: `https://youtu.be/oZZCUZ78QAc`
+        - Upload date: `2025-07-23`
+        - Thumbnail URL: `https://img.youtube.com/vi/oZZCUZ78QAc/hqdefault.jpg`
+- **Tasks:**
+    - [x] Add metadata + canonical URL updates in `web/replit/index.html`.
+    - [x] Add JSON-LD via `@graph` with five nodes (`Organization`, `SoftwareApplication`, `FAQPage`, `VideoObject`, `WebPage`) and stable `@id` linking.
+    - [x] Keep schema answers synchronized with on-page FAQ copy to avoid content drift.
+    - [x] Update footer trust identity on both `web/replit/index.html` and `web/replit/thank-you.html`.
+    - [x] Replace placeholder privacy page with finalized policy content sourced from `memory/tasks/story_create_landing_page/sources/privacy_policy.md`.
+    - [x] Confirm `VideoObject.thumbnailUrl` before deployment.
+    - [ ] Validate external links in Proof + Footer and document results. (Blocked in this local environment by network restrictions; execute in deployed environment.)
+    - [x] Run schema validation checks and capture pass/fail evidence in docs.
 
 ---
 
@@ -132,3 +161,4 @@ This Replit-specific plan mirrors the Codex structure but tracks the modernized 
 1. Circulate Codex plans for sign-off.
 2. Spin up Story 1 copy deck immediately; assign asset owners.
 3. Schedule engineering pairing session to review Stories 2 & 3 requirements before implementation begins.
+4. Run deployment-environment external link QA for Story 6 and attach evidence to docs.

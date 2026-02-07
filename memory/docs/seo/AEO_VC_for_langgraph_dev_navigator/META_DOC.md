@@ -1,0 +1,2 @@
+AEO.vc is a service that give advice to your website AEO
+This folder I use AEO.vc to create advice from landing page for langgraph-dev-navigator, which is described in memory/tasks/story_create_landing_page/ . all advices are stored as markdown files in this folder. 

@@ -71,7 +71,7 @@ This document is the source of truth for the Stage 1 landing page (waitlist funn
   2. **How is it different from the docs?** — `The assistant maps your repo into the knowledge graph, so responses reference the exact nodes and edges you run.`
   3. **What do early partners receive?** — `Guided onboarding, direct access to experiment summaries, and priority on feature requests collected via the insight survey.`
   4. **Is it open source?** — `Yes. The framework is MIT licensed; you host your own API keys and data.`
-  5. **How is my data handled?** — `Waitlist emails and survey responses follow the storage plan in the API design doc. Detailed privacy note publishes with Stage 5.` (**TBD** until policy published.)
+  5. **How is my data handled?** — `Waitlist emails and survey responses follow the storage plan in the API design doc. Privacy and measurement details are documented in the Privacy Policy.`
 
 ### 6. Waitlist CTA Block
 - **Heading:** `Join the LangGraph Dev Navigator waitlist`
@@ -86,9 +86,11 @@ This document is the source of truth for the Stage 1 landing page (waitlist funn
   - `By joining, you consent to secure storage of your email for waitlist updates and aggregated experiment reporting. See the privacy & measurement disclosure.` (**TBD:** insert real link once document exists per Story 5.)
 
 ### 7. Footer
-- **Body copy:** `Built by the LangGraph Dev Navigator team.`
+- **Body copy (AEO update, 2026-02-07):** `Built by Boting Wang — former software engineer in Microsoft, physics PhD in Southern Methodist University.`
 - **Links:**
   - `GitHub repo URL` (Text: `GitHub`)
+  - `Founder GitHub: https://github.com/botingw` (Text: `Founder GitHub`)
+  - `Founder LinkedIn: https://www.linkedin.com/in/bo-ting-wang/` (Text: `Founder LinkedIn`)
   - `privacy.html` (Text: `Privacy Policy`)
 
 ### 8. Modal — Instrumentation & Evidence Plan
@@ -148,6 +150,10 @@ Use four accordion or card groups with checkbox lists. Each option needs short h
 ---
 
 ## Outstanding Follow-ups (Summary)
-- **Publish privacy & measurement disclosure:** Referenced in the Waitlist CTA and Stage 2. (Owner: PM/Legal, tracked in Story 5).
 - **Confirm managed knowledge server offering:** The survey includes this as a potential feature. (Owner: Product).
 
+## AEO Metadata Inputs (Execution Context, 2026-02-07)
+- **Canonical URL:** `https://langgraph-dev-navigator.replit.app/`
+- **VideoObject URL:** `https://youtu.be/oZZCUZ78QAc`
+- **VideoObject uploadDate:** `2025-07-23`
+- **VideoObject thumbnailUrl:** `https://img.youtube.com/vi/oZZCUZ78QAc/hqdefault.jpg`
