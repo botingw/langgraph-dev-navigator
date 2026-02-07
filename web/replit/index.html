@@ -3,9 +3,129 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="LangGraph Dev Navigator - Ship LangGraph Code, Not Hallucinations. Grounded AI assistant with RAG and validation.">
+  <meta name="description" content="Stop debugging hallucinations. The LangGraph Dev Navigator uses your repo for retrieval and a knowledge graph for validation to generate runnable, version-correct code.">
   <meta name="api-base" content="">
-  <title>LangGraph Dev Navigator — Replit Edition</title>
+  <title>LangGraph Dev Navigator | Grounded AI Coding Assistant</title>
+  <link rel="canonical" href="https://langgraph-dev-navigator.replit.app/">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://langgraph-dev-navigator.replit.app/#organization",
+          "name": "LangGraph Dev Navigator",
+          "url": "https://langgraph-dev-navigator.replit.app/",
+          "founder": {
+            "@type": "Person",
+            "name": "Boting Wang",
+            "description": "Former software engineer at Microsoft and physics PhD at Southern Methodist University.",
+            "sameAs": [
+              "https://www.linkedin.com/in/bo-ting-wang/",
+              "https://github.com/botingw"
+            ]
+          },
+          "sameAs": [
+            "https://www.linkedin.com/in/bo-ting-wang/",
+            "https://github.com/botingw"
+          ]
+        },
+        {
+          "@type": "SoftwareApplication",
+          "@id": "https://langgraph-dev-navigator.replit.app/#software",
+          "name": "LangGraph Dev Navigator - Replit Edition",
+          "applicationCategory": "DeveloperTool",
+          "operatingSystem": "Web",
+          "description": "Ship LangGraph Code, Not Hallucinations. LangGraph Dev Navigator retrieves the right files from your repo, generates scoped code, and proves its work with a LangGraph-specific knowledge graph.",
+          "url": "https://langgraph-dev-navigator.replit.app/",
+          "publisher": {
+            "@id": "https://langgraph-dev-navigator.replit.app/#organization"
+          },
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD",
+            "availability": "https://schema.org/PreOrder"
+          }
+        },
+        {
+          "@type": "FAQPage",
+          "@id": "https://langgraph-dev-navigator.replit.app/#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Who is it for?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Individual LangGraph developers and teams who need grounded, version-correct assistants."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How is it different from the docs?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The assistant maps your repo into the knowledge graph, so responses reference the exact nodes and edges you run."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What do early partners receive?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Guided onboarding, direct access to experiment summaries, and priority on feature requests collected via the insight survey."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Is it open source?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. The framework is MIT licensed; you host your own API keys and data."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How is my data handled?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Waitlist emails and survey responses follow the storage plan in the API design doc. Privacy and measurement details are documented in the Privacy Policy."
+              }
+            }
+          ]
+        },
+        {
+          "@type": "VideoObject",
+          "@id": "https://langgraph-dev-navigator.replit.app/#video-demo",
+          "name": "Validation Playback Demo",
+          "description": "Watch the reflection agent locate the right docs, regenerate the fix, and pass validation in this 90-second YouTube demo.",
+          "url": "https://youtu.be/oZZCUZ78QAc",
+          "embedUrl": "https://www.youtube.com/embed/oZZCUZ78QAc",
+          "thumbnailUrl": "https://img.youtube.com/vi/oZZCUZ78QAc/hqdefault.jpg",
+          "uploadDate": "2025-07-23"
+        },
+        {
+          "@type": "WebPage",
+          "@id": "https://langgraph-dev-navigator.replit.app/#webpage",
+          "url": "https://langgraph-dev-navigator.replit.app/",
+          "name": "LangGraph Dev Navigator | Grounded AI Coding Assistant",
+          "description": "Stop debugging hallucinations. The LangGraph Dev Navigator uses your repo for retrieval and a knowledge graph for validation to generate runnable, version-correct code.",
+          "about": {
+            "@id": "https://langgraph-dev-navigator.replit.app/#software"
+          },
+          "publisher": {
+            "@id": "https://langgraph-dev-navigator.replit.app/#organization"
+          },
+          "mainEntity": {
+            "@id": "https://langgraph-dev-navigator.replit.app/#faq"
+          },
+          "subjectOf": {
+            "@id": "https://langgraph-dev-navigator.replit.app/#video-demo"
+          }
+        }
+      ]
+    }
+  </script>
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -301,7 +421,7 @@ graph LR
           <details class="faq-item" data-track="faq-privacy">
             <summary class="faq-question">How is my data handled?</summary>
             <div class="faq-answer">
-              <p>Waitlist emails and survey responses follow the storage plan in the API design doc. Detailed privacy note publishes with Stage 5.</p>
+              <p>Waitlist emails and survey responses follow the storage plan in the API design doc. Privacy and measurement details are documented in the Privacy Policy.</p>
             </div>
           </details>
         </div>
@@ -350,9 +470,13 @@ graph LR
   <footer class="site-footer">
     <div class="container">
       <div class="footer-content">
-        <p class="footer-text">Built by the LangGraph Dev Navigator team.</p>
+        <p class="footer-text">
+          Built by <a href="https://www.linkedin.com/in/bo-ting-wang/" target="_blank" rel="noopener" class="footer-link">Boting Wang</a>, former software engineer at Microsoft and physics PhD at Southern Methodist University.
+        </p>
         <nav class="footer-nav">
           <a href="https://github.com/botingw/langgraph-dev-navigator" target="_blank" rel="noopener" data-track="footer-github" class="footer-link">GitHub</a>
+          <a href="https://github.com/botingw" target="_blank" rel="noopener" data-track="footer-founder-github" class="footer-link">Founder GitHub</a>
+          <a href="https://www.linkedin.com/in/bo-ting-wang/" target="_blank" rel="noopener" data-track="footer-founder-linkedin" class="footer-link">Founder LinkedIn</a>
           <a href="privacy.html" data-track="footer-privacy" class="footer-link">Privacy Policy</a>
         </nav>
       </div>
