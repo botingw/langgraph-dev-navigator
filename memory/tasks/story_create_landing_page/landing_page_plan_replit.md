@@ -167,6 +167,35 @@ This addendum captures the approved direction for Answer Engine Optimization wor
     - Upload date: `2025-07-23`
     - thumbnailUrl: `https://img.youtube.com/vi/oZZCUZ78QAc/hqdefault.jpg`
 
+## SEO Technical Addendum (2026-02-07)
+
+This addendum captures post-AEO SEO hardening work derived from:
+- `memory/docs/seo/website_seo.md`
+- `memory/docs/seo/website_seo_high_leverage.md`
+
+Execution planning reference:
+- `memory/tasks/story_create_landing_page/seo_technical_hardening_plan_replit.md`
+- `memory/tasks/story_create_landing_page/google_search_console_runbook_replit.md`
+
+Locked planning context:
+- Keep current page structure and design unchanged unless technically required.
+- Apply explicit non-index rules for non-search pages:
+  - `thank-you.html` -> `noindex,follow`
+  - `admin.html` -> `noindex,nofollow`
+- Search Console owner and operator: `Boting Wang`.
+- Replit verification flow: URL-prefix + HTML meta tag.
+- Priority query set is fixed for the next metadata/copy tuning pass:
+  - `langgraph debugging assistant`
+  - `langgraph hallucination detector`
+  - `langgraph agent validation framework`
+  - `langchain agent debugging tool`
+  - `ai agent for fixing langgraph workflows`
+  - `grounded ai coding assistant for langgraph`
+  - `version-aware langgraph coding assistant`
+  - `how to stop hallucinations in langgraph agents`
+  - `debug multi-agent workflows langgraph`
+  - `langgraph developer tools`
+
 ## Conclusion
 
 The Replit implementation successfully delivers the same proven content strategy and conversion funnel as the codex plan while providing a significantly enhanced technical foundation. The modern architecture ensures better performance, accessibility, security, and maintainability without compromising the validated content approach.

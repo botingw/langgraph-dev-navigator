@@ -64,3 +64,31 @@ Locked context for upcoming AEO execution:
 
 Resolved context item:
 *   `VideoObject.thumbnailUrl` resolved as `https://img.youtube.com/vi/oZZCUZ78QAc/hqdefault.jpg` (confirmed 2026-02-07).
+
+## 7. SEO Technical Hardening Context (Added 2026-02-07)
+
+Primary SEO recommendation sources:
+*   `memory/docs/seo/website_seo.md`
+*   `memory/docs/seo/website_seo_high_leverage.md`
+
+Planning artifact:
+*   `memory/tasks/story_create_landing_page/seo_technical_hardening_plan_replit.md`
+*   `memory/tasks/story_create_landing_page/google_search_console_runbook_replit.md`
+
+Locked context for SEO execution:
+*   `thank-you.html` should be non-indexable using `noindex,follow`.
+*   `admin.html` is likely reachable on the same public domain today; API admin endpoints are password-gated, but page-level exposure remains a risk.
+*   Search Console owner: `Boting Wang`.
+*   Replit verification path: URL-prefix property + HTML tag.
+*   Social preview fallback image: `https://img.youtube.com/vi/oZZCUZ78QAc/hqdefault.jpg`.
+*   Priority query set for landing-page SEO:
+    *   `langgraph debugging assistant`
+    *   `langgraph hallucination detector`
+    *   `langgraph agent validation framework`
+    *   `langchain agent debugging tool`
+    *   `ai agent for fixing langgraph workflows`
+    *   `grounded ai coding assistant for langgraph`
+    *   `version-aware langgraph coding assistant`
+    *   `how to stop hallucinations in langgraph agents`
+    *   `debug multi-agent workflows langgraph`
+    *   `langgraph developer tools`

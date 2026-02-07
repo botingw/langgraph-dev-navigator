@@ -3,6 +3,7 @@
 ## Status
 - Phase: Story 6 implementation completed in `web/replit` (2026-02-07).
 - Last updated: 2026-02-07.
+- Follow-up phase planned: `memory/tasks/story_create_landing_page/seo_technical_hardening_plan_replit.md` (Story 7, planning only).
 
 ## Objective
 Improve landing-page AEO signals with minimal design and UX disruption, preserving the approved content structure from:

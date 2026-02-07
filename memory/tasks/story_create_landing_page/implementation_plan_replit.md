@@ -138,6 +138,46 @@ This Replit-specific plan mirrors the Codex structure but tracks the modernized 
     - [ ] Validate external links in Proof + Footer and document results. (Blocked in this local environment by network restrictions; execute in deployed environment.)
     - [x] Run schema validation checks and capture pass/fail evidence in docs.
 
+## Story 7 — SEO Technical Hardening (Post-AEO)
+- **Objective:** Improve crawlability, indexability, and query-intent alignment while preserving the approved design and section structure.
+- **Dependencies:** Story 6 completed; source guidance from `memory/docs/seo/website_seo.md` and `memory/docs/seo/website_seo_high_leverage.md`.
+- **Acceptance Criteria:**
+    - `robots.txt` and `sitemap.xml` exist in `web/replit` and are consistent with canonical URLs.
+    - Page-level indexability policy is explicit (`thank-you.html` and `admin.html` non-indexable).
+    - Priority query set is mapped to existing metadata/copy surfaces without section redesign.
+    - CWV baseline and triage workflow are documented in task management files.
+    - Search Console setup and sitemap submission runbook is documented (even if account access is pending).
+- **Locked Context (2026-02-07):**
+    - `thank-you.html` should use `noindex,follow`.
+    - `admin.html` is likely publicly reachable today; data APIs are password-gated but page exposure is still considered a risk.
+    - Search Console owner for `langgraph-dev-navigator.replit.app`: `Boting Wang`.
+    - Replit domain verification path: URL-prefix property + HTML tag.
+    - Social preview fallback image: `https://img.youtube.com/vi/oZZCUZ78QAc/hqdefault.jpg`.
+    - Priority queries:
+        - `langgraph debugging assistant`
+        - `langgraph hallucination detector`
+        - `langgraph agent validation framework`
+        - `langchain agent debugging tool`
+        - `ai agent for fixing langgraph workflows`
+        - `grounded ai coding assistant for langgraph`
+        - `version-aware langgraph coding assistant`
+        - `how to stop hallucinations in langgraph agents`
+        - `debug multi-agent workflows langgraph`
+        - `langgraph developer tools`
+- **Tasks:**
+    - [x] Add `web/replit/robots.txt` and include sitemap reference.
+    - [x] Add `web/replit/sitemap.xml` with canonical, indexable, 200 URLs only.
+    - [x] Add explicit robots directives:
+        - `web/replit/thank-you.html`: `noindex,follow`
+        - `web/replit/admin.html`: `noindex,nofollow`
+    - [x] Validate canonical tags across indexable pages.
+    - [x] Add baseline `og:*` and `twitter:*` metadata on `web/replit/index.html`.
+    - [x] Align metadata and key copy surfaces with the locked priority query set, without changing section order.
+    - [ ] Record CWV baseline (`LCP`, `INP`, `CLS`) and open a triage checklist for regressions.
+    - [x] Write Search Console runbook for Replit domain verification and sitemap submission.
+    - [ ] Execute Search Console ownership verification and submit sitemap (manual owner action).
+    - [ ] Document admin exposure mitigation path (move dashboard behind authenticated server route).
+
 ---
 
 ## Timeline & Dependencies Summary
@@ -147,6 +187,7 @@ This Replit-specific plan mirrors the Codex structure but tracks the modernized 
 | Week 2 | Story 2 + Story 3 implementation | Story 1 assets; backend stubs for integration |
 | Week 3 | Story 4 complete; begin Story 5 | Infra access, secrets provisioned |
 | Week 4 | Story 5 deploy + experiment backlog ready | All prior stories done |
+| Week 5 | Story 7 SEO hardening execution | Story 6 completion + deployment access |
 
 ## Risk Register
 - **Incomplete assets delay engineering** → Mitigate by treating Story 1 as gate; no coding before sign-off.
@@ -162,3 +203,4 @@ This Replit-specific plan mirrors the Codex structure but tracks the modernized 
 2. Spin up Story 1 copy deck immediately; assign asset owners.
 3. Schedule engineering pairing session to review Stories 2 & 3 requirements before implementation begins.
 4. Run deployment-environment external link QA for Story 6 and attach evidence to docs.
+5. Execute manual Search Console steps in `memory/tasks/story_create_landing_page/google_search_console_runbook_replit.md` (owner action), then attach screenshots/status to Story 7.
