@@ -1,0 +1,55 @@
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Secrets — NEVER put env files into the image
+.env
+.env.*
+
+# Local OS / IDE
+.DS_Store
+.vscode/
+.idea/
+
+# Node
+**/node_modules/
+npm-debug.log
+
+# Docker itself
+Dockerfile
+.dockerignore
+
+# Repo content not needed in the landing-page image.
+# (api/ and web/replit/ are explicitly COPY'd in the Dockerfile.)
+AGENTS.md
+GEMINI.md
+README.md
+META_DOC.md
+LICENSE
+LICENSES/
+attached_assets/
+docs_tree_structure.md
+langgraph_tree_structure.md
+langsmith-docs_tree_structure.md
+images/
+langgraph/
+langgraph_dev/
+langsmith-docs/
+mcp-crawl4ai-rag/
+memory/
+requirements.txt
+src/
+tools/
+
+# Root-level Node/Python files (NOT the api/ ones)
+/package.json
+/package-lock.json
+
+# Other web variants — only web/replit/ ships with this image
+web/codex/
+web/gemini/
+
+# Replit-specific
+replit.md
+.replit
