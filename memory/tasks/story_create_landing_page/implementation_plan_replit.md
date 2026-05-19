@@ -102,7 +102,7 @@ This Replit-specific plan mirrors the Codex structure but tracks the modernized 
     - Post-launch checklist executed (lighthouse, form submissions, survey completions, logs clean).
     - Growth loop initiated: baseline metrics captured, first experiment hypothesis logged.
 - **Tasks:**
-    - [ ] Choose hosting stack, configure CI/CD pipelines.
+    - [ ] ~~Choose hosting stack, configure CI/CD pipelines.~~ **Moved to Story 8** (Cloud Run + Supabase migration; see `replit_migration_spike.md` and Story 8 below).
     - [ ] Replace local fetch stubs with production endpoints + error telemetry.
     - [ ] Validate instrumentation end-to-end (event inspector screenshots, sample payloads).
     - [x] Publish privacy/data usage doc referenced on both pages.
@@ -178,6 +178,103 @@ This Replit-specific plan mirrors the Codex structure but tracks the modernized 
     - [x] Write Search Console runbook for Replit domain verification and sitemap submission.
     - [x] Execute Search Console ownership verification and submit sitemap (manual owner action; owner reported success on 2026-02-07).
     - [ ] Document admin exposure mitigation path (move dashboard behind authenticated server route).
+
+## Story 8 — Migrate Landing Page Off Replit to Cloud Run + Supabase
+- **Objective:** Move the landing page (Express + Postgres + static frontend) off Replit (~$20/mo) onto Google Cloud Run + Supabase Postgres (target: $0-$1/mo), using a risk-averse **parallel-deploy** approach so the legacy Replit deployment keeps running until the new system is verified.
+- **Dependencies:** `replit_migration_spike.md` Q1, Q2, Q4, Q5, Q6 resolved (see spike §2). Q3 (domain choice) blocks Phase 5 only — Phases 0-4 are unblocked.
+- **Acceptance Criteria:**
+    - Cloud Run service running the Express monolith in `us-central1`, serving the landing site + all 5 public API endpoints + 4 admin endpoints from a single origin.
+    - Supabase Postgres connected via session pooler (port 5432); schema auto-created on first boot via `api/database.js:initializeTables()`.
+    - Admin dashboard reachable on the new host with `ADMIN_PASSWORD` env in place; rows from new submissions appear in Supabase Studio.
+    - GA4 firing on the new domain (verified post-cutover in Phase 5).
+    - Old Replit deployment shut down only after Cloud Run verified working (Phase 5).
+    - The Replit deployment is **not broken at any point during Phases 0-4** (parallel-deploy invariant).
+- **Locked Context (2026-05-17 / 2026-05-18, from `replit_migration_spike.md`):**
+    - Hosting: Cloud Run monolith (spike §4 Option A)
+    - Database: Supabase Postgres session pooler, port 5432 (spike §5)
+    - Region: `us-central1` — Tier 1 pricing, near-US (spike §12)
+    - Deploy mode: first deploy via Cloud Run web console; subsequent deploys via `gcloud run deploy --source .` (spike §12)
+    - No data migration; schema recreated fresh (spike §1.5)
+    - No Replit shutdown buffer; immediate cutover at Phase 5 (spike §6 Path 2)
+    - Admin page kept as-is; just set `ADMIN_PASSWORD` env (spike §11)
+    - GA4 measurement ID carried forward (spike §1.5)
+    - **Risk principle (new, 2026-05-18):** keep Replit running until Cloud Run verified; defer all destructive / cosmetic / SEO code changes to Phase 5 cutover; Phases 0-3 only do **additive** changes that work on both platforms.
+- **Open Decisions (block Phase 5 only):**
+    - Q3 — Domain: free `*.run.app` vs custom domain (~$12/yr). Spike recommends custom.
+- **Tasks (phased):**
+
+### Phase 0 — Prep (no code change, no Replit impact)
+    - [ ] Verify `gcloud` CLI installed + authed + active GCP project set (`gcloud auth list`, `gcloud config get-value project`).
+    - [ ] Create new Supabase project in user's org via web console; choose region near `us-central1` (e.g. `us-east-1`); set DB password.
+    - [ ] Capture Supabase **session pooler** connection string (port 5432) into local `.env.cloud` (gitignored — must be added to `.gitignore` if not already covered).
+    - [ ] Note GCP project ID + Cloud Run region for subsequent deploy commands.
+
+### Phase 1 — Additive code change (Replit unaffected)
+    - [ ] Add `Dockerfile` at repo root (Node 20-alpine; `WORKDIR /app`; copy `api/` + `web/replit/`; `cd api && npm install --omit=dev`; expose 8080; `CMD ["node", "server.js"]` from `api/` working dir).
+    - [ ] Add `.dockerignore` (exclude `node_modules`, `.env*`, `memory/`, `.git`, `web/codex/`, other non-landing artifacts).
+    - [ ] Add `.env.cloud` to `.gitignore` if not already covered by `.env*` pattern.
+    - [ ] Push commit; confirm Replit deployment still works (open `https://langgraph-dev-navigator.replit.app/api/health`).
+    - [ ] **Explicitly NOT done in this phase:** PORT default change, folder rename, brand cleanup, canonical URL sweep, `data-page` rename, `.replit` deletion.
+
+### Phase 2 — Local Docker verify against Supabase (Replit still untouched)
+    - [ ] `docker build -t landing:local .`
+    - [ ] `docker run --rm -p 8080:8080 --env-file .env.cloud landing:local` with env: `DATABASE_URL`, `ADMIN_PASSWORD`, `NODE_ENV=production`, `FRONTEND_URL=http://localhost:8080`.
+    - [ ] Smoke test 5 endpoints: `/api/health`, `/api/join-waitlist` (POST), `/api/verify-user/:id`, `/api/submit-survey` (POST), `/api/analytics` (POST).
+    - [ ] Verify rows land in Supabase via Supabase Studio (`users`, `survey_submissions`, `survey_responses`, `analytics`).
+    - [ ] Test admin.html login + dashboard render + auto-refresh + CSV export.
+    - [ ] Confirm Replit URL still serving (no regression).
+
+### Phase 3 — Cloud Run deploy (temp `*.run.app` URL, parallel with Replit)
+    - [ ] Cloud Run Console → Create Service. Region `us-central1`. Memory/CPU defaults (256 MiB / 1 CPU). Allow unauthenticated invocations.
+    - [ ] Either: (a) push local image to Artifact Registry then deploy by image, or (b) "Deploy from source" pointing at this repo.
+    - [ ] Set non-sensitive env vars in Console: `NODE_ENV=production`, `FRONTEND_URL=<the run.app URL after first deploy>`.
+    - [ ] Store sensitive env in GCP Secret Manager: `DATABASE_URL`, `ADMIN_PASSWORD`. Reference via Console "Secrets" tab. (Fallback: inline env if Secret Manager not set up yet — flag for follow-up.)
+    - [ ] Capture the assigned `*.run.app` URL; re-deploy once to populate `FRONTEND_URL` with the final URL.
+    - [ ] Smoke test 5 endpoints + admin dashboard on `*.run.app`.
+    - [ ] Confirm Replit + Cloud Run both serving (parallel-deploy invariant).
+    - **Rollback:** delete Cloud Run service; Replit is untouched.
+
+### Phase 4 — Observation (1-7 days, parallel running)
+    - [ ] Monitor Cloud Run logs + error rate + p95 latency in Console.
+    - [ ] **Resolve Q3 (domain choice) before exiting this phase.**
+    - [ ] (Optional) Commit `scripts/deploy.sh` wrapping `gcloud run deploy landing --source . --region us-central1 --set-env-vars=... --set-secrets=...` for reproducible subsequent deploys.
+
+### Phase 5 — Cutover (all destructive / cosmetic / SEO changes batched here)
+**Code refactor — folder + paths**
+    - [ ] Rename `web/replit/` → `web/landing/`.
+    - [ ] Update `api/server.js:54` (static dir path) and `:467` (SPA fallback path).
+    - [ ] Update `api/server.js:517-518` startup log strings.
+    - [ ] Update `web/landing/assets/js/main.js:535` log string.
+    - [ ] Update `web/landing/assets/js/survey.js:793` `data-page === 'replit-thank-you'` check.
+    - [ ] Update `data-page="replit-*"` attrs in `index.html`, `thank-you.html`, `privacy.html`, `admin.html`.
+
+**Brand / copy cleanup**
+    - [ ] Remove "Replit Edition" badge from `index.html:161`, `thank-you.html:31`, `privacy.html:30`.
+    - [ ] Update `privacy.html:71-75` hosting language ("deployed on Replit infrastructure" + Replit Privacy Policy link).
+
+**Canonical URL / SEO sweep (depends on Q3 domain)**
+    - [ ] Sweep `<link rel="canonical">` tags in all HTML.
+    - [ ] Sweep all `og:url` meta tags.
+    - [ ] Sweep all JSON-LD `@id` URLs in `index.html` (Organization, SoftwareApplication, FAQPage, VideoObject, WebPage — 5 nodes).
+    - [ ] Update `sitemap.xml` URLs.
+    - [ ] Update `robots.txt` `Sitemap:` line.
+
+**Domain + analytics**
+    - [ ] (If custom domain chosen) Cloud Run custom domain mapping + DNS records (A/AAAA or CNAME per Cloud Run domain mapping docs).
+    - [ ] GSC: verify new domain property, submit new sitemap (no Change-of-Address needed — replit.app has no rankings to migrate).
+    - [ ] Add new domain to GA4 property's domain list.
+
+**Replit shutdown**
+    - [ ] Delete `.replit` and `replit.md` (or rename to `legacy_replit.md.txt` if keeping for history).
+    - [ ] Shut down Replit deployment; cancel paid plan.
+
+### Follow-up backlog (post-cutover, non-blocking — tracks spike §11 hardening + spike §3 risks)
+    - [ ] Rotate `.env` API keys (OpenAI / Google / Tavily / Perplexity).
+    - [ ] Migrate `ADMIN_PASSWORD` + `DATABASE_URL` to Secret Manager if Phase 3 used inline env vars as fallback.
+    - [ ] Add rate limiting to `/api/admin/*` endpoints (currently only waitlist + survey have it).
+    - [ ] Replace plaintext `!==` admin compare with `crypto.timingSafeEqual`.
+    - [ ] Remove unused `bcrypt` dep from `api/package.json`.
+    - [ ] (Optional) Commit `api/migrations/*.sql` files to replace boot-time `CREATE TABLE IF NOT EXISTS` for better long-term hygiene.
 
 ---
 

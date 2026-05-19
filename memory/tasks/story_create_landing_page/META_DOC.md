@@ -93,3 +93,23 @@ Locked context for SEO execution:
     *   `how to stop hallucinations in langgraph agents`
     *   `debug multi-agent workflows langgraph`
     *   `langgraph developer tools`
+
+## 8. Migration Off Replit → Cloud Run + Supabase (Added 2026-05-18)
+
+Primary artifacts:
+*   `memory/tasks/story_create_landing_page/replit_migration_spike.md` — investigation, decisions, options analysis (authoritative source of truth for migration decisions)
+*   `memory/tasks/story_create_landing_page/replit_migration_handover.md` — cross-session handover context (may be slightly stale; spike is authoritative if they disagree)
+*   `memory/tasks/story_create_landing_page/implementation_plan_replit.md` Story 8 — phased execution plan (parallel-deploy / risk-averse approach)
+
+Locked context for migration execution:
+*   Hosting: Google Cloud Run monolith in `us-central1`
+*   Database: Supabase Postgres session pooler (port 5432)
+*   Deploy approach: Console for first deploy, then `gcloud run deploy --source .` for subsequent deploys
+*   No data migration; schema recreated fresh on first boot
+*   No Replit shutdown buffer; immediate cutover at Phase 5
+*   Risk principle: keep Replit running until Cloud Run verified; defer destructive / cosmetic / SEO code changes to final cutover phase
+
+Open decision blocking cutover only:
+*   Q3 — Domain choice (free `*.run.app` vs custom domain ~$12/yr)
+
+Story 5's `[ ] Choose hosting stack, configure CI/CD pipelines` task is superseded by Story 8.
