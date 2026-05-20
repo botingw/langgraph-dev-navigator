@@ -30,6 +30,18 @@ app.use(cors({
 // Logging
 app.use(morgan('combined'));
 
+// Hostname-based 301 redirects:
+//   *.replit.app                     → apex (path preserved, transitional during Replit→Cloud Run migration)
+//   www.langgraph-dev-navigator.dev  → apex (canonical enforcement)
+// Cloud Run apex traffic and local dev pass through unchanged.
+app.use((req, res, next) => {
+  const host = req.hostname;
+  if (host.endsWith('.replit.app') || host === 'www.langgraph-dev-navigator.dev') {
+    return res.redirect(301, `https://langgraph-dev-navigator.dev${req.originalUrl}`);
+  }
+  next();
+});
+
 // Body parsing
 app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true }));
@@ -50,8 +62,8 @@ const adminAuth = (req, res, next) => {
   next();
 };
 
-// Serve static files from Replit frontend
-app.use(express.static(path.join(__dirname, '../web/replit')));
+// Serve static frontend files.
+app.use(express.static(path.join(__dirname, '../web/landing')));
 
 // Request validation schemas
 const joinWaitlistSchema = {
@@ -464,7 +476,7 @@ app.use((req, res, next) => {
   
   // For non-API routes, check if file exists, otherwise serve index.html
   if (req.method === 'GET' && !req.path.includes('.')) {
-    res.sendFile(path.join(__dirname, '../web/replit/index.html'));
+    res.sendFile(path.join(__dirname, '../web/landing/index.html'));
   } else {
     next();
   }
@@ -514,8 +526,8 @@ async function startServer() {
     await db.connect();
     
     app.listen(PORT, '0.0.0.0', () => {
-      console.log(`🚀 Replit LangGraph Dev Navigator API server running on port ${PORT}`);
-      console.log(`Frontend served from: ${path.join(__dirname, '../web/replit')}`);
+      console.log(`🚀 LangGraph Dev Navigator API server running on port ${PORT}`);
+      console.log(`Frontend served from: ${path.join(__dirname, '../web/landing')}`);
       console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
     });
   } catch (error) {

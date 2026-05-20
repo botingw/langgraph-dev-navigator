@@ -790,7 +790,7 @@ document.head.appendChild(styleSheet);
 
 // Initialize survey manager when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-  if (document.body.dataset.page === 'replit-thank-you') {
+  if (document.body.dataset.page === 'landing-thank-you') {
     window.surveyManager = new SurveyManager();
   }
 });

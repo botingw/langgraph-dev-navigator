@@ -181,7 +181,7 @@ This Replit-specific plan mirrors the Codex structure but tracks the modernized 
 
 ## Story 8 — Migrate Landing Page Off Replit to Cloud Run + Supabase
 - **Objective:** Move the landing page (Express + Postgres + static frontend) off Replit (~$20/mo) onto Google Cloud Run + Supabase Postgres (target: $0-$1/mo), using a risk-averse **parallel-deploy** approach so the legacy Replit deployment keeps running until the new system is verified.
-- **Dependencies:** `replit_migration_spike.md` Q1, Q2, Q4, Q5, Q6 resolved (see spike §2). Q3 (domain choice) blocks Phase 5 only — Phases 0-4 are unblocked.
+- **Dependencies:** `replit_migration_spike.md` Q1-Q6 all resolved (see spike §2).
 - **Acceptance Criteria:**
     - Cloud Run service running the Express monolith in `us-central1`, serving the landing site + all 5 public API endpoints + 4 admin endpoints from a single origin.
     - Supabase Postgres connected via session pooler (port 5432); schema auto-created on first boot via `api/database.js:initializeTables()`.
@@ -195,12 +195,11 @@ This Replit-specific plan mirrors the Codex structure but tracks the modernized 
     - Region: `us-central1` — Tier 1 pricing, near-US (spike §12)
     - Deploy mode: first deploy via Cloud Run web console; subsequent deploys via `gcloud run deploy --source .` (spike §12)
     - No data migration; schema recreated fresh (spike §1.5)
-    - No Replit shutdown buffer; immediate cutover at Phase 5 (spike §6 Path 2)
+    - **Replit redirect buffer (revised 2026-05-20, spike §6 Path 3):** Replit runs the same swept code as Cloud Run, with a hostname-based middleware that 301-redirects `*.replit.app` traffic to `langgraph-dev-navigator.dev` (path preserved). Kept live 1-2 months as transition before shutdown.
     - Admin page kept as-is; just set `ADMIN_PASSWORD` env (spike §11)
     - GA4 measurement ID carried forward (spike §1.5)
     - **Risk principle (new, 2026-05-18):** keep Replit running until Cloud Run verified; defer all destructive / cosmetic / SEO code changes to Phase 5 cutover; Phases 0-3 only do **additive** changes that work on both platforms.
-- **Open Decisions (block Phase 5 only):**
-    - Q3 — Domain: free `*.run.app` vs custom domain (~$12/yr). Spike recommends custom.
+    - **Domain (resolved 2026-05-19, spike §13):** `langgraph-dev-navigator.dev` at Cloudflare registrar; apex canonical with www→apex redirect; Cloud Run Domain Mapping (Path A, free) — not Load Balancer.
 - **Tasks (phased):**
 
 ### Phase 0 — Prep (no code change, no Replit impact)
@@ -264,9 +263,11 @@ This Replit-specific plan mirrors the Codex structure but tracks the modernized 
     - [ ] GSC: verify new domain property, submit new sitemap (no Change-of-Address needed — replit.app has no rankings to migrate).
     - [ ] Add new domain to GA4 property's domain list.
 
-**Replit shutdown**
-    - [ ] Delete `.replit` and `replit.md` (or rename to `legacy_replit.md.txt` if keeping for history).
-    - [ ] Shut down Replit deployment; cancel paid plan.
+**Replit redirect phase (5h-5j, replaces single Replit shutdown step)**
+    - [ ] **Phase 5h:** User syncs the Phase 5e/5f commit to Replit and redeploys. After redeploy, all `*.replit.app/<path>` should 301 to `https://langgraph-dev-navigator.dev/<path>` via the hostname middleware.
+    - [ ] **Phase 5h verify:** `curl -sI https://langgraph-dev-navigator.replit.app/` shows `HTTP/2 301` with `location: https://langgraph-dev-navigator.dev/`.
+    - [ ] **Phase 5i:** Observation window 1-2 months. Replit keeps serving 301s; no other action required.
+    - [ ] **Phase 5j:** After observation window — delete `.replit` and `replit.md` (or rename to `legacy_replit.md.txt`); shut down Replit deployment; cancel paid plan.
 
 ### Follow-up backlog (post-cutover, non-blocking — tracks spike §11 hardening + spike §3 risks)
     - [ ] Rotate `.env` API keys (OpenAI / Google / Tavily / Perplexity).
