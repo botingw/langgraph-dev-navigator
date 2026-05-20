@@ -106,7 +106,7 @@ Locked context for migration execution:
 *   Database: Supabase Postgres session pooler (port 5432)
 *   Deploy approach: Console for first deploy, then `gcloud run deploy --source .` for subsequent deploys
 *   No data migration; schema recreated fresh on first boot
-*   No Replit shutdown buffer; immediate cutover at Phase 5
+*   Replit kept 1-2 months as 301-redirect server via hostname-based Express middleware (same codebase as Cloud Run, no separate build); shutdown happens in Phase 5j after observation window (spike §6 Path 3)
 *   Risk principle: keep Replit running until Cloud Run verified; defer destructive / cosmetic / SEO code changes to final cutover phase
 
 Open decision blocking cutover only:

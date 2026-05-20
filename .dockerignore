@@ -21,7 +21,7 @@ Dockerfile
 .dockerignore
 
 # Repo content not needed in the landing-page image.
-# (api/ and web/replit/ are explicitly COPY'd in the Dockerfile.)
+# (api/ and web/landing/ are explicitly COPY'd in the Dockerfile.)
 AGENTS.md
 GEMINI.md
 README.md
@@ -46,7 +46,7 @@ tools/
 /package.json
 /package-lock.json
 
-# Other web variants — only web/replit/ ships with this image
+# Other web variants — only web/landing/ ships with this image
 web/codex/
 web/gemini/
 

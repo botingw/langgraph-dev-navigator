@@ -532,7 +532,7 @@ class App {
     // Survey form is handled by specialized SurveyManager in survey.js
     // No need for generic FormHandler on survey form
 
-    console.log('🚀 Replit LangGraph Dev Navigator initialized');
+    console.log('🚀 LangGraph Dev Navigator initialized');
   }
 
   // Initialize Mermaid diagrams with proper loading

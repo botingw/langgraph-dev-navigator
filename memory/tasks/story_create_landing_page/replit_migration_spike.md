@@ -49,7 +49,7 @@ Captured from conversation after initial spike draft:
 
 - [x] **Q1 — Replit Postgres access window:** N/A. No production data to migrate. Schema recreated fresh on Supabase.
 - [x] **Q2 — Data volume estimate:** N/A. No production data.
-- [ ] **Q3 — Domain choice:** (a) free `*.run.app`, (b) custom domain (~$12/yr), or (c) `username.github.io`?
+- [x] **Q3 — Domain choice:** Custom domain `langgraph-dev-navigator.dev` at Cloudflare registrar (~$10-12/yr at-cost). Canonical = apex; `www.*` redirects to apex. See §13 for full reasoning.
 - [x] **Q4 — GCP deploy mode:** `gcloud run deploy --source` as primary; Cloud Console for first-time service setup. Region: `us-central1`. See §12 for full reasoning.
 - [x] **Q5 — Admin page (`admin.html`) placement:** Keep as-is on same Cloud Run host (Option A). Migration day = just set `ADMIN_PASSWORD` env var. See §11 for full reasoning and follow-up hardening backlog.
 - [x] **Q6 — GA4 measurement ID:** Not migration-critical. Carry forward existing ID.
@@ -280,20 +280,32 @@ Supabase exposes:
 ### Recommendation
 **S1 — buy a custom domain.** $12/yr is rounding error vs. $240/yr saved from Replit, and preserves the AEO/SEO work already done (Story 6 + Story 7).
 
-### Replit shutdown buffer — revised after 2026-05-16 discussion
-
-Original plan assumed a 1-2 month buffer where Replit serves 301 redirects to the new domain. Two paths considered:
+### Replit shutdown buffer — revised twice (2026-05-16 → 2026-05-20)
 
 **Path 1 — Keep Replit running 1-2 months for redirects**
 - Cost: ~$20 × 1-2 = $20-$40 (mostly DB; could possibly be reduced by stripping DB usage from the Replit Express app and making it a pure redirect server)
 - Benefit: catches any stray visitor, preserves any residual SEO authority on replit.app
 
-**Path 2 — Shut down Replit immediately, accept stray 404s** ✅ **PREFERRED**
+**Path 2 — Shut down Replit immediately, accept stray 404s** ❌ **superseded 2026-05-20**
 - Cost: $0 buffer, immediate $20/mo savings start
 - Risk accepted: zero customers in past 6 months + replit.app rankings haven't been audited as load-bearing → expected lost-visitor count ≈ 0
-- The ~$40 saved buys 3+ years of custom domain renewal
+- Initially selected on 2026-05-16; user reconsidered on 2026-05-20
 
-**Selected: Path 2.** Skip the buffer. Cut over and shut down Replit.
+**Path 3 — Same codebase, hostname-based redirect middleware** ✅ **SELECTED 2026-05-20**
+- Replit syncs the SAME swept code as Cloud Run (no separate "redirect server" build).
+- Top-of-stack Express middleware checks `req.hostname`:
+    - `*.replit.app` → 301 redirect to `https://langgraph-dev-navigator.dev{req.originalUrl}` (path preserved)
+    - `www.langgraph-dev-navigator.dev` → 301 redirect to apex
+    - otherwise → pass through to normal handlers (used by Cloud Run apex)
+- Replit becomes a pure 301 redirector without code divergence between platforms.
+- Cost: ~$20 × 1-2 months = $20-$40 buffer.
+- Benefits over Path 2:
+    - Catches bookmark / social / search-index stragglers
+    - Transfers SEO link equity via 301 (Google's documented signal)
+    - Preserves deep links (`/thank-you.html` → same path on new domain)
+- Rejected concern: $20-40 cost is acceptable insurance for a 1-month transition window.
+
+**Selected: Path 3.** Implementation pattern in `api/server.js` (added in Story 8 Phase 5e).
 
 ### Pre-migration SEO checklist (revised)
 - Decide domain ahead of cutover (Q3 still open)
@@ -363,7 +375,7 @@ Original plan assumed a 1-2 month buffer where Replit serves 301 redirects to th
 
 | Risk | Likelihood | Impact | Mitigation |
 |------|-----------|--------|-----------|
-| Stray visitor lands on dead replit.app domain after cutover | Low | Low | Accepted (Path 2). Zero customers in 6 months → expected lost visits ≈ 0. |
+| Stray visitor lands on dead replit.app domain after cutover | Low | Low | Mitigated by Path 3 (2026-05-20): Replit kept as 301-redirect server for 1-2 months via hostname-based middleware. See §6. |
 | Cloud Run cold start hurts CTA conversion | Low | Low | LCP affected by ~1-2s on first visit; mitigate with `min-instances=1` (~$5/mo) only if data shows conversion drop |
 | Supabase free tier auto-pauses after 7d inactivity | Medium | Low | Accepted. Manual reactivation tolerable per user. |
 | Postgres connection limits exhausted by Cloud Run scaling | Low | Medium | Use Supabase Supavisor session pooler (port 5432) |
@@ -475,7 +487,67 @@ Migration leverages this familiarity for the first deploy (service skeleton, env
 
 ---
 
-## 13. References
+## 13. Q3 Resolution Detail — Domain Choice (2026-05-19)
+
+### Selected
+- **TLD:** `.dev` (Google Registry, HSTS-preloaded — forces HTTPS, dev-tool signal)
+- **Domain:** `langgraph-dev-navigator.dev` (apex, preserves existing brand from replit.app subdomain)
+- **Registrar:** Cloudflare (at-cost wholesale, ~$10-12/yr, no markup; mandatory Cloudflare DNS hosting — free + fast)
+- **Canonical:** apex (`langgraph-dev-navigator.dev`); `www.*` redirects to apex via Express middleware
+- **Cloud Run integration:** Domain Mapping (Path A) — free, beta but us-central1 is on the supported region list ([docs](https://docs.cloud.google.com/run/docs/mapping-custom-domains))
+
+### Cost breakdown (annual)
+| Item | Cost |
+|------|------|
+| Cloudflare `.dev` registration | ~$10-12/yr |
+| Cloud Run Domain Mapping | $0 |
+| Google managed SSL cert | $0 |
+| Cloudflare DNS hosting | $0 |
+| **Total** | **~$10-12/yr** |
+
+Path B (Global External Application Load Balancer) rejected: would add ~$216/yr LB fee, defeats migration cost-saving goal.
+
+### Options weighed
+| Choice | Verdict |
+|--------|---------|
+| Free `*.run.app` subdomain | ❌ rejected. Ugly URL, `.run.app` is a low-trust subdomain pool for SEO, hurts brand for a landing page that wants discoverability |
+| `username.github.io` | ❌ rejected (was tied to Option B split which spike already rejected) |
+| Custom `.com` | viable; rejected in favor of `.dev` for dev-tool semantics |
+| Custom `.dev` | ✅ **Selected**. Dev-tool fit, Google-owned, HSTS-preloaded (free HTTPS enforcement), ~$10/yr |
+| Custom `.io` / `.ai` | ❌ rejected for cost ($30-200/yr) without clear ranking benefit |
+
+### Registrar options weighed
+| Registrar | Verdict |
+|-----------|---------|
+| **Cloudflare** | ✅ **Selected**. At-cost pricing (no markup), free WHOIS privacy, fastest public DNS, free DDoS. Mandatory CF nameservers is OK for our use case |
+| Porkbun | viable alternative; chose CF for at-cost transparency |
+| Spaceship | viable; less brand-trust |
+| Namecheap | ~$5-7/yr more on renewal, no benefit for us |
+
+### Cloudflare DNS proxy (orange-cloud) note
+- **Initial setup:** DNS-only mode (grey cloud) for each Cloud Run domain mapping record. Cloud Run's managed cert flow expects direct DNS resolution.
+- **Possible later:** switch to Cloudflare proxy (orange cloud) for CDN / DDoS / WAF. Requires terminating SSL at Cloudflare (Full mode) and tolerating IP-rewrite to Cloudflare edges in app logs. Not in scope for initial cutover.
+
+### SEO impact
+- Domain change replit.app → `langgraph-dev-navigator.dev`: zero SEO loss (replit.app had no rankings to migrate)
+- Google has publicly stated TLD is not a ranking factor
+- New GSC property needed; sitemap re-submission. No "Change of Address" tool needed
+- GA4 measurement ID carried forward; new domain added to property's domain list
+
+### Migration-day actions for Q3
+- User: buy `langgraph-dev-navigator.dev` at Cloudflare
+- `gcloud beta run domain-mappings create --service=landing-page --domain=langgraph-dev-navigator.dev --region=us-central1`
+- `gcloud beta run domain-mappings create --service=landing-page --domain=www.langgraph-dev-navigator.dev --region=us-central1` (for the www redirect target)
+- Add A + AAAA records (apex) and CNAME (www) in Cloudflare DNS panel, all **DNS-only** (grey cloud)
+- Add 301 redirect from www to apex in `api/server.js` Express middleware
+- Update `FRONTEND_URL` env on Cloud Run service to `https://langgraph-dev-navigator.dev`
+- Sweep canonical / og:url / JSON-LD `@id` / sitemap.xml / robots.txt to new apex
+- GSC: verify new property, submit new sitemap
+- GA4: add new domain to property
+
+---
+
+## 14. References
 
 - Current setup inventory: see §3 above; cross-reference `implementation_plan_replit.md` Story 5 (deployment) which has unticked `[ ] Choose hosting stack, configure CI/CD pipelines`
 - Replit deployment config: `.replit`, `replit.md`
